@@ -4,18 +4,23 @@
 using System;
 using BingMapsRESTToolkit;
 
-public static void Run(TimerInfo myTimer, TraceWriter log, Stream outputBlob)
+public async static void Run(TimerInfo myTimer, TraceWriter log, Stream outputBlob)
 {
     //github
     log.Info($"C# Timer trigger function executed at: {DateTime.Now}");
     //Create an image request.
-    var request = new ImageryRequest()
+    var request = new ImageryMetadataRequest()
     {
         CenterPoint = new Coordinate(33.769340,-84.393599),
         ZoomLevel = 20,
         ImagerySet = ImageryType.Birdseye,
         BingMapsKey = "AmWPWL1QDJgNJU7ZQM8tTD-I_Wz8cenvxhdMTQ6LD4NWEMEB_3wC3D0FGRwoc1QS"
     };
+
+    var response = await ServiceManager.GetResponseAsync(request);
+    Console.Log(response);
+
+    throw new Exception("bail here");
 
     //Process the request by using the ServiceManager.
     using (var imageStream = ServiceManager.GetImageAsync(request).Result)
