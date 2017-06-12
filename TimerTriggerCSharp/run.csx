@@ -4,7 +4,7 @@
 using System;
 using BingMapsRESTToolkit;
 
-public async static void Run(TimerInfo myTimer, TraceWriter log, Stream outputBlob)
+public static void Run(TimerInfo myTimer, TraceWriter log, Stream outputBlob)
 {
     //github
     log.Info($"C# Timer trigger function executed at: {DateTime.Now}");
@@ -17,11 +17,11 @@ public async static void Run(TimerInfo myTimer, TraceWriter log, Stream outputBl
         BingMapsKey = "AmWPWL1QDJgNJU7ZQM8tTD-I_Wz8cenvxhdMTQ6LD4NWEMEB_3wC3D0FGRwoc1QS"
     };
 
-    var response = await ServiceManager.GetResponseAsync(request);
-    Console.Log(response);
+    var response = ServiceManager.GetResponseAsync(request).Result;
+    Console.Write(response);
 
     throw new Exception("bail here");
-
+/* 
     //Process the request by using the ServiceManager.
     using (var imageStream = ServiceManager.GetImageAsync(request).Result)
     {
@@ -30,6 +30,6 @@ public async static void Run(TimerInfo myTimer, TraceWriter log, Stream outputBl
         imageStream.CopyTo(outputBlob);
         //var byteArray = imageStream.ToArray();
         //outBlob.Write(byteArray, 0, byteArray.Length);
-    }
+    }*/
     
 }
