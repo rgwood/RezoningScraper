@@ -4,7 +4,7 @@
       "name": "myTimer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "00 */3 * * *"
+      "schedule": "0 0 */3 * * *"
     }
   ],
   "disabled": false
