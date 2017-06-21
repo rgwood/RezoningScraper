@@ -2,7 +2,6 @@
   "frameworks": {
     "net46":{
       "dependencies": {
-        "BingMapsRESTToolkit": "1.0.5"
       }
     }
    }
