@@ -2,6 +2,7 @@
 #r "System.IO"
 
 using System;
+using System.Configuration;
 
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
