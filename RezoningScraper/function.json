@@ -7,5 +7,5 @@
       "schedule": "00 */3 * * *"
     }
   ],
-  "disabled": true
+  "disabled": false
 }
