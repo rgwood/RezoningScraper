@@ -57,11 +57,17 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
             var changeDetails = new List<string>();
             if(!scrapedRezoning.Status.Equals(oldVersion.Status, StringComparison.OrdinalIgnoreCase))
             {
-                changeDetails.Add($"Status changed from *{oldVersion.Status}* to *{scrapedRezoning.Status}*");
+                if(String.IsNullOrEmpty(oldVersion.Status))
+                   changeDetails.Add($"New status: *{scrapedRezoning.Status}*");
+                else
+                   changeDetails.Add($"Status changed from *{oldVersion.Status}* to *{scrapedRezoning.Status}*");
             }
             if (!scrapedRezoning.Info.Equals(oldVersion.Info, StringComparison.OrdinalIgnoreCase))
             {
-                changeDetails.Add($"Detail changed from *{oldVersion.Info}* to *{scrapedRezoning.Info}*");
+                if(String.IsNullOrEmpty(oldVersion.Info))
+                   changeDetails.Add($"New info: *{scrapedRezoning.Info}*");
+                else
+                   changeDetails.Add($"Detail changed from *{oldVersion.Info}* to *{scrapedRezoning.Info}*");
             }
             if(changeDetails.Any())
             {
