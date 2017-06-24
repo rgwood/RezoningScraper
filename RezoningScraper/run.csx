@@ -46,8 +46,8 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
         var afterLinkText = CleanupString(sb.ToString());
         var pattern = "\\s*-\\s*(?\'Status\'[^-]*)(\\s*-\\s*)?(?\'Info\'.*)$";
         var match = Regex.Match(afterLinkText, pattern);
-        var status = match.Groups["Status"].Value;
-        var info = match.Groups["Info"].Value;
+        var status = CleanupString(match.Groups["Status"].Value);
+        var info = CleanupString(match.Groups["Info"].Value);
         var scrapedRezoning = new Rezoning() { Name = name, Status = status, Info = info };
         var rezoningsWithSameName = rezonings.Where(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         if (rezoningsWithSameName.Any())
@@ -60,14 +60,25 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
                 if(String.IsNullOrEmpty(oldVersion.Status))
                    changeDetails.Add($"New status: *{scrapedRezoning.Status}*");
                 else
-                   changeDetails.Add($"Status changed from *{oldVersion.Status}* to *{scrapedRezoning.Status}*");
+                {
+                    if(String.IsNullOrEmpty(scrapedRezoning.Status))
+                        changeDetails.Add($"Status *{oldVersion.Status}* was removed");
+                    else
+                        changeDetails.Add($"Status changed from *{oldVersion.Status}* to *{scrapedRezoning.Status}*");
+                }
+
             }
             if (!scrapedRezoning.Info.Equals(oldVersion.Info, StringComparison.OrdinalIgnoreCase))
             {
                 if(String.IsNullOrEmpty(oldVersion.Info))
                    changeDetails.Add($"New info: *{scrapedRezoning.Info}*");
                 else
-                   changeDetails.Add($"Detail changed from *{oldVersion.Info}* to *{scrapedRezoning.Info}*");
+                {
+                    if(String.IsNullOrEmpty(scrapedRezoning.Info))
+                        changeDetails.Add($"Detail *{oldVersion.Info}* was removed");
+                    else
+                        changeDetails.Add($"Detail changed from *{oldVersion.Info}* to *{scrapedRezoning.Info}*");
+                }
             }
             if(changeDetails.Any())
             {
