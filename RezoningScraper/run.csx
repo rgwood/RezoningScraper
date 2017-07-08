@@ -1,23 +1,31 @@
 #r "System.Collections"
 #r "System.IO"
+#r "Microsoft.WindowsAzure.Storage" // Namespace for CloudStorageAccount
 
 using HtmlAgilityPack;
 using System;
 using System.Configuration;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using Dapper;
-using Dapper.Contrib.Extensions;
 using System.Net.Http;
+using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
-private class Rezoning
+private class Rezoning : TableEntity
 {
-    public int Id { get; set; }
+    public readonly string DefaultPartitionKey = "default";
+    public Rezoning(string name)
+    {
+        this.PartitionKey = DefaultPartitionKey;
+        this.RowKey = name;
+        Name = name;
+    }
+
+    public Rezoning(){}
     public string Name { get; set; }
     public string Status { get; set; }
     public string Info { get; set; }
@@ -25,8 +33,16 @@ private class Rezoning
 
 public static void Run(TimerInfo myTimer, TraceWriter log)
 {
+    var TESTMODE = false;
+
     log.Info($"C# Timer trigger function executed at: {DateTime.Now}");
-    var rezonings = GetRezoningsFromDb();
+
+    CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+    CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+    CloudTable table = tableClient.GetTableReference("rezonings");
+    table.CreateIfNotExists();
+
+    var rezonings = GetRezoningsFromDb(table);
     
     var pageUri = new System.Uri(ConfigurationManager.AppSettings["RezoningPageUri"]);
     var web = new HtmlWeb();
@@ -48,7 +64,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
         var match = Regex.Match(afterLinkText, pattern);
         var status = CleanupString(match.Groups["Status"].Value);
         var info = CleanupString(match.Groups["Info"].Value);
-        var scrapedRezoning = new Rezoning() { Name = name, Status = status, Info = info };
+        var scrapedRezoning = new Rezoning(name) { Name = name, Status = status, Info = info };
         var rezoningsWithSameName = rezonings.Where(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         if (rezoningsWithSameName.Any())
         {
@@ -84,29 +100,31 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
             {
                 oldVersion.Status = scrapedRezoning.Status;
                 oldVersion.Info = scrapedRezoning.Info;
-                UpdateRezoningInDb(oldVersion);
+                UpdateRezoningInDb(table, oldVersion);
                 var message = $"Rezoning application updated: *<{fullUri.ToString()}|{scrapedRezoning.Name}>*\n";
                 message += String.Join("\n", changeDetails);
-                SendMessageToSlack(message, log);
+                SendMessageToSlack(message, log, TESTMODE);
             }
         }
         else
         {
             log.Info($"Writing new rezoning with name='{scrapedRezoning.Name}', Status='{scrapedRezoning.Status}', Info='{scrapedRezoning.Info}' ");
-            InsertRezoningToDb(scrapedRezoning);
+            InsertRezoningToDb(table, scrapedRezoning);
             var message = $"New rezoning application: *<{fullUri.ToString()}|{scrapedRezoning.Name}>*\nStatus: {scrapedRezoning.Status}";
             if (!String.IsNullOrEmpty(scrapedRezoning.Info))
                 message += $"\n{scrapedRezoning.Info}";
-            SendMessageToSlack(message, log);
+            SendMessageToSlack(message, log, TESTMODE);
             log.Info("Wrote to DB");
         }
     }
 
 }
 
-private static void SendMessageToSlack(string message, TraceWriter log)
+private static void SendMessageToSlack(string message, TraceWriter log, bool testMode)
 {
     log.Info($"Sending message to Slack: {message}");
+    if(testMode)
+        return;
     var client = new HttpClient();
     var content = new StringContent($"{{\"text\":\"{message}\"}}", Encoding.UTF8, "application/json");
     var response = client.PostAsync(ConfigurationManager.AppSettings["SlackMessageUri"], content).Result;
@@ -115,27 +133,21 @@ private static void SendMessageToSlack(string message, TraceWriter log)
         throw new Exception($"Failed to send message to slack: {response}");
     }
 }
-private static List<Rezoning> GetRezoningsFromDb()
+private static List<Rezoning> GetRezoningsFromDb(CloudTable table)
 {
-    using (var db = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlServerConnString"].ConnectionString))
-    {
-        return db.Query<Rezoning>("select Id, Name, Status, Info from Rezonings").AsList<Rezoning>();
-    }
+    var query = new TableQuery<Rezoning>();
+    return table.ExecuteQuery(query).ToList();
 }
-private static void InsertRezoningToDb(Rezoning r)
+private static void InsertRezoningToDb(CloudTable table, Rezoning r)
 {
-    using (var db = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlServerConnString"].ConnectionString))
-    {
-        db.Insert(r);
-    }
+    TableOperation insertOperation = TableOperation.Insert(r);
+    table.Execute(insertOperation);
 }
 
-private static void UpdateRezoningInDb(Rezoning r)
+private static void UpdateRezoningInDb(CloudTable table, Rezoning r)
 {
-    using (var db = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlServerConnString"].ConnectionString))
-    {
-        db.Update(r);
-    }
+    TableOperation operation = TableOperation.Replace(r);
+    table.Execute(operation);
 }
 
 private static string CleanupString(string input)
