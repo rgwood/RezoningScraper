@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Net.Http;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace AbundantHousingVancouver
@@ -19,21 +20,28 @@ namespace AbundantHousingVancouver
     {
         [FunctionName("RezoningScraper")]
         public static void Run([TimerTrigger("0 24 */3 * * *")]TimerInfo myTimer, TraceWriter log)
+        //TEST public static void Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, TraceWriter log)
         {
             var TESTMODE = false;
-
-            log.Info($"C# Timer trigger function executed at: {DateTime.Now}");
-
+            
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("rezonings");
             table.CreateIfNotExists();
-
+            
             var rezonings = GetRezoningsFromDb(table);
 
             var pageUri = new Uri(ConfigurationManager.AppSettings["RezoningPageUri"]);
             var web = new HtmlWeb();
             var doc = web.Load(pageUri.ToString());
+
+            //save the HTML for debugging purposes
+            var saveFileName = $"VancouverRezoningWebpage-{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}.html";
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference("rezoning-scrapes");
+            SaveTextFileToAzure(container, doc.DocumentNode.OuterHtml, saveFileName);
+            log.Info($"Saved HTML to {saveFileName}");
+            
             var desc = doc.DocumentNode.Descendants("li");
             var links = desc.Where(d => d.ChildNodes.Any() && d.ChildNodes.First().Name.Equals("a", StringComparison.OrdinalIgnoreCase));
             foreach (var htmlNode in links)
@@ -102,6 +110,12 @@ namespace AbundantHousingVancouver
                 }
             }
 
+        }
+        
+        private static void SaveTextFileToAzure(CloudBlobContainer container, string fileContents, string fileName)
+        {
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+            blockBlob.UploadText(fileContents);
         }
 
         private static void SendMessageToSlack(string message, TraceWriter log, bool testMode)

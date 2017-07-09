@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.0-alpha3" />
     <PackageReference Include="NUnit" Version="3.7.1" />
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.1.4" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
