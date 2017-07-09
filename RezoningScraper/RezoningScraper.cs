@@ -13,7 +13,7 @@ using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace RezoningScraper
+namespace AbundantHousingVancouver
 {
     public static class RezoningScraper
     {
@@ -137,7 +137,7 @@ namespace RezoningScraper
             table.Execute(operation);
         }
 
-        private static string CleanupString(string input)
+        public static string CleanupString(string input)
         {
             return RemoveLineBreaksAndExtraWhiteSpace(WebUtility.HtmlDecode(input)).Trim();
         }

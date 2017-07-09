@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace RezoningScraper
+namespace AbundantHousingVancouver
 {
     public class Rezoning : TableEntity
     {
