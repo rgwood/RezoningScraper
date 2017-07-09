@@ -31,7 +31,7 @@ namespace AbundantHousingVancouver
 
             var rezonings = GetRezoningsFromDb(table);
 
-            var pageUri = new System.Uri(ConfigurationManager.AppSettings["RezoningPageUri"]);
+            var pageUri = new Uri(ConfigurationManager.AppSettings["RezoningPageUri"]);
             var web = new HtmlWeb();
             var doc = web.Load(pageUri.ToString());
             var desc = doc.DocumentNode.Descendants("li");
@@ -39,7 +39,7 @@ namespace AbundantHousingVancouver
             foreach (var htmlNode in links)
             {
                 var link = htmlNode.FirstChild.Attributes["href"].Value;
-                var fullUri = new System.Uri(pageUri, link);
+                var fullUri = new Uri(pageUri, link);
                 var name = CleanupString(htmlNode.FirstChild.InnerText);
                 var sb = new StringBuilder();
                 for (int i = 1; i < htmlNode.ChildNodes.Count; i++)
@@ -47,11 +47,8 @@ namespace AbundantHousingVancouver
                     sb.Append(htmlNode.ChildNodes[i].InnerText);
                 }
                 var afterLinkText = CleanupString(sb.ToString());
-                var pattern = "\\s*-\\s*(?\'Status\'[^-]*)(\\s*-\\s*)?(?\'Info\'.*)$";
-                var match = Regex.Match(afterLinkText, pattern);
-                var status = CleanupString(match.Groups["Status"].Value);
-                var info = CleanupString(match.Groups["Info"].Value);
-                var scrapedRezoning = new Rezoning(name) { Name = name, Status = status, Info = info };
+                var parsed = ParsePostLinkString(afterLinkText);
+                var scrapedRezoning = new Rezoning(name) { Name = name, Status = parsed.Status, Info = parsed.Info };
                 var rezoningsWithSameName = rezonings.Where(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 if (rezoningsWithSameName.Any())
                 {
@@ -135,6 +132,27 @@ namespace AbundantHousingVancouver
         {
             TableOperation operation = TableOperation.Replace(r);
             table.Execute(operation);
+        }
+
+        //This shouldnt' be necessary but C#7 tuple syntax isn't compiling correctly for some reason
+        public class RegexReturnType
+        {
+            public RegexReturnType(string status, string info)
+            {
+                Status = status;
+                Info = info;
+            }
+            public string Status;
+            public string Info;
+        }
+
+        public static RegexReturnType ParsePostLinkString(string input)
+        {
+            var pattern = "\\s*-\\s*(?\'Status\'[^-]*)(\\s*-\\s*)?(?\'Info\'.*)$";
+            var match = Regex.Match(input, pattern);
+            var status = CleanupString(match.Groups["Status"].Value);
+            var info = CleanupString(match.Groups["Info"].Value);
+            return new RegexReturnType(status, info);
         }
 
         public static string CleanupString(string input)
