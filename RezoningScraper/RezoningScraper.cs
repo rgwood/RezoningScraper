@@ -19,7 +19,7 @@ namespace AbundantHousingVancouver
     public static class RezoningScraper
     {
         [FunctionName("RezoningScraper")]
-        public static void Run([TimerTrigger("0 24 */3 * * *")]TimerInfo myTimer, TraceWriter log)
+        public static void Run([TimerTrigger("%TimerSchedule%")]TimerInfo myTimer, TraceWriter log)
         //TEST public static void Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, TraceWriter log)
         {
             var TESTMODE = false;
