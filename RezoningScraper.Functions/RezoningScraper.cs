@@ -39,6 +39,8 @@ namespace AbundantHousingVancouver
 
             saveHtmlToBlobStorage(storageAccount, webpageHtml, log);
 
+            // The big ugly HTML parser. This is closely tied to the CoV formatting which could change at any time
+            // so it's probably not worth spending a lot of time cleaning it up
             var desc = webpageHtml.DocumentNode.Descendants("li");
             var links = desc.Where(d => d.ChildNodes.Any() && d.ChildNodes.First().Name.Equals("a", StringComparison.OrdinalIgnoreCase));
             foreach (var htmlNode in links)
@@ -72,7 +74,6 @@ namespace AbundantHousingVancouver
                             else
                                 changeDetails.Add($"Status changed from *{oldVersion.Status}* to *{scrapedRezoning.Status}*");
                         }
-
                     }
                     if (!scrapedRezoning.Info.Equals(oldVersion.Info, StringComparison.OrdinalIgnoreCase))
                     {
@@ -205,7 +206,6 @@ namespace AbundantHousingVancouver
             var status = CleanupString(match.Groups["Status"].Value);
             var info = CleanupString(match.Groups["Info"].Value);
             return (status, info);
-            //return new RegexReturnType(status, info);
         }
 
         public static string CleanupString(string input)
