@@ -23,7 +23,7 @@ namespace AbundantHousingVancouver
         public async static Task Run([TimerTrigger("%TimerSchedule%", RunOnStartup = true)]TimerInfo myTimer, TraceWriter log, ExecutionContext context)
         //TEST public static void Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, TraceWriter log)
         {
-            var TESTMODE = true;
+            var TESTMODE = false;
 
             var config = new ConfigurationBuilder()
             .SetBasePath(context.FunctionAppDirectory)
