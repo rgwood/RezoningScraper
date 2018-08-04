@@ -4,6 +4,17 @@ A small project written for [Abundant Housing Vancouver](http://www.abundanthous
 
 Scrapes the City of Vancouver's [rezoning application page](http://rezoning.vancouver.ca/applications/) then notifies people of any changes via Slack. It's an [Azure Function](https://duckduckgo.com/?q=azure+function&t=ffab&ia=web) written in C# using .NET Core, uses HtmlAgilityPack for HTML parsing and Azure Table+Blob storage.
 
+#### Build
+Just run `dotnet build`.
+
+#### Development + Deployment
+
+I use the Azure Functions extension in VS Code. 
+
+To run this locally, you may first need to use the "Initialize project for use with VS Code" command.
+
+To deploy, use the "Deploy to function app" command and point it at the publish output folder (`/RezoningScraper.Functions/bin/Release/netstandard2.0/publish`).
+
 #### Tests
 `dotnet test`
 
