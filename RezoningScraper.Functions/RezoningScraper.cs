@@ -19,42 +19,32 @@ namespace AbundantHousingVancouver
 {
     public static class RezoningScraper
     {
+        private static TraceWriter Log;
+        private static string StorageConnectionString;
+        private static string SlackMessageUri;
+        private static string RezoningPageUri;
+        private static bool IsRunningInTestMode;
+
         [FunctionName("RezoningScraper")]
         public async static Task Run([TimerTrigger("%TimerSchedule%", RunOnStartup = true)]TimerInfo myTimer, TraceWriter log, ExecutionContext context)
-        //TEST public static void Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, TraceWriter log)
         {
-            var TESTMODE = false;
+            setUpLogging(log);
+            loadConfiguration(context);
 
-            var config = new ConfigurationBuilder()
-            .SetBasePath(context.FunctionAppDirectory)
-            .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .Build();
+            var storageAccount = CloudStorageAccount.Parse(StorageConnectionString);
+            var rezoningsTable = await getRezoningsTableAndCreateIfDoesntExist(storageAccount);
+            var rezonings = await GetRezoningsFromDb(rezoningsTable);
 
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(config["StorageConnectionString"]);
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CloudTable table = tableClient.GetTableReference("rezonings");
-            await table.CreateIfNotExistsAsync();
-            
-            var rezonings = await GetRezoningsFromDb(table);
+            var webpageHtml = new HtmlWeb().Load(RezoningPageUri);
 
-            var pageUri = new Uri(config["RezoningPageUri"]);
-            var web = new HtmlWeb();
-            var doc = web.Load(pageUri.ToString());
+            saveHtmlToBlobStorage(storageAccount, webpageHtml, log);
 
-            //save the HTML for debugging purposes
-            var saveFileName = $"VancouverRezoningWebpage-{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}.html";
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("rezoning-scrapes");
-            SaveTextFileToAzure(container, doc.DocumentNode.OuterHtml, saveFileName);
-            log.Info($"Saved HTML to {saveFileName}");
-            
-            var desc = doc.DocumentNode.Descendants("li");
+            var desc = webpageHtml.DocumentNode.Descendants("li");
             var links = desc.Where(d => d.ChildNodes.Any() && d.ChildNodes.First().Name.Equals("a", StringComparison.OrdinalIgnoreCase));
             foreach (var htmlNode in links)
             {
                 var link = htmlNode.FirstChild.Attributes["href"].Value;
-                var fullUri = new Uri(pageUri, link);
+                var fullUri = new Uri(new Uri(RezoningPageUri), link);
                 var name = CleanupString(htmlNode.FirstChild.InnerText);
                 var sb = new StringBuilder();
                 for (int i = 1; i < htmlNode.ChildNodes.Count; i++)
@@ -63,8 +53,8 @@ namespace AbundantHousingVancouver
                 }
                 var afterLinkText = CleanupString(sb.ToString());
                 var parsed = ParsePostLinkString(afterLinkText);
-                var scrapedRezoning = new Rezoning(name) { Name = name, Status = parsed.Status, Info = parsed.Info };
-                
+                var scrapedRezoning = new Rezoning(name) { Name = name, Status = parsed.status, Info = parsed.info };
+
                 var rezoningsWithSameName = rezonings.Where(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 if (rezoningsWithSameName.Any())
                 {
@@ -100,40 +90,79 @@ namespace AbundantHousingVancouver
                     {
                         oldVersion.Status = scrapedRezoning.Status;
                         oldVersion.Info = scrapedRezoning.Info;
-                        UpdateRezoningInDb(table, oldVersion);
+                        UpdateRezoningInDb(rezoningsTable, oldVersion);
                         var message = $"Rezoning application updated: *<{fullUri.ToString()}|{scrapedRezoning.Name}>*\n";
                         message += String.Join("\n", changeDetails);
-                        SendMessageToSlack(config["SlackMessageUri"], message, log, TESTMODE);
+                        SendMessageToSlack(message, log);
                     }
                 }
                 else
                 {
                     log.Info($"Writing new rezoning with name='{scrapedRezoning.Name}', Status='{scrapedRezoning.Status}', Info='{scrapedRezoning.Info}' ");
-                    InsertRezoningToDb(table, scrapedRezoning);
+                    InsertRezoningToDb(rezoningsTable, scrapedRezoning);
                     var message = $"New rezoning application: *<{fullUri.ToString()}|{scrapedRezoning.Name}>*\nStatus: {scrapedRezoning.Status}";
                     if (!String.IsNullOrEmpty(scrapedRezoning.Info))
                         message += $"\n{scrapedRezoning.Info}";
-                    SendMessageToSlack(config["SlackMessageUri"], message, log, TESTMODE);
+                    SendMessageToSlack(message, log);
                     log.Info("Wrote to DB");
                 }
             }
 
         }
-        
+
+        private static void setUpLogging(TraceWriter _log)
+        {
+            Log = _log;
+        }
+
+        private static void loadConfiguration(ExecutionContext context)
+        {
+            var config = new ConfigurationBuilder()
+            .SetBasePath(context.FunctionAppDirectory)
+            .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .Build();
+            IsRunningInTestMode = Boolean.Parse(config["TestMode"] ?? "false");
+            StorageConnectionString = config["StorageConnectionString"];
+            RezoningPageUri = config["RezoningPageUri"];
+            SlackMessageUri = config["SlackMessageUri"];
+
+            if (IsRunningInTestMode)
+            {
+                Log.Info("Running in test mode");
+            }
+        }
+
+        private async static Task<CloudTable> getRezoningsTableAndCreateIfDoesntExist(CloudStorageAccount storageAccount)
+        {
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("rezonings");
+            await table.CreateIfNotExistsAsync();
+            return table;
+        }
+
+        private static void saveHtmlToBlobStorage(CloudStorageAccount storageAccount, HtmlDocument doc, TraceWriter log)
+        {
+            var saveFileName = $"VancouverRezoningWebpage-{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}.html";
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference("rezoning-scrapes");
+            SaveTextFileToAzure(container, doc.DocumentNode.OuterHtml, saveFileName);
+            log.Info($"Saved HTML to {saveFileName}");
+        }
         private async static void SaveTextFileToAzure(CloudBlobContainer container, string fileContents, string fileName)
         {
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
             await blockBlob.UploadTextAsync(fileContents);
         }
 
-        private static void SendMessageToSlack(string slackUri, string message, TraceWriter log, bool testMode)
+        private static void SendMessageToSlack(string message, TraceWriter log)
         {
             log.Info($"Sending message to Slack: {message}");
-            if (testMode)
+            if (IsRunningInTestMode)
                 return;
             var client = new HttpClient();
             var content = new StringContent($"{{\"text\":\"{message}\"}}", Encoding.UTF8, "application/json");
-            var response = client.PostAsync(slackUri, content).Result;
+            var response = client.PostAsync(SlackMessageUri, content).Result;
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Failed to send message to slack: {response}");
@@ -141,9 +170,8 @@ namespace AbundantHousingVancouver
         }
         private async static Task<List<Rezoning>> GetRezoningsFromDb(CloudTable table)
         {
-            var query = new TableQuery<Rezoning>();
-
             var ret = new List<Rezoning>();
+            var query = new TableQuery<Rezoning>();
             TableContinuationToken token = null;
 
             do
@@ -167,29 +195,17 @@ namespace AbundantHousingVancouver
         private async static void UpdateRezoningInDb(CloudTable table, Rezoning r)
         {
             TableOperation operation = TableOperation.Replace(r);
-            
             await table.ExecuteAsync(operation);
         }
 
-        //This shouldnt' be necessary but C#7 tuple syntax isn't compiling correctly for some reason
-        public class RegexReturnType
-        {
-            public RegexReturnType(string status, string info)
-            {
-                Status = status;
-                Info = info;
-            }
-            public string Status;
-            public string Info;
-        }
-
-        public static RegexReturnType ParsePostLinkString(string input)
+        public static (string status, string info) ParsePostLinkString(string input)
         {
             var pattern = "\\s*-\\s*(?\'Status\'[^-]*)(\\s*-\\s*)?(?\'Info\'.*)$";
             var match = Regex.Match(input, pattern);
             var status = CleanupString(match.Groups["Status"].Value);
             var info = CleanupString(match.Groups["Info"].Value);
-            return new RegexReturnType(status, info);
+            return (status, info);
+            //return new RegexReturnType(status, info);
         }
 
         public static string CleanupString(string input)

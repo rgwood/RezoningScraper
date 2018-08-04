@@ -31,9 +31,8 @@ namespace RezoningScraperTests
         {
             var result = RezoningScraper.ParsePostLinkString(input);
 
-            Assert.AreEqual(expectedStatus, result.Status);
-            Assert.AreEqual(expectedInfo, result.Info);
+            Assert.AreEqual(expectedStatus, result.status);
+            Assert.AreEqual(expectedInfo, result.info);
         }
-
     }
 }
