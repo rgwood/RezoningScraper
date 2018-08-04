@@ -2,7 +2,6 @@ using System;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using HtmlAgilityPack;
-using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,28 +9,36 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Net.Http;
 using Microsoft.Azure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
+using System.Threading.Tasks;
 
 namespace AbundantHousingVancouver
 {
     public static class RezoningScraper
     {
         [FunctionName("RezoningScraper")]
-        public static void Run([TimerTrigger("%TimerSchedule%")]TimerInfo myTimer, TraceWriter log)
+        public async static Task Run([TimerTrigger("%TimerSchedule%", RunOnStartup = true)]TimerInfo myTimer, TraceWriter log, ExecutionContext context)
         //TEST public static void Run([TimerTrigger("*/10 * * * * *")]TimerInfo myTimer, TraceWriter log)
         {
-            var TESTMODE = false;
-            
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            var TESTMODE = true;
+
+            var config = new ConfigurationBuilder()
+            .SetBasePath(context.FunctionAppDirectory)
+            .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(config["StorageConnectionString"]);
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("rezonings");
-            table.CreateIfNotExists();
+            await table.CreateIfNotExistsAsync();
             
-            var rezonings = GetRezoningsFromDb(table);
+            var rezonings = await GetRezoningsFromDb(table);
 
-            var pageUri = new Uri(ConfigurationManager.AppSettings["RezoningPageUri"]);
+            var pageUri = new Uri(config["RezoningPageUri"]);
             var web = new HtmlWeb();
             var doc = web.Load(pageUri.ToString());
 
@@ -57,6 +64,7 @@ namespace AbundantHousingVancouver
                 var afterLinkText = CleanupString(sb.ToString());
                 var parsed = ParsePostLinkString(afterLinkText);
                 var scrapedRezoning = new Rezoning(name) { Name = name, Status = parsed.Status, Info = parsed.Info };
+                
                 var rezoningsWithSameName = rezonings.Where(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 if (rezoningsWithSameName.Any())
                 {
@@ -95,7 +103,7 @@ namespace AbundantHousingVancouver
                         UpdateRezoningInDb(table, oldVersion);
                         var message = $"Rezoning application updated: *<{fullUri.ToString()}|{scrapedRezoning.Name}>*\n";
                         message += String.Join("\n", changeDetails);
-                        SendMessageToSlack(message, log, TESTMODE);
+                        SendMessageToSlack(config["SlackMessageUri"], message, log, TESTMODE);
                     }
                 }
                 else
@@ -105,47 +113,62 @@ namespace AbundantHousingVancouver
                     var message = $"New rezoning application: *<{fullUri.ToString()}|{scrapedRezoning.Name}>*\nStatus: {scrapedRezoning.Status}";
                     if (!String.IsNullOrEmpty(scrapedRezoning.Info))
                         message += $"\n{scrapedRezoning.Info}";
-                    SendMessageToSlack(message, log, TESTMODE);
+                    SendMessageToSlack(config["SlackMessageUri"], message, log, TESTMODE);
                     log.Info("Wrote to DB");
                 }
             }
 
         }
         
-        private static void SaveTextFileToAzure(CloudBlobContainer container, string fileContents, string fileName)
+        private async static void SaveTextFileToAzure(CloudBlobContainer container, string fileContents, string fileName)
         {
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
-            blockBlob.UploadText(fileContents);
+            await blockBlob.UploadTextAsync(fileContents);
         }
 
-        private static void SendMessageToSlack(string message, TraceWriter log, bool testMode)
+        private static void SendMessageToSlack(string slackUri, string message, TraceWriter log, bool testMode)
         {
             log.Info($"Sending message to Slack: {message}");
             if (testMode)
                 return;
             var client = new HttpClient();
             var content = new StringContent($"{{\"text\":\"{message}\"}}", Encoding.UTF8, "application/json");
-            var response = client.PostAsync(ConfigurationManager.AppSettings["SlackMessageUri"], content).Result;
+            var response = client.PostAsync(slackUri, content).Result;
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Failed to send message to slack: {response}");
             }
         }
-        private static List<Rezoning> GetRezoningsFromDb(CloudTable table)
+        private async static Task<List<Rezoning>> GetRezoningsFromDb(CloudTable table)
         {
             var query = new TableQuery<Rezoning>();
-            return table.ExecuteQuery(query).ToList();
-        }
-        private static void InsertRezoningToDb(CloudTable table, Rezoning r)
-        {
-            TableOperation insertOperation = TableOperation.Insert(r);
-            table.Execute(insertOperation);
+
+            var ret = new List<Rezoning>();
+            TableContinuationToken token = null;
+
+            do
+            {
+
+                TableQuerySegment<Rezoning> seg = await table.ExecuteQuerySegmentedAsync<Rezoning>(query, token);
+                token = seg.ContinuationToken;
+                ret.AddRange(seg);
+
+            } while (token != null);
+
+            return ret;
         }
 
-        private static void UpdateRezoningInDb(CloudTable table, Rezoning r)
+        private async static void InsertRezoningToDb(CloudTable table, Rezoning r)
+        {
+            TableOperation insertOperation = TableOperation.Insert(r);
+            await table.ExecuteAsync(insertOperation);
+        }
+
+        private async static void UpdateRezoningInDb(CloudTable table, Rezoning r)
         {
             TableOperation operation = TableOperation.Replace(r);
-            table.Execute(operation);
+            
+            await table.ExecuteAsync(operation);
         }
 
         //This shouldnt' be necessary but C#7 tuple syntax isn't compiling correctly for some reason

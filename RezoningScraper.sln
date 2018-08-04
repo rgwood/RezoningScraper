@@ -1,31 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26621.2
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RezoningScraper", "RezoningScraper\RezoningScraper.csproj", "{0F28FB85-B1A6-448E-AD17-351F36E81234}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RezoningScraperTests", "RezoningScraperTests\RezoningScraperTests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RezoningScraper.Functions", "RezoningScraper.Functions\RezoningScraper.Functions.csproj", "{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0F28FB85-B1A6-448E-AD17-351F36E81234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F28FB85-B1A6-448E-AD17-351F36E81234}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F28FB85-B1A6-448E-AD17-351F36E81234}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F28FB85-B1A6-448E-AD17-351F36E81234}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {AF40490B-31CD-4372-A85C-F1C265F69E8B}
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Debug|x64.Build.0 = Debug|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Debug|x86.Build.0 = Debug|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Release|x64.ActiveCfg = Release|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Release|x64.Build.0 = Release|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Release|x86.ActiveCfg = Release|Any CPU
+		{07E9C247-6CEA-4331-B8E9-3A32A348CCC4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
