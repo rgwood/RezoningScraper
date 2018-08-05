@@ -36,7 +36,6 @@ namespace AbundantHousingVancouver
             var rezonings = await GetRezoningsFromDb(rezoningsTable);
 
             var webpageHtml = new HtmlWeb().Load(RezoningPageUri);
-
             saveHtmlToBlobStorage(storageAccount, webpageHtml, log);
 
             // The big ugly HTML parser. This is closely tied to the CoV formatting which could change at any time
@@ -108,7 +107,6 @@ namespace AbundantHousingVancouver
                     log.Info("Wrote to DB");
                 }
             }
-
         }
 
         private static void setUpLogging(TraceWriter _log)
