@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.8.5" />
     <PackageReference Include="Microsoft.Azure.Storage.Common" Version="8.6.0-preview" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.14" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

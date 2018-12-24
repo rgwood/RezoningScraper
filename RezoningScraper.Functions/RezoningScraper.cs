@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Net.Http;
 using Microsoft.Azure;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -19,7 +20,7 @@ namespace AbundantHousingVancouver
 {
     public static class RezoningScraper
     {
-        private static TraceWriter Log;
+        private static ILogger Log;
         private static string StorageConnectionString;
         private static string SlackMessageUri;
         private static string RezoningPageUri;
@@ -29,7 +30,7 @@ namespace AbundantHousingVancouver
         private static CloudTable RezoningsTable;
 
         [FunctionName("RezoningScraper")]
-        public async static Task Run([TimerTrigger("%TimerSchedule%", RunOnStartup = true)]TimerInfo myTimer, TraceWriter log, ExecutionContext context)
+        public async static Task Run([TimerTrigger("%TimerSchedule%", RunOnStartup = true)]TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             setUpLogging(log);
             loadConfiguration(context);
@@ -42,7 +43,7 @@ namespace AbundantHousingVancouver
             parseHtmlAndProcessUpdates(webpageHtml, existingRezonings);
         }
 
-        private static void setUpLogging(TraceWriter _log)
+        private static void setUpLogging(ILogger _log)
         {
             Log = _log;
         }
@@ -61,7 +62,7 @@ namespace AbundantHousingVancouver
 
             if (IsRunningInTestMode)
             {
-                Log.Info("Running in test mode");
+                Log.LogInformation("Running in test mode");
             }
         }
 
@@ -85,7 +86,7 @@ namespace AbundantHousingVancouver
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("rezoning-scrapes");
             SaveTextFileToAzure(container, doc.DocumentNode.OuterHtml, saveFileName);
-            Log.Info($"Saved HTML to {saveFileName}");
+            Log.LogInformation($"Saved HTML to {saveFileName}");
         }
         private async static void SaveTextFileToAzure(CloudBlobContainer container, string fileContents, string fileName)
         {
@@ -95,7 +96,7 @@ namespace AbundantHousingVancouver
 
         private static void SendMessageToSlack(string message)
         {
-            Log.Info($"Sending message to Slack: {message}");
+            Log.LogInformation($"Sending message to Slack: {message}");
             if (IsRunningInTestMode)
                 return;
             var client = new HttpClient();
@@ -128,7 +129,10 @@ namespace AbundantHousingVancouver
         // which could change at any time, so it's probably not worth spending time cleaning it up
         private static void parseHtmlAndProcessUpdates(HtmlDocument html, List<Rezoning> existingRezonings)
         {
-            var desc = html.DocumentNode.Descendants("li");
+            var box = html.DocumentNode.SelectNodes("//div[@class='box']").Single();
+            var nodesUpToHeritage = box.ChildNodes.TakeWhile(n => !n.DescendantsAndSelf().Any(n1 => n1.InnerText.Equals("Heritage Application Legal Information")));
+            
+            var desc = nodesUpToHeritage.Select(n => n.SelectNodes("li")).Where(n => n != null).SelectMany(n => n).ToList();
             var links = desc.Where(d => d.ChildNodes.Any() && d.ChildNodes.First().Name.Equals("a", StringComparison.OrdinalIgnoreCase));
             foreach (var htmlNode in links)
             {
@@ -147,7 +151,7 @@ namespace AbundantHousingVancouver
                 var rezoningsWithSameName = existingRezonings.Where(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 if (rezoningsWithSameName.Any())
                 {
-                    Log.Info($"Existing entry for {name} found.");
+                    Log.LogInformation($"Existing entry for {name} found.");
                     var oldVersion = rezoningsWithSameName.Single();
                     var changeDetails = new List<string>();
                     if (!scrapedRezoning.Status.Equals(oldVersion.Status, StringComparison.OrdinalIgnoreCase))
@@ -186,13 +190,13 @@ namespace AbundantHousingVancouver
                 }
                 else
                 {
-                    Log.Info($"Writing new rezoning with name='{scrapedRezoning.Name}', Status='{scrapedRezoning.Status}', Info='{scrapedRezoning.Info}' ");
+                    Log.LogInformation($"Writing new rezoning with name='{scrapedRezoning.Name}', Status='{scrapedRezoning.Status}', Info='{scrapedRezoning.Info}' ");
                     InsertRezoningToDb(RezoningsTable, scrapedRezoning);
                     var message = $"New rezoning application: *<{fullUri.ToString()}|{scrapedRezoning.Name}>*\nStatus: {scrapedRezoning.Status}";
                     if (!String.IsNullOrEmpty(scrapedRezoning.Info))
                         message += $"\n{scrapedRezoning.Info}";
                     SendMessageToSlack(message);
-                    Log.Info("Wrote to DB");
+                    Log.LogInformation("Wrote to DB");
                 }
             }
         }
