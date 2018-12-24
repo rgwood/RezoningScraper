@@ -15,6 +15,8 @@ To run this locally, you may first need to use the "Initialize project for use w
 
 To deploy, use the "Deploy to function app" command and point it at the publish output folder (`/RezoningScraper.Functions/bin/Release/netstandard2.0/publish`).
 
+Troubleshooting: try opening the `RezoningScraper.Functions` folder and deploying from there – sometimes doesn't work from the solution directory, need to figure out why.
+
 #### Tests
 `dotnet test`
 
