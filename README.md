@@ -1,8 +1,16 @@
-# RezoningScraper
+# RezoningScraper (Not Currently Operational)
 
 A small project written for [Abundant Housing Vancouver](http://www.abundanthousingvancouver.com).
 
-Scrapes the City of Vancouver's [rezoning application page](http://rezoning.vancouver.ca/applications/) then notifies people of any changes via Slack. It's an [Azure Function](https://duckduckgo.com/?q=azure+function&t=ffab&ia=web) written in C# using .NET Core, uses HtmlAgilityPack for HTML parsing and Azure Table+Blob storage.
+Scrapes the City of Vancouver's [rezoning application page](http://rezoning.vancouver.ca/applications/) then notifies people of any changes via Slack. It's an [Azure Function](https://duckduckgo.com/?q=azure+function&t=ffab&ia=web) written in C# using .NET Core, uses HtmlAgilityPack for HTML parsing and Azure Table+Blob storage. It costs just a few pennies/month to run.
+
+## Update Nov 2021
+
+The City changed their website and this has been broken since February 2021. I might try to patch it up, but there's a good chance I won't get around to it. The code's not in the best state, I'd change a few things about it if I was starting today.
+
+#### License
+
+Public domain. Do whatever you like with this code, no attribution needed.
 
 #### Build
 Just run `dotnet build`.
