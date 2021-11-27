@@ -6,26 +6,10 @@ Scrapes the City of Vancouver's [rezoning application page](http://rezoning.vanc
 
 ## Update Nov 2021
 
-The City changed their website and this has been broken since February 2021. I might try to patch it up, but there's a good chance I won't get around to it. The code's not in the best state, I'd change a few things about it if I was starting today.
+The City changed their website and this has been broken since February 2021. 
 
-#### License
+I'm in the middle of patching it up and modernizing it, things aren't 100 working yet.
+
+## License
 
 Public domain. Do whatever you like with this code, no attribution needed.
-
-#### Build
-Just run `dotnet build`.
-
-#### Development + Deployment
-
-I use the Azure Functions extension in VS Code. 
-
-To run this locally, you may first need to use the "Initialize project for use with VS Code" command.
-
-To deploy, use the "Deploy to function app" command and point it at the publish output folder (`/RezoningScraper.Functions/bin/Release/netstandard2.0/publish`).
-
-Troubleshooting: try opening the `RezoningScraper.Functions` folder and deploying from there – sometimes doesn't work from the solution directory, need to figure out why.
-
-#### Tests
-`dotnet test`
-
-Note that there is a bug (?) in the current version of .NET Core that means when you run `dotnet test` on a solution, it attempts to run tests in _all_ projects (and fails on projects that contain no tests). I'm using [this handy fix by Martin Ullrich ](https://dasmulli.blog/2018/01/20/make-dotnet-test-work-on-solution-files/), as found in [this GitHub issue](https://github.com/Microsoft/vstest/issues/1129).
