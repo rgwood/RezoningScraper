@@ -1,6 +1,6 @@
 using FluentAssertions;
 using Xunit;
-using RezoningScraper2;
+using RezoningScraper;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
