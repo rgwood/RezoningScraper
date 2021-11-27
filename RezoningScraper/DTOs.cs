@@ -1,23 +1,23 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace RezoningScraper2;
+namespace RezoningScraper;
 
 // created using the Visual Studio "Paste JSON as Classes" feature
 
 public class Projects
 {
-    public Datum[] data { get; set; }
-    public Links links { get; set; }
-    public Meta meta { get; set; }
+    public Datum[]? data { get; set; }
+    public Links? links { get; set; }
+    public Meta? meta { get; set; }
 }
 
 public class Links
 {
-    public string self { get; set; }
-    public string first { get; set; }
-    public object prev { get; set; }
-    public string next { get; set; }
-    public string last { get; set; }
+    public string? self { get; set; }
+    public string? first { get; set; }
+    public object? prev { get; set; }
+    public string? next { get; set; }
+    public string? last { get; set; }
 }
 
 public class Meta
@@ -31,11 +31,11 @@ public class Meta
 
 public class Datum
 {
-    public string id { get; set; }
-    public string type { get; set; }
-    public Attributes attributes { get; set; }
-    public Relationships relationships { get; set; }
-    public Links1 links { get; set; }
+    public string? id { get; set; }
+    public string? type { get; set; }
+    public Attributes? attributes { get; set; }
+    public Relationships? relationships { get; set; }
+    public Links1? links { get; set; }
 }
 
 public class Attributes
@@ -73,21 +73,21 @@ public class Attributes
 
 public class Relationships
 {
-    public Site site { get; set; }
+    public Site? site { get; set; }
 }
 
 public class Site
 {
-    public Data data { get; set; }
+    public Data? data { get; set; }
 }
 
 public class Data
 {
-    public string id { get; set; }
-    public string type { get; set; }
+    public string? id { get; set; }
+    public string? type { get; set; }
 }
 
 public class Links1
 {
-    public string self { get; set; }
+    public string? self { get; set; }
 }
