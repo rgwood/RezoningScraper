@@ -1,13 +1,12 @@
 using FluentAssertions;
-using Xunit;
 using RezoningScraper;
-using System.IO;
 using System.Reflection;
 using System.Text.Json;
+using Xunit;
 
 namespace RezoningScraperTests;
 
-public class Tests
+public class SerializationTests
 {
     [Fact]
     public void CanDeserialize()
