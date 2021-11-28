@@ -5,7 +5,9 @@ using System.Text.Json;
 
 namespace RezoningScraper;
 
-public static class DbHelpers
+public record Token(DateTimeOffset Expiration, string JWT);
+
+public static class DbHelper
 {
     /// <summary>Creates or opens a SQLite DB</summary>
     /// <param name="filePath">A file path relative to the executable</param>
@@ -36,16 +38,22 @@ CREATE TABLE IF NOT EXISTS
 Projects(
     Id TEXT PRIMARY KEY NOT NULL,
     Serialized TEXT NOT NULL
-)";
+);
+
+CREATE TABLE
+TokenCache(
+    Expiration TEXT NOT NULL,
+    Token TEXT NOT NULL
+);";
         conn.Execute(sql);
     }
 
-    public static bool Contains(this SqliteConnection conn, string id) 
+    public static bool ContainsProject(this SqliteConnection conn, string id) 
         => conn.ExecuteScalar<int>("SELECT COUNT(*) FROM Projects WHERE id = @id", new { id }) > 0;
 
-    public static Datum Get(this SqliteConnection conn, string id)
+    public static Datum GetProject(this SqliteConnection conn, string id)
     {
-        if (!conn.Contains(id))
+        if (!conn.ContainsProject(id))
         {
             throw new KeyNotFoundException();
         }
@@ -62,12 +70,7 @@ Projects(
         return result;
     }
 
-    public static IEnumerable<Datum> GetAll(this SqliteConnection conn)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static void Upsert(this SqliteConnection conn, Datum datum)
+    public static void UpsertProject(this SqliteConnection conn, Datum datum)
     {
         // TODO: add archive functionality, move old versions to an archive table or something
 
@@ -76,5 +79,25 @@ Projects(
 INSERT INTO projects(Id, Serialized) VALUES(@id,@json)
   ON CONFLICT(Id) DO UPDATE SET Serialized = excluded.Serialized";
         conn.Execute(Sql, new { datum.id, json });
+    }
+
+    public static Token? GetToken(this SqliteConnection conn)
+    {
+        var tuple = conn.Query<(long, string)?>("select * from TokenCache").FirstOrDefault();
+
+        if (tuple == null) return null;
+
+        return new Token(DateTimeOffset.FromUnixTimeMilliseconds(tuple.Value.Item1), tuple.Value.Item2);
+    }
+
+    public static void SetToken(this SqliteConnection conn, Token t)
+    {
+        var tran = conn.BeginTransaction();
+        conn.Execute("DELETE FROM TokenCache");
+
+        conn.Execute("INSERT INTO TokenCache(Expiration, Token) VALUES(@Expiration,@Token)",
+            new { Expiration = t.Expiration.ToUnixTimeMilliseconds(), Token=t.JWT });
+
+        tran.Commit();
     }
 }

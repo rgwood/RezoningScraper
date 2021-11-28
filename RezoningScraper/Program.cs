@@ -17,7 +17,7 @@ await Status().StartAsync("Querying API...", async ctx =>
 
     ctx.Status = "Comparing against existing database...";
 
-    var db = DbHelpers.CreateOrOpenFileDb("RezoningScraper.db");
+    var db = DbHelper.CreateOrOpenFileDb("RezoningScraper.db");
     db.InitializeSchemaIfNeeded();
 
     List<Datum> newProjects = new();
@@ -27,9 +27,9 @@ await Status().StartAsync("Querying API...", async ctx =>
     var tran = db.BeginTransaction();
     foreach (var project in results)
     {
-        if (db.Contains(project.id!))
+        if (db.ContainsProject(project.id!))
         {
-            var oldVersion = db.Get(project.id!);
+            var oldVersion = db.GetProject(project.id!);
             if (ProjectsHaveChanged(oldVersion, project))
             {
                 modifiedProjects.Add((oldVersion, project));
@@ -40,7 +40,7 @@ await Status().StartAsync("Querying API...", async ctx =>
             newProjects.Add(project);
         }
 
-        db.Upsert(project);
+        db.UpsertProject(project);
     }
     tran.Commit();
 

@@ -40,35 +40,35 @@ public class Datum
 
 public class Attributes
 {
-	public string? name { get; set; }
-	public string? permalink { get; set; }
-	public string? state { get; set; }
-	[JsonPropertyName("visibility-mode")]
-	public string? visibilitymode { get; set; }
-	[JsonPropertyName("published-at")]
-	public DateTime publishedat { get; set; }
-	[JsonPropertyName("survey-count")]
-	public int surveycount { get; set; }
-	[JsonPropertyName("banner-url")]
-	public string? bannerurl { get; set; }
-	public string? description { get; set; }
-	[JsonPropertyName("project-tag-list")]
-	public string[]? projecttaglist { get; set; }
-	[JsonPropertyName("created-at")]
-	public DateTime createdat { get; set; }
-	[JsonPropertyName("archival-reason-message")]
-	public string? archivalreasonmessage { get; set; }
-	[JsonPropertyName("image-url")]
-	public string? imageurl { get; set; }
-	[JsonPropertyName("image-caption")]
-	public string? imagecaption { get; set; }
-	[JsonPropertyName("image-description")]
-	public string? imagedescription { get; set; }
-	[JsonPropertyName("meta-description")]
-	public string? metadescription { get; set; }
-	[JsonPropertyName("parent-id")]
-	public int? parentid { get; set; }
-	public bool access { get; set; }
+    public string? name { get; set; }
+    public string? permalink { get; set; }
+    public string? state { get; set; }
+    [JsonPropertyName("visibility-mode")]
+    public string? visibilitymode { get; set; }
+    [JsonPropertyName("published-at")]
+    public DateTime publishedat { get; set; }
+    [JsonPropertyName("survey-count")]
+    public int surveycount { get; set; }
+    [JsonPropertyName("banner-url")]
+    public string? bannerurl { get; set; }
+    public string? description { get; set; }
+    [JsonPropertyName("project-tag-list")]
+    public string[]? projecttaglist { get; set; }
+    [JsonPropertyName("created-at")]
+    public DateTime createdat { get; set; }
+    [JsonPropertyName("archival-reason-message")]
+    public string? archivalreasonmessage { get; set; }
+    [JsonPropertyName("image-url")]
+    public string? imageurl { get; set; }
+    [JsonPropertyName("image-caption")]
+    public string? imagecaption { get; set; }
+    [JsonPropertyName("image-description")]
+    public string? imagedescription { get; set; }
+    [JsonPropertyName("meta-description")]
+    public string? metadescription { get; set; }
+    [JsonPropertyName("parent-id")]
+    public int? parentid { get; set; }
+    public bool access { get; set; }
 }
 
 public class Relationships

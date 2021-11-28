@@ -1,8 +1,4 @@
-using FluentAssertions;
-using RezoningScraper;
-using System.Reflection;
 using System.Text.Json;
-using Xunit;
 
 namespace RezoningScraperTests;
 
@@ -11,7 +7,7 @@ public class SerializationTests
     [Fact]
     public void CanDeserialize()
     {
-        string json = ReadResource("ExampleInput.json");
+        string json = SerializationTestsHelpers.ReadResource("ExampleInput.json");
         json.Should().NotBeNullOrEmpty();
 
         var result = JsonSerializer.Deserialize<Projects>(json);
@@ -29,25 +25,5 @@ public class SerializationTests
         // default values if missing
         f.ID.Should().Be(0);
         f.Name.Should().BeNull();
-    }
-
-
-    public string ReadResource(string name)
-    {
-        // Determine path
-        var assembly = Assembly.GetExecutingAssembly();
-        string resourcePath = name;
-        // Format: "{Namespace}.{Folder}.{filename}.{Extension}"
-        if (!name.StartsWith(nameof(RezoningScraperTests)))
-        {
-            resourcePath = assembly.GetManifestResourceNames()
-                .Single(str => str.EndsWith(name));
-        }
-
-        using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
-        using (StreamReader reader = new StreamReader(stream))
-        {
-            return reader.ReadToEnd();
-        }
     }
 }
