@@ -37,7 +37,7 @@ public static class API
 
 			if (data != null)
 			{
-				AnsiConsole.WriteLine($"Page {++pageCount} contained {data.Count()} items");
+				AnsiConsole.WriteLine($"Retrieved page {++pageCount} ({data.Count()} items)");
 				foreach (var item in data)
 				{
 					yield return item;

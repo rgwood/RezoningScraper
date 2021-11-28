@@ -1,14 +1,22 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
+using System.Reflection;
 using System.Text.Json;
 
 namespace RezoningScraper;
 
 public static class DbHelpers
 {
-    public static SqliteConnection CreateFileDb(string filePath)
+    /// <summary>Creates or opens a SQLite DB</summary>
+    /// <param name="filePath">A file path relative to the executable</param>
+    /// <returns></returns>
+    public static SqliteConnection CreateOrOpenFileDb(string filePath)
     {
-        SqliteConnection connection = new SqliteConnection($"Data Source={filePath}");
+        string exePath = Assembly.GetEntryAssembly()!.Location;
+        string exeDirPath = Directory.GetParent(exePath)!.FullName;
+        string dbAbsolutePath = Path.Combine(exeDirPath, filePath);
+
+        SqliteConnection connection = new SqliteConnection($"Data Source={dbAbsolutePath}");
         connection.Open();
         return connection;
     }
@@ -61,6 +69,8 @@ Projects(
 
     public static void Upsert(this SqliteConnection conn, Datum datum)
     {
+        // TODO: add archive functionality, move old versions to an archive table or something
+
         string json = JsonSerializer.Serialize(datum);
         const string Sql = @"
 INSERT INTO projects(Id, Serialized) VALUES(@id,@json)
