@@ -1,4 +1,5 @@
 ﻿using AngleSharp.Html.Parser;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Nodes;
 
 namespace RezoningScraper;
@@ -24,4 +25,13 @@ public static class TokenHelper
             ["token"].GetValue<string>();
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
+
+    public static DateTimeOffset GetExpirationFromEncodedJWT(string jwt)
+    {
+        var token = new JwtSecurityToken(jwt);
+        string unparsedExp = token.Claims.Single(c => c.Type == "exp").Value;
+        long exp = long.Parse(unparsedExp);
+        return DateTimeOffset.FromUnixTimeSeconds(exp);
+    }
+
 }

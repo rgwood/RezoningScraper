@@ -40,7 +40,7 @@ Projects(
     Serialized TEXT NOT NULL
 );
 
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
 TokenCache(
     Expiration TEXT NOT NULL,
     Token TEXT NOT NULL
