@@ -6,7 +6,7 @@ Scrapes the City of Vancouver's [rezoning application page](http://rezoning.vanc
 
 ## Update Nov 2021
 
-The City changed their website and this has been broken since February 2021. I might try to patch it up, but there's a good chance I won't get around to it. The code's not in the best state, I'd change a few things about it if I was starting today.
+The City changed their website and this has been broken since February 2021. I'm taking this opportunity to rewrite the whole thing, work is happening on this branch: https://github.com/rgwood/RezoningScraper/tree/v2
 
 #### License
 
