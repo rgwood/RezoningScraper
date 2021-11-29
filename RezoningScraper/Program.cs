@@ -15,35 +15,12 @@ await Status().StartAsync("Opening DB...", async ctx =>
         db.InitializeSchemaIfNeeded();
 
         ctx.Status = "Loading token...";
-
-        var tokenFromDb = db.GetToken();
-        string jwt;
-
-        if (tokenFromDb != null && tokenFromDb.Expiration > DateTimeOffset.UtcNow.AddMinutes(1))
-        {
-            jwt = tokenFromDb.JWT;
-            WriteLine($"Loaded API token from database. Cached token will expire on {tokenFromDb.Expiration}");
-        }
-        else
-        {
-            WriteLine("Getting latest anonymous user token from shapeyourcity.ca");
-            var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(20) };
-            var htmlToParse = await client.GetStringAsync("https://shapeyourcity.ca/embeds/projectfinder");
-
-            jwt = TokenHelper.ExtractTokenFromHtml(htmlToParse);
-
-            var expiration = TokenHelper.GetExpirationFromEncodedJWT(jwt);
-
-            WriteLine($"Retrieved JWT with expiration date {expiration}");
-
-            db.SetToken(new Token(expiration, jwt));
-            WriteLine($"Cached JWT in local database");
-        }
+        var token = await TokenHelper.GetTokenFromDbOrWebsite(db);
 
         ctx.Status = "Querying API...";
         WriteLine("Starting API query...");
         var stopwatch = Stopwatch.StartNew();
-        var results = await API.GetAllProjects(jwt).ToListAsync();
+        var results = await API.GetAllProjects(token.JWT).ToListAsync();
         MarkupLine($"API query finished: retrieved {results.Count} projects in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
 
         ctx.Status = "Comparing against existing database...";
