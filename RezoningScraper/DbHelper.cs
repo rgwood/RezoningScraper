@@ -14,9 +14,7 @@ public static class DbHelper
     /// <returns></returns>
     public static SqliteConnection CreateOrOpenFileDb(string filePath)
     {
-        string exePath = Assembly.GetEntryAssembly()!.Location;
-        string exeDirPath = Directory.GetParent(exePath)!.FullName;
-        string dbAbsolutePath = Path.Combine(exeDirPath, filePath);
+        string dbAbsolutePath = Path.Combine(AppContext.BaseDirectory, filePath);
 
         SqliteConnection connection = new SqliteConnection($"Data Source={dbAbsolutePath}");
         connection.Open();
