@@ -16,7 +16,7 @@ public class DatabaseTests
         db.InitializeSchemaIfNeeded();
         
         db.ContainsProject("foo").Should().BeFalse();
-        db.UpsertProject(new Datum() { id = "foo" });
+        db.UpsertProject(new Project() { id = "foo" });
         db.ContainsProject("foo").Should().BeTrue();
     }
 
@@ -26,10 +26,10 @@ public class DatabaseTests
         var db = DbHelper.CreateInMemoryDb();
         db.InitializeSchemaIfNeeded();
 
-        db.UpsertProject(new Datum() { id = "foo", type="first" });
+        db.UpsertProject(new Project() { id = "foo", type="first" });
         db.GetProject("foo").type.Should().Be("first");
 
-        db.UpsertProject(new Datum() { id = "foo", type = "second" });
+        db.UpsertProject(new Project() { id = "foo", type = "second" });
         db.GetProject("foo").type.Should().Be("second");
     }
 

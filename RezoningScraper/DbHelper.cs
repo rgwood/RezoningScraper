@@ -47,7 +47,7 @@ TokenCache(
     public static bool ContainsProject(this SqliteConnection conn, string id) 
         => conn.ExecuteScalar<int>("SELECT COUNT(*) FROM Projects WHERE id = @id", new { id }) > 0;
 
-    public static Datum GetProject(this SqliteConnection conn, string id)
+    public static Project GetProject(this SqliteConnection conn, string id)
     {
         if (!conn.ContainsProject(id))
         {
@@ -56,7 +56,7 @@ TokenCache(
 
         string json = conn.QuerySingle<string>("SELECT Serialized FROM Projects where id = @id", new { id });
 
-        var result = JsonSerializer.Deserialize<Datum>(json);
+        var result = JsonSerializer.Deserialize<Project>(json);
 
         if (result == null)
         {
@@ -66,7 +66,7 @@ TokenCache(
         return result;
     }
 
-    public static void UpsertProject(this SqliteConnection conn, Datum datum)
+    public static void UpsertProject(this SqliteConnection conn, Project datum)
     {
         // TODO: add archive functionality, move old versions to an archive table or something
 

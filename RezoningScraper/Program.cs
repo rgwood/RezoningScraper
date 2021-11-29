@@ -25,8 +25,8 @@ await Status().StartAsync("Opening DB...", async ctx =>
 
         ctx.Status = "Comparing against existing database...";
 
-        List<Datum> newProjects = new();
-        List<(Datum Old, Datum Latest)> modifiedProjects = new();
+        List<Project> newProjects = new();
+        List<(Project Old, Project Latest)> modifiedProjects = new();
 
         stopwatch.Restart();
         var tran = db.BeginTransaction();
@@ -63,7 +63,7 @@ await Status().StartAsync("Opening DB...", async ctx =>
     }
 });
 
-void HandleNewProjects(List<Datum> newProjects)
+void HandleNewProjects(List<Project> newProjects)
 {
     if (newProjects.Count == 0) return;
 
@@ -87,12 +87,12 @@ void HandleNewProjects(List<Datum> newProjects)
     }
 }
 
-void HandleModifiedProjects(List<(Datum Old, Datum Latest)> modifiedProjects)
+void HandleModifiedProjects(List<(Project Old, Project Latest)> modifiedProjects)
 {
     // TODO: implement
 }
 
-bool DidProjectChange(Datum oldVersion, Datum newVersion, out Dictionary<string, AttributeChange> changedAttributes)
+bool DidProjectChange(Project oldVersion, Project newVersion, out Dictionary<string, AttributeChange> changedAttributes)
 {
     bool changed = false;
     // todo: check more fields (all attributes), and return data about what exactly changed

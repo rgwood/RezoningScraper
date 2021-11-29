@@ -2,18 +2,18 @@
 
 internal class ProjectComparer
 {
-    private readonly Datum _oldVersion;
-    private readonly Datum _newVersion;
+    private readonly Project _oldVersion;
+    private readonly Project _newVersion;
 
     internal record AttributeChange(string OldValue, string NewValue);
 
-    public ProjectComparer(Datum oldVersion, Datum newVersion)
+    public ProjectComparer(Project oldVersion, Project newVersion)
     {
         this._oldVersion = oldVersion;
         this._newVersion = newVersion;
     }
 
-    internal bool DidProjectChange(Datum oldVersion, Datum newVersion, out Dictionary<string, AttributeChange> changedAttributes)
+    internal bool DidProjectChange(Project oldVersion, Project newVersion, out Dictionary<string, AttributeChange> changedAttributes)
     {
         bool changed = false;
         // todo: check more fields (all attributes), and return data about what exactly changed

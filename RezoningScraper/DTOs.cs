@@ -7,7 +7,7 @@ namespace RezoningScraper;
 
 public class Projects
 {
-    public Datum[]? data { get; set; }
+    public Project[]? data { get; set; }
     public Links? links { get; set; }
     public Meta? meta { get; set; }
 }
@@ -30,7 +30,7 @@ public class Meta
     public int hidden { get; set; }
 }
 
-public class Datum
+public class Project
 {
     public string? id { get; set; }
     public string? type { get; set; }

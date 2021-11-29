@@ -12,7 +12,7 @@ public static class API
 	/// Get all projects from the ShapeYourCity API.
 	/// </summary>
 	/// <returns>An async enumerable of projects (because the API is paginated)</returns>
-	public static async IAsyncEnumerable<Datum> GetAllProjects(string jwt)
+	public static async IAsyncEnumerable<Project> GetAllProjects(string jwt)
 	{
 		string startUrl = $"https://shapeyourcity.ca/api/v2/projects?per_page={ResultsPerPage}";
         HttpClient client = new();
