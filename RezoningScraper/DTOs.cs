@@ -2,7 +2,8 @@
 
 namespace RezoningScraper;
 
-// created using the Visual Studio "Paste JSON as Classes" feature
+// C# classes that map directly to the JSON returned by the ShapeYourCity API
+// Created using the Visual Studio "Paste JSON as Classes" feature
 
 public class Projects
 {

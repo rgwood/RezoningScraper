@@ -35,7 +35,7 @@ await Status().StartAsync("Opening DB...", async ctx =>
             if (db.ContainsProject(project.id!))
             {
                 var oldVersion = db.GetProject(project.id!);
-                if (ProjectsHaveChanged(oldVersion, project))
+                if (DidProjectChange(oldVersion, project, out var changedAttributes))
                 {
                     modifiedProjects.Add((oldVersion, project));
                 }
@@ -65,6 +65,8 @@ await Status().StartAsync("Opening DB...", async ctx =>
 
 void HandleNewProjects(List<Datum> newProjects)
 {
+    if (newProjects.Count == 0) return;
+
     WriteLine();
     MarkupLine("[bold underline green]New Projects[/]");
     WriteLine();
@@ -81,7 +83,6 @@ void HandleNewProjects(List<Datum> newProjects)
         }
 
         WriteLine($"URL: {project!.links!.self}");
-
         WriteLine();
     }
 }
@@ -91,12 +92,22 @@ void HandleModifiedProjects(List<(Datum Old, Datum Latest)> modifiedProjects)
     // TODO: implement
 }
 
-//WriteLine("Press any key to exit");
-//System.Console.ReadKey();
-
-bool ProjectsHaveChanged(Datum oldVersion, Datum newVersion)
+bool DidProjectChange(Datum oldVersion, Datum newVersion, out Dictionary<string, AttributeChange> changedAttributes)
 {
+    bool changed = false;
     // todo: check more fields (all attributes), and return data about what exactly changed
+    changedAttributes = new Dictionary<string, AttributeChange>();
+
+    var oldAttrs = oldVersion.attributes!;
+    var newAttrs = newVersion.attributes!;
+
+    if (oldAttrs.name != newAttrs.name)
+    {
+        changed = true;
+        changedAttributes.Add("Name", new(oldAttrs.name, newAttrs.name));
+    }
 
     return oldVersion?.attributes?.name != newVersion?.attributes?.name;
 }
+
+public record AttributeChange(string OldValue, string NewValue);

@@ -1,3 +1,4 @@
+<!-- Source of https://shapeyourcity.ca/embeds/projectfinder, Nov 2021 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,7 +135,7 @@
 </head>
 <body>
     <script>
-    (function setScript(initialValue) {
+        (function setScript(initialValue) {
             var mql = window.matchMedia("(prefers-color-scheme: dark)");
             var systemPreference = mql.matches ? "dark" : "light";
             var persistedPreference;
@@ -891,430 +892,448 @@
                         }
                     }
                 </style><div class="ehq-projectsMenuContainer css-10ol9uz">
-                <style data-emotion="css 1kqgmaz">
-                    .css-1kqgmaz {
-                        width: 100%;
-                        padding: var(--chakra-space-2);
-                    }
-
-                    @media screen and (min-width: 30em) {
+                    <style data-emotion="css 1kqgmaz">
                         .css-1kqgmaz {
                             width: 100%;
-                        }
-                    }
-
-                    @media screen and (min-width: 48em) {
-                        .css-1kqgmaz {
-                            width: 40%;
-                        }
-                    }
-
-                    @media screen and (min-width: 62em) {
-                        .css-1kqgmaz {
-                            width: 40%;
-                        }
-                    }
-                </style><div class="ehq-projectsSearchFilterContainer css-1kqgmaz">
-                <style data-emotion="css 4302v8">
-                    .css-4302v8 {
-                        width: 100%;
-                        display: -webkit-box;
-                        display: -webkit-flex;
-                        display: -ms-flexbox;
-                        display: flex;
-                        position: relative;
-                    }
-                </style><div class="chakra-input__group css-4302v8">
-                <style data-emotion="css 1lt6yxu">
-                    .css-1lt6yxu {
-                        width: 100%;
-                        min-width: 0px;
-                        outline: 2px solid transparent;
-                        outline-offset: 2px;
-                        position: relative;
-                        -webkit-appearance: none;
-                        -moz-appearance: none;
-                        -ms-appearance: none;
-                        appearance: none;
-                        transition-property: var(--chakra-transition-property-common);
-                        transition-duration: var(--chakra-transition-duration-normal);
-                        font-size: var(--chakra-fontSizes-md);
-                        -webkit-padding-start: var(--chakra-space-4);
-                        padding-inline-start: var(--chakra-space-4);
-                        -webkit-padding-end: var(--chakra-space-10);
-                        padding-inline-end: var(--chakra-space-10);
-                        height: var(--chakra-sizes-10);
-                        border-radius: var(--chakra-radii-md);
-                        border: 1px solid;
-                        border-color: inherit;
-                        background: inherit;
-                        padding-right: 40px;
-                        overflow: hidden;
-                    }
-
-                        .css-1lt6yxu:hover, .css-1lt6yxu[data-hover] {
-                            border-color: var(--chakra-colors-gray-300);
+                            padding: var(--chakra-space-2);
                         }
 
-                        .css-1lt6yxu[aria-readonly=true], .css-1lt6yxu[readonly], .css-1lt6yxu[data-readonly] {
-                            box-shadow: none !important;
-                            -webkit-user-select: all;
-                            -moz-user-select: all;
-                            -ms-user-select: all;
-                            user-select: all;
+                        @media screen and (min-width: 30em) {
+                            .css-1kqgmaz {
+                                width: 100%;
+                            }
                         }
 
-                        .css-1lt6yxu[disabled], .css-1lt6yxu[aria-disabled=true], .css-1lt6yxu[data-disabled] {
-                            opacity: 0.4;
-                            cursor: not-allowed;
+                        @media screen and (min-width: 48em) {
+                            .css-1kqgmaz {
+                                width: 40%;
+                            }
                         }
 
-                        .css-1lt6yxu[aria-invalid=true], .css-1lt6yxu[data-invalid] {
-                            border-color: #E53E3E;
-                            box-shadow: 0 0 0 1px #E53E3E;
+                        @media screen and (min-width: 62em) {
+                            .css-1kqgmaz {
+                                width: 40%;
+                            }
                         }
+                    </style><div class="ehq-projectsSearchFilterContainer css-1kqgmaz">
+                        <style data-emotion="css 4302v8">
+                            .css-4302v8 {
+                                width: 100%;
+                                display: -webkit-box;
+                                display: -webkit-flex;
+                                display: -ms-flexbox;
+                                display: flex;
+                                position: relative;
+                            }
+                        </style><div class="chakra-input__group css-4302v8">
+                            <style data-emotion="css 1lt6yxu">
+                                .css-1lt6yxu {
+                                    width: 100%;
+                                    min-width: 0px;
+                                    outline: 2px solid transparent;
+                                    outline-offset: 2px;
+                                    position: relative;
+                                    -webkit-appearance: none;
+                                    -moz-appearance: none;
+                                    -ms-appearance: none;
+                                    appearance: none;
+                                    transition-property: var(--chakra-transition-property-common);
+                                    transition-duration: var(--chakra-transition-duration-normal);
+                                    font-size: var(--chakra-fontSizes-md);
+                                    -webkit-padding-start: var(--chakra-space-4);
+                                    padding-inline-start: var(--chakra-space-4);
+                                    -webkit-padding-end: var(--chakra-space-10);
+                                    padding-inline-end: var(--chakra-space-10);
+                                    height: var(--chakra-sizes-10);
+                                    border-radius: var(--chakra-radii-md);
+                                    border: 1px solid;
+                                    border-color: inherit;
+                                    background: inherit;
+                                    padding-right: 40px;
+                                    overflow: hidden;
+                                }
 
-                        .css-1lt6yxu:focus, .css-1lt6yxu[data-focus] {
-                            z-index: 1;
-                            border-color: #3182ce;
-                            box-shadow: 0 0 0 1px #3182ce;
-                        }
-                </style><input value="" aria-label="Search Projects" placeholder="Search Projects" data-tname="projects-menu-top-search-input" class="chakra-input ehq-projectsSearchFilter css-1lt6yxu" />
-                <style data-emotion="css ur97uj">
-                    .css-ur97uj {
-                        right: 0;
-                        width: var(--chakra-sizes-10);
-                        height: var(--chakra-sizes-10);
-                        font-size: var(--chakra-fontSizes-md);
-                        display: -webkit-box;
-                        display: -webkit-flex;
-                        display: -ms-flexbox;
-                        display: flex;
-                        -webkit-align-items: center;
-                        -webkit-box-align: center;
-                        -ms-flex-align: center;
-                        align-items: center;
-                        -webkit-box-pack: center;
-                        -ms-flex-pack: center;
-                        -webkit-justify-content: center;
-                        justify-content: center;
-                        position: absolute;
-                        top: 0px;
-                        z-index: 2;
-                    }
-                </style><div class="chakra-input__right-element css-ur97uj">
-                <style data-emotion="css onkibi">
-                    .css-onkibi {
-                        width: 1em;
-                        height: 1em;
-                        display: inline-block;
-                        line-height: 1em;
-                        -webkit-flex-shrink: 0;
-                        -ms-flex-negative: 0;
-                        flex-shrink: 0;
-                        color: currentColor;
-                        vertical-align: middle;
-                    }
-                </style><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-onkibi"><path fill="currentColor" d="M23.384,21.619,16.855,15.09a9.284,9.284,0,1,0-1.768,1.768l6.529,6.529a1.266,1.266,0,0,0,1.768,0A1.251,1.251,0,0,0,23.384,21.619ZM2.75,9.5a6.75,6.75,0,1,1,6.75,6.75A6.758,6.758,0,0,1,2.75,9.5Z"></path></svg></div></div></div>
-                <style data-emotion="css sje8z5">
-                    .css-sje8z5 {
-                        width: 100%;
-                        padding: var(--chakra-space-2);
-                    }
+                                    .css-1lt6yxu:hover, .css-1lt6yxu[data-hover] {
+                                        border-color: var(--chakra-colors-gray-300);
+                                    }
 
-                    @media screen and (min-width: 30em) {
+                                    .css-1lt6yxu[aria-readonly=true], .css-1lt6yxu[readonly], .css-1lt6yxu[data-readonly] {
+                                        box-shadow: none !important;
+                                        -webkit-user-select: all;
+                                        -moz-user-select: all;
+                                        -ms-user-select: all;
+                                        user-select: all;
+                                    }
+
+                                    .css-1lt6yxu[disabled], .css-1lt6yxu[aria-disabled=true], .css-1lt6yxu[data-disabled] {
+                                        opacity: 0.4;
+                                        cursor: not-allowed;
+                                    }
+
+                                    .css-1lt6yxu[aria-invalid=true], .css-1lt6yxu[data-invalid] {
+                                        border-color: #E53E3E;
+                                        box-shadow: 0 0 0 1px #E53E3E;
+                                    }
+
+                                    .css-1lt6yxu:focus, .css-1lt6yxu[data-focus] {
+                                        z-index: 1;
+                                        border-color: #3182ce;
+                                        box-shadow: 0 0 0 1px #3182ce;
+                                    }
+                            </style><input value="" aria-label="Search Projects" placeholder="Search Projects" data-tname="projects-menu-top-search-input" class="chakra-input ehq-projectsSearchFilter css-1lt6yxu" />
+                            <style data-emotion="css ur97uj">
+                                .css-ur97uj {
+                                    right: 0;
+                                    width: var(--chakra-sizes-10);
+                                    height: var(--chakra-sizes-10);
+                                    font-size: var(--chakra-fontSizes-md);
+                                    display: -webkit-box;
+                                    display: -webkit-flex;
+                                    display: -ms-flexbox;
+                                    display: flex;
+                                    -webkit-align-items: center;
+                                    -webkit-box-align: center;
+                                    -ms-flex-align: center;
+                                    align-items: center;
+                                    -webkit-box-pack: center;
+                                    -ms-flex-pack: center;
+                                    -webkit-justify-content: center;
+                                    justify-content: center;
+                                    position: absolute;
+                                    top: 0px;
+                                    z-index: 2;
+                                }
+                            </style><div class="chakra-input__right-element css-ur97uj">
+                                <style data-emotion="css onkibi">
+                                    .css-onkibi {
+                                        width: 1em;
+                                        height: 1em;
+                                        display: inline-block;
+                                        line-height: 1em;
+                                        -webkit-flex-shrink: 0;
+                                        -ms-flex-negative: 0;
+                                        flex-shrink: 0;
+                                        color: currentColor;
+                                        vertical-align: middle;
+                                    }
+                                </style><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-onkibi"><path fill="currentColor" d="M23.384,21.619,16.855,15.09a9.284,9.284,0,1,0-1.768,1.768l6.529,6.529a1.266,1.266,0,0,0,1.768,0A1.251,1.251,0,0,0,23.384,21.619ZM2.75,9.5a6.75,6.75,0,1,1,6.75,6.75A6.758,6.758,0,0,1,2.75,9.5Z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <style data-emotion="css sje8z5">
                         .css-sje8z5 {
                             width: 100%;
+                            padding: var(--chakra-space-2);
                         }
-                    }
 
-                    @media screen and (min-width: 48em) {
-                        .css-sje8z5 {
-                            width: 30%;
+                        @media screen and (min-width: 30em) {
+                            .css-sje8z5 {
+                                width: 100%;
+                            }
                         }
-                    }
 
-                    @media screen and (min-width: 62em) {
-                        .css-sje8z5 {
-                            width: 30%;
+                        @media screen and (min-width: 48em) {
+                            .css-sje8z5 {
+                                width: 30%;
+                            }
                         }
-                    }
-                </style><div class="ehq-projectsTagsFilterContainer css-sje8z5">
-                <style data-emotion="css b62m3t-container">
-                    .css-b62m3t-container {
-                        position: relative;
-                        box-sizing: border-box;
-                    }
-                </style><div class="ehq-dropdownContainer css-b62m3t-container">
-                <style data-emotion="css 7pg0cj-a11yText">
-                    .css-7pg0cj-a11yText {
-                        z-index: 9999;
-                        border: 0;
-                        clip: rect(1px, 1px, 1px, 1px);
-                        height: 1px;
-                        width: 1px;
-                        position: absolute;
-                        overflow: hidden;
-                        padding: 0;
-                        white-space: nowrap;
-                    }
-                </style><span id="react-select-Topics-live-region" class="css-7pg0cj-a11yText"></span><span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span>
-                <style data-emotion="css 1s2u09g-control">
-                    .css-1s2u09g-control {
-                        -webkit-align-items: center;
-                        -webkit-box-align: center;
-                        -ms-flex-align: center;
-                        align-items: center;
-                        background-color: hsl(0, 0%, 100%);
-                        border-color: hsl(0, 0%, 80%);
-                        border-radius: 4px;
-                        border-style: solid;
-                        border-width: 1px;
-                        cursor: default;
-                        display: -webkit-box;
-                        display: -webkit-flex;
-                        display: -ms-flexbox;
-                        display: flex;
-                        -webkit-box-flex-wrap: wrap;
-                        -webkit-flex-wrap: wrap;
-                        -ms-flex-wrap: wrap;
-                        flex-wrap: wrap;
-                        -webkit-box-pack: justify;
-                        -webkit-justify-content: space-between;
-                        justify-content: space-between;
-                        min-height: 38px;
-                        outline: 0 !important;
-                        position: relative;
-                        -webkit-transition: all 100ms;
-                        transition: all 100ms;
-                        box-sizing: border-box;
-                    }
 
-                        .css-1s2u09g-control:hover {
-                            border-color: hsl(0, 0%, 70%);
+                        @media screen and (min-width: 62em) {
+                            .css-sje8z5 {
+                                width: 30%;
+                            }
                         }
-                </style><div class=" css-1s2u09g-control">
-                <style data-emotion="css 1d8n9bt">
-                    .css-1d8n9bt {
-                        -webkit-align-items: center;
-                        -webkit-box-align: center;
-                        -ms-flex-align: center;
-                        align-items: center;
-                        display: grid;
-                        -webkit-flex: 1;
-                        -ms-flex: 1;
-                        flex: 1;
-                        -webkit-box-flex-wrap: wrap;
-                        -webkit-flex-wrap: wrap;
-                        -ms-flex-wrap: wrap;
-                        flex-wrap: wrap;
-                        padding: 2px 8px;
-                        -webkit-overflow-scrolling: touch;
-                        position: relative;
-                        overflow: hidden;
-                        box-sizing: border-box;
-                    }
-                </style><div class=" css-1d8n9bt">
-                <style data-emotion="css qc6sy-singleValue">
-                    .css-qc6sy-singleValue {
-                        color: hsl(0, 0%, 20%);
-                        grid-area: 1/1/2/3;
-                        margin-left: 2px;
-                        margin-right: 2px;
-                        max-width: 100%;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        box-sizing: border-box;
-                    }
-                </style><div class=" css-qc6sy-singleValue"></div>
-                <style data-emotion="css ackcql">
-                    .css-ackcql {
-                        margin: 2px;
-                        padding-bottom: 2px;
-                        padding-top: 2px;
-                        visibility: visible;
-                        color: hsl(0, 0%, 20%);
-                        -webkit-flex: 1 1 auto;
-                        -ms-flex: 1 1 auto;
-                        flex: 1 1 auto;
-                        display: inline-grid;
-                        grid-area: 1/1/2/3;
-                        grid-template-columns: 0 min-content;
-                        box-sizing: border-box;
-                    }
+                    </style><div class="ehq-projectsTagsFilterContainer css-sje8z5">
+                        <style data-emotion="css b62m3t-container">
+                            .css-b62m3t-container {
+                                position: relative;
+                                box-sizing: border-box;
+                            }
+                        </style><div class="ehq-dropdownContainer css-b62m3t-container">
+                            <style data-emotion="css 7pg0cj-a11yText">
+                                .css-7pg0cj-a11yText {
+                                    z-index: 9999;
+                                    border: 0;
+                                    clip: rect(1px, 1px, 1px, 1px);
+                                    height: 1px;
+                                    width: 1px;
+                                    position: absolute;
+                                    overflow: hidden;
+                                    padding: 0;
+                                    white-space: nowrap;
+                                }
+                            </style><span id="react-select-Topics-live-region" class="css-7pg0cj-a11yText"></span><span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span>
+                            <style data-emotion="css 1s2u09g-control">
+                                .css-1s2u09g-control {
+                                    -webkit-align-items: center;
+                                    -webkit-box-align: center;
+                                    -ms-flex-align: center;
+                                    align-items: center;
+                                    background-color: hsl(0, 0%, 100%);
+                                    border-color: hsl(0, 0%, 80%);
+                                    border-radius: 4px;
+                                    border-style: solid;
+                                    border-width: 1px;
+                                    cursor: default;
+                                    display: -webkit-box;
+                                    display: -webkit-flex;
+                                    display: -ms-flexbox;
+                                    display: flex;
+                                    -webkit-box-flex-wrap: wrap;
+                                    -webkit-flex-wrap: wrap;
+                                    -ms-flex-wrap: wrap;
+                                    flex-wrap: wrap;
+                                    -webkit-box-pack: justify;
+                                    -webkit-justify-content: space-between;
+                                    justify-content: space-between;
+                                    min-height: 38px;
+                                    outline: 0 !important;
+                                    position: relative;
+                                    -webkit-transition: all 100ms;
+                                    transition: all 100ms;
+                                    box-sizing: border-box;
+                                }
 
-                        .css-ackcql:after {
-                            content: attr(data-value) " ";
-                            visibility: hidden;
-                            white-space: pre;
-                            grid-area: 1/2;
-                            font: inherit;
-                            min-width: 2px;
-                            border: 0;
-                            margin: 0;
-                            outline: 0;
-                            padding: 0;
-                        }
-                </style><div class=" css-ackcql" data-value=""><input type="text" class="" style="label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0" autoCapitalize="none" autoComplete="off" autoCorrect="off" id="react-select-Topics-input" spellcheck="false" tabindex="0" value="" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" aria-controls="react-select-Topics-listbox" aria-owns="react-select-Topics-listbox" aria-label="Topics" role="combobox" /></div></div>
-                <style data-emotion="css 1wy0on6">
-                    .css-1wy0on6 {
-                        -webkit-align-items: center;
-                        -webkit-box-align: center;
-                        -ms-flex-align: center;
-                        align-items: center;
-                        -webkit-align-self: stretch;
-                        -ms-flex-item-align: stretch;
-                        align-self: stretch;
-                        display: -webkit-box;
-                        display: -webkit-flex;
-                        display: -ms-flexbox;
-                        display: flex;
-                        -webkit-flex-shrink: 0;
-                        -ms-flex-negative: 0;
-                        flex-shrink: 0;
-                        box-sizing: border-box;
-                    }
-                </style><div class=" css-1wy0on6">
-                <style data-emotion="css tlfecz-indicatorContainer">
-                    .css-tlfecz-indicatorContainer {
-                        color: hsl(0, 0%, 80%);
-                        display: -webkit-box;
-                        display: -webkit-flex;
-                        display: -ms-flexbox;
-                        display: flex;
-                        padding: 8px;
-                        -webkit-transition: color 150ms;
-                        transition: color 150ms;
-                        box-sizing: border-box;
-                    }
+                                    .css-1s2u09g-control:hover {
+                                        border-color: hsl(0, 0%, 70%);
+                                    }
+                            </style><div class=" css-1s2u09g-control">
+                                <style data-emotion="css 1d8n9bt">
+                                    .css-1d8n9bt {
+                                        -webkit-align-items: center;
+                                        -webkit-box-align: center;
+                                        -ms-flex-align: center;
+                                        align-items: center;
+                                        display: grid;
+                                        -webkit-flex: 1;
+                                        -ms-flex: 1;
+                                        flex: 1;
+                                        -webkit-box-flex-wrap: wrap;
+                                        -webkit-flex-wrap: wrap;
+                                        -ms-flex-wrap: wrap;
+                                        flex-wrap: wrap;
+                                        padding: 2px 8px;
+                                        -webkit-overflow-scrolling: touch;
+                                        position: relative;
+                                        overflow: hidden;
+                                        box-sizing: border-box;
+                                    }
+                                </style><div class=" css-1d8n9bt">
+                                    <style data-emotion="css qc6sy-singleValue">
+                                        .css-qc6sy-singleValue {
+                                            color: hsl(0, 0%, 20%);
+                                            grid-area: 1/1/2/3;
+                                            margin-left: 2px;
+                                            margin-right: 2px;
+                                            max-width: 100%;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            white-space: nowrap;
+                                            box-sizing: border-box;
+                                        }
+                                    </style><div class=" css-qc6sy-singleValue"></div>
+                                    <style data-emotion="css ackcql">
+                                        .css-ackcql {
+                                            margin: 2px;
+                                            padding-bottom: 2px;
+                                            padding-top: 2px;
+                                            visibility: visible;
+                                            color: hsl(0, 0%, 20%);
+                                            -webkit-flex: 1 1 auto;
+                                            -ms-flex: 1 1 auto;
+                                            flex: 1 1 auto;
+                                            display: inline-grid;
+                                            grid-area: 1/1/2/3;
+                                            grid-template-columns: 0 min-content;
+                                            box-sizing: border-box;
+                                        }
 
-                        .css-tlfecz-indicatorContainer:hover {
-                            color: hsl(0, 0%, 60%);
-                        }
-                </style><div class=" css-tlfecz-indicatorContainer" aria-hidden="true">
-                <style data-emotion="css 8mmkcg">
-                    .css-8mmkcg {
-                        display: inline-block;
-                        fill: currentColor;
-                        line-height: 1;
-                        stroke: currentColor;
-                        stroke-width: 0;
-                    }
-                </style><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"></path></svg></div>
-                <style data-emotion="css 1okebmr-indicatorSeparator">
-                    .css-1okebmr-indicatorSeparator {
-                        -webkit-align-self: stretch;
-                        -ms-flex-item-align: stretch;
-                        align-self: stretch;
-                        background-color: hsl(0, 0%, 80%);
-                        margin-bottom: 8px;
-                        margin-top: 8px;
-                        width: 1px;
-                        box-sizing: border-box;
-                    }
-                </style><span class=" css-1okebmr-indicatorSeparator"></span><div class=" css-tlfecz-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div><div class="ehq-projectsYearFilterContainer css-sje8z5"><div class="ehq-dropdownContainer css-b62m3t-container"><span id="react-select-Year-live-region" class="css-7pg0cj-a11yText"></span><span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span><div class=" css-1s2u09g-control"><div class=" css-1d8n9bt">
-                <style data-emotion="css 5ze0tj-placeholder">
-                    .css-5ze0tj-placeholder {
-                        color: hsl(0, 0%, 50%);
-                        grid-area: 1/1/2/3;
-                        margin-left: 2px;
-                        margin-right: 2px;
-                        box-sizing: border-box;
-                        max-width: calc(100% - 10px);
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                    }
-                </style><div class=" css-5ze0tj-placeholder" id="react-select-Year-placeholder">Year</div><div class=" css-ackcql" data-value=""><input type="text" class="" style="label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0" autoCapitalize="none" autoComplete="off" autoCorrect="off" id="react-select-Year-input" spellcheck="false" tabindex="0" value="" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" aria-controls="react-select-Year-listbox" aria-owns="react-select-Year-listbox" aria-label="Year" role="combobox" aria-describedby="react-select-Year-placeholder" /></div></div><div class=" css-1wy0on6"><span class=" css-1okebmr-indicatorSeparator"></span><div class=" css-tlfecz-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div><div class="ehq-projectsStateFilterContainer css-sje8z5"><div class="ehq-dropdownContainer css-b62m3t-container"><span id="react-select-Status-live-region" class="css-7pg0cj-a11yText"></span><span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span><div class=" css-1s2u09g-control"><div class=" css-1d8n9bt"><div class=" css-5ze0tj-placeholder" id="react-select-Status-placeholder">Status</div><div class=" css-ackcql" data-value=""><input type="text" class="" style="label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0" autoCapitalize="none" autoComplete="off" autoCorrect="off" id="react-select-Status-input" spellcheck="false" tabindex="0" value="" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" aria-controls="react-select-Status-listbox" aria-owns="react-select-Status-listbox" aria-label="Status" role="combobox" aria-describedby="react-select-Status-placeholder" /></div></div><div class=" css-1wy0on6"><span class=" css-1okebmr-indicatorSeparator"></span><div class=" css-tlfecz-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div>
-                <style data-emotion="css ojenth">
-                    .css-ojenth {
-                        padding: var(--chakra-space-2);
-                        width: 100%;
-                    }
+                                            .css-ackcql:after {
+                                                content: attr(data-value) " ";
+                                                visibility: hidden;
+                                                white-space: pre;
+                                                grid-area: 1/2;
+                                                font: inherit;
+                                                min-width: 2px;
+                                                border: 0;
+                                                margin: 0;
+                                                outline: 0;
+                                                padding: 0;
+                                            }
+                                    </style><div class=" css-ackcql" data-value=""><input type="text" class="" style="label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0" autoCapitalize="none" autoComplete="off" autoCorrect="off" id="react-select-Topics-input" spellcheck="false" tabindex="0" value="" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" aria-controls="react-select-Topics-listbox" aria-owns="react-select-Topics-listbox" aria-label="Topics" role="combobox" /></div>
+                                </div>
+                                <style data-emotion="css 1wy0on6">
+                                    .css-1wy0on6 {
+                                        -webkit-align-items: center;
+                                        -webkit-box-align: center;
+                                        -ms-flex-align: center;
+                                        align-items: center;
+                                        -webkit-align-self: stretch;
+                                        -ms-flex-item-align: stretch;
+                                        align-self: stretch;
+                                        display: -webkit-box;
+                                        display: -webkit-flex;
+                                        display: -ms-flexbox;
+                                        display: flex;
+                                        -webkit-flex-shrink: 0;
+                                        -ms-flex-negative: 0;
+                                        flex-shrink: 0;
+                                        box-sizing: border-box;
+                                    }
+                                </style><div class=" css-1wy0on6">
+                                    <style data-emotion="css tlfecz-indicatorContainer">
+                                        .css-tlfecz-indicatorContainer {
+                                            color: hsl(0, 0%, 80%);
+                                            display: -webkit-box;
+                                            display: -webkit-flex;
+                                            display: -ms-flexbox;
+                                            display: flex;
+                                            padding: 8px;
+                                            -webkit-transition: color 150ms;
+                                            transition: color 150ms;
+                                            box-sizing: border-box;
+                                        }
 
-                    @media screen and (min-width: 30em) {
+                                            .css-tlfecz-indicatorContainer:hover {
+                                                color: hsl(0, 0%, 60%);
+                                            }
+                                    </style><div class=" css-tlfecz-indicatorContainer" aria-hidden="true">
+                                        <style data-emotion="css 8mmkcg">
+                                            .css-8mmkcg {
+                                                display: inline-block;
+                                                fill: currentColor;
+                                                line-height: 1;
+                                                stroke: currentColor;
+                                                stroke-width: 0;
+                                            }
+                                        </style><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"></path></svg>
+                                    </div>
+                                    <style data-emotion="css 1okebmr-indicatorSeparator">
+                                        .css-1okebmr-indicatorSeparator {
+                                            -webkit-align-self: stretch;
+                                            -ms-flex-item-align: stretch;
+                                            align-self: stretch;
+                                            background-color: hsl(0, 0%, 80%);
+                                            margin-bottom: 8px;
+                                            margin-top: 8px;
+                                            width: 1px;
+                                            box-sizing: border-box;
+                                        }
+                                    </style><span class=" css-1okebmr-indicatorSeparator"></span><div class=" css-tlfecz-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><div class="ehq-projectsYearFilterContainer css-sje8z5">
+                        <div class="ehq-dropdownContainer css-b62m3t-container">
+                            <span id="react-select-Year-live-region" class="css-7pg0cj-a11yText"></span><span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span><div class=" css-1s2u09g-control">
+                                <div class=" css-1d8n9bt">
+                                    <style data-emotion="css 5ze0tj-placeholder">
+                                        .css-5ze0tj-placeholder {
+                                            color: hsl(0, 0%, 50%);
+                                            grid-area: 1/1/2/3;
+                                            margin-left: 2px;
+                                            margin-right: 2px;
+                                            box-sizing: border-box;
+                                            max-width: calc(100% - 10px);
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            white-space: nowrap;
+                                        }
+                                    </style><div class=" css-5ze0tj-placeholder" id="react-select-Year-placeholder">Year</div><div class=" css-ackcql" data-value=""><input type="text" class="" style="label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0" autoCapitalize="none" autoComplete="off" autoCorrect="off" id="react-select-Year-input" spellcheck="false" tabindex="0" value="" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" aria-controls="react-select-Year-listbox" aria-owns="react-select-Year-listbox" aria-label="Year" role="combobox" aria-describedby="react-select-Year-placeholder" /></div>
+                                </div><div class=" css-1wy0on6"><span class=" css-1okebmr-indicatorSeparator"></span><div class=" css-tlfecz-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div>
+                            </div>
+                        </div>
+                    </div><div class="ehq-projectsStateFilterContainer css-sje8z5"><div class="ehq-dropdownContainer css-b62m3t-container"><span id="react-select-Status-live-region" class="css-7pg0cj-a11yText"></span><span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span><div class=" css-1s2u09g-control"><div class=" css-1d8n9bt"><div class=" css-5ze0tj-placeholder" id="react-select-Status-placeholder">Status</div><div class=" css-ackcql" data-value=""><input type="text" class="" style="label:input;color:inherit;background:0;opacity:1;width:100%;grid-area:1 / 2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0" autoCapitalize="none" autoComplete="off" autoCorrect="off" id="react-select-Status-input" spellcheck="false" tabindex="0" value="" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" aria-controls="react-select-Status-listbox" aria-owns="react-select-Status-listbox" aria-label="Status" role="combobox" aria-describedby="react-select-Status-placeholder" /></div></div><div class=" css-1wy0on6"><span class=" css-1okebmr-indicatorSeparator"></span><div class=" css-tlfecz-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div>
+                    <style data-emotion="css ojenth">
                         .css-ojenth {
+                            padding: var(--chakra-space-2);
                             width: 100%;
                         }
-                    }
 
-                    @media screen and (min-width: 48em) {
-                        .css-ojenth {
-                            width: 15%;
-                        }
-                    }
-
-                    @media screen and (min-width: 62em) {
-                        .css-ojenth {
-                            width: 15%;
-                        }
-                    }
-                </style><div class="ehq-projectsResetFilterButtonContainer css-ojenth">
-                <style data-emotion="css 1xa03fj">
-                    .css-1xa03fj {
-                        display: block;
-                        -webkit-appearance: none;
-                        -moz-appearance: none;
-                        -ms-appearance: none;
-                        appearance: none;
-                        -webkit-align-items: center;
-                        -webkit-box-align: center;
-                        -ms-flex-align: center;
-                        align-items: center;
-                        -webkit-box-pack: center;
-                        -ms-flex-pack: center;
-                        -webkit-justify-content: center;
-                        justify-content: center;
-                        -webkit-user-select: none;
-                        -moz-user-select: none;
-                        -ms-user-select: none;
-                        user-select: none;
-                        position: relative;
-                        white-space: nowrap;
-                        vertical-align: middle;
-                        outline: 2px solid transparent;
-                        outline-offset: 2px;
-                        width: 100%;
-                        line-height: 1.2;
-                        border-radius: var(--chakra-radii-md);
-                        font-weight: var(--chakra-fontWeights-semibold);
-                        transition-property: var(--chakra-transition-property-common);
-                        transition-duration: var(--chakra-transition-duration-normal);
-                        height: var(--chakra-sizes-10);
-                        min-width: var(--chakra-sizes-10);
-                        font-size: var(--chakra-fontSizes-sm);
-                        -webkit-padding-start: var(--chakra-space-4);
-                        padding-inline-start: var(--chakra-space-4);
-                        -webkit-padding-end: var(--chakra-space-4);
-                        padding-inline-end: var(--chakra-space-4);
-                        background: var(--chakra-colors-default-500);
-                        color: var(--chakra-colors-white);
-                        overflow: hidden;
-                    }
-
-                        .css-1xa03fj:focus, .css-1xa03fj[data-focus] {
-                            box-shadow: var(--chakra-shadows-outline);
+                        @media screen and (min-width: 30em) {
+                            .css-ojenth {
+                                width: 100%;
+                            }
                         }
 
-                        .css-1xa03fj[disabled], .css-1xa03fj[aria-disabled=true], .css-1xa03fj[data-disabled] {
-                            opacity: 0.4;
-                            cursor: not-allowed;
-                            box-shadow: var(--chakra-shadows-none);
+                        @media screen and (min-width: 48em) {
+                            .css-ojenth {
+                                width: 15%;
+                            }
                         }
 
-                        .css-1xa03fj:hover, .css-1xa03fj[data-hover] {
-                            background: var(--chakra-colors-default-600);
+                        @media screen and (min-width: 62em) {
+                            .css-ojenth {
+                                width: 15%;
+                            }
                         }
-
-                            .css-1xa03fj:hover[disabled], .css-1xa03fj[data-hover][disabled], .css-1xa03fj:hover[aria-disabled=true], .css-1xa03fj[data-hover][aria-disabled=true], .css-1xa03fj:hover[data-disabled], .css-1xa03fj[data-hover][data-disabled] {
+                    </style><div class="ehq-projectsResetFilterButtonContainer css-ojenth">
+                        <style data-emotion="css 1xa03fj">
+                            .css-1xa03fj {
+                                display: block;
+                                -webkit-appearance: none;
+                                -moz-appearance: none;
+                                -ms-appearance: none;
+                                appearance: none;
+                                -webkit-align-items: center;
+                                -webkit-box-align: center;
+                                -ms-flex-align: center;
+                                align-items: center;
+                                -webkit-box-pack: center;
+                                -ms-flex-pack: center;
+                                -webkit-justify-content: center;
+                                justify-content: center;
+                                -webkit-user-select: none;
+                                -moz-user-select: none;
+                                -ms-user-select: none;
+                                user-select: none;
+                                position: relative;
+                                white-space: nowrap;
+                                vertical-align: middle;
+                                outline: 2px solid transparent;
+                                outline-offset: 2px;
+                                width: 100%;
+                                line-height: 1.2;
+                                border-radius: var(--chakra-radii-md);
+                                font-weight: var(--chakra-fontWeights-semibold);
+                                transition-property: var(--chakra-transition-property-common);
+                                transition-duration: var(--chakra-transition-duration-normal);
+                                height: var(--chakra-sizes-10);
+                                min-width: var(--chakra-sizes-10);
+                                font-size: var(--chakra-fontSizes-sm);
+                                -webkit-padding-start: var(--chakra-space-4);
+                                padding-inline-start: var(--chakra-space-4);
+                                -webkit-padding-end: var(--chakra-space-4);
+                                padding-inline-end: var(--chakra-space-4);
                                 background: var(--chakra-colors-default-500);
+                                color: var(--chakra-colors-white);
+                                overflow: hidden;
                             }
 
-                        .css-1xa03fj:active, .css-1xa03fj[data-active] {
-                            background: var(--chakra-colors-default-700);
-                        }
-                </style><button type="button" class="chakra-button ehq-projectsResetFilterButton css-1xa03fj" data-tname="projects-filter-reset-button"><p class="chakra-text ehq-projectResetButtonText css-0">Reset Filters</p></button></div></div>
+                                .css-1xa03fj:focus, .css-1xa03fj[data-focus] {
+                                    box-shadow: var(--chakra-shadows-outline);
+                                }
+
+                                .css-1xa03fj[disabled], .css-1xa03fj[aria-disabled=true], .css-1xa03fj[data-disabled] {
+                                    opacity: 0.4;
+                                    cursor: not-allowed;
+                                    box-shadow: var(--chakra-shadows-none);
+                                }
+
+                                .css-1xa03fj:hover, .css-1xa03fj[data-hover] {
+                                    background: var(--chakra-colors-default-600);
+                                }
+
+                                    .css-1xa03fj:hover[disabled], .css-1xa03fj[data-hover][disabled], .css-1xa03fj:hover[aria-disabled=true], .css-1xa03fj[data-hover][aria-disabled=true], .css-1xa03fj:hover[data-disabled], .css-1xa03fj[data-hover][data-disabled] {
+                                        background: var(--chakra-colors-default-500);
+                                    }
+
+                                .css-1xa03fj:active, .css-1xa03fj[data-active] {
+                                    background: var(--chakra-colors-default-700);
+                                }
+                        </style><button type="button" class="chakra-button ehq-projectsResetFilterButton css-1xa03fj" data-tname="projects-filter-reset-button"><p class="chakra-text ehq-projectResetButtonText css-0">Reset Filters</p></button>
+                    </div>
+                </div>
                 <style data-emotion="css 1oaujcy">
                     .css-1oaujcy {
                         display: -webkit-box;
@@ -1381,223 +1400,242 @@
                             }
                         }
                     </style><div class="ehq-projectCardContainer css-4p0eft">
-                    <style data-emotion="css vmaeo2">
-                        .css-vmaeo2 {
-                            border: var(--chakra-borders-1px);
-                            border-radius: var(--chakra-radii-sm);
-                            overflow: hidden;
-                            border-color: var(--chakra-colors-gray-200);
-                            margin: var(--chakra-space-2);
-                            display: block;
-                            height: 100%;
-                        }
-                    </style><div class="ehq-card css-vmaeo2">
-                    <style data-emotion="css v2dlq6">
-                        .css-v2dlq6 {
-                            transition-property: var(--chakra-transition-property-common);
-                            transition-duration: var(--chakra-transition-duration-fast);
-                            transition-timing-function: var(--chakra-transition-easing-ease-out);
-                            cursor: pointer;
-                            -webkit-text-decoration: none;
-                            text-decoration: none;
-                            outline: 2px solid transparent;
-                            outline-offset: 2px;
-                            color: inherit;
-                            height: 250px;
-                            width: 100%;
-                            display: block;
-                            overflow: hidden;
-                            text-align: center;
-                        }
-
-                            .css-v2dlq6:hover, .css-v2dlq6[data-hover] {
-                                -webkit-text-decoration: underline;
-                                text-decoration: underline;
+                        <style data-emotion="css vmaeo2">
+                            .css-vmaeo2 {
+                                border: var(--chakra-borders-1px);
+                                border-radius: var(--chakra-radii-sm);
+                                overflow: hidden;
+                                border-color: var(--chakra-colors-gray-200);
+                                margin: var(--chakra-space-2);
+                                display: block;
+                                height: 100%;
                             }
+                        </style><div class="ehq-card css-vmaeo2">
+                            <style data-emotion="css v2dlq6">
+                                .css-v2dlq6 {
+                                    transition-property: var(--chakra-transition-property-common);
+                                    transition-duration: var(--chakra-transition-duration-fast);
+                                    transition-timing-function: var(--chakra-transition-easing-ease-out);
+                                    cursor: pointer;
+                                    -webkit-text-decoration: none;
+                                    text-decoration: none;
+                                    outline: 2px solid transparent;
+                                    outline-offset: 2px;
+                                    color: inherit;
+                                    height: 250px;
+                                    width: 100%;
+                                    display: block;
+                                    overflow: hidden;
+                                    text-align: center;
+                                }
 
-                            .css-v2dlq6:focus, .css-v2dlq6[data-focus] {
-                                box-shadow: var(--chakra-shadows-outline);
-                            }
-                    </style><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/6288-ash-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a>
-                    <style data-emotion="css 8ylox8">
-                        .css-8ylox8 {
-                            -webkit-margin-start: var(--chakra-space-5);
-                            margin-inline-start: var(--chakra-space-5);
-                            -webkit-margin-end: var(--chakra-space-5);
-                            margin-inline-end: var(--chakra-space-5);
-                            margin-top: var(--chakra-space-4);
-                            margin-bottom: var(--chakra-space-4);
-                        }
-                    </style><div class="ehq-cardItem css-8ylox8">
-                    <style data-emotion="css 1l4uiyf">
-                        .css-1l4uiyf {
-                            height: 18px;
-                        }
-                    </style><span class="ehq-projectYearTextContainer css-1l4uiyf"> 26 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8">
-                    <style data-emotion="css kxf6fq">
-                        .css-kxf6fq {
-                            font-family: inherit;
-                            font-weight: var(--chakra-fontWeights-bold);
-                            font-size: 16px;
-                            line-height: 1.33;
-                        }
+                                    .css-v2dlq6:hover, .css-v2dlq6[data-hover] {
+                                        -webkit-text-decoration: underline;
+                                        text-decoration: underline;
+                                    }
 
-                        @media screen and (min-width: 48em) {
-                            .css-kxf6fq {
-                                line-height: 1.2;
-                            }
-                        }
-                    </style><h2 class="chakra-heading ehq-cardTitle css-kxf6fq">
-                    <style data-emotion="css f4h6uy">
-                        .css-f4h6uy {
-                            transition-property: var(--chakra-transition-property-common);
-                            transition-duration: var(--chakra-transition-duration-fast);
-                            transition-timing-function: var(--chakra-transition-easing-ease-out);
-                            cursor: pointer;
-                            -webkit-text-decoration: none;
-                            text-decoration: none;
-                            outline: 2px solid transparent;
-                            outline-offset: 2px;
-                            color: inherit;
-                        }
+                                    .css-v2dlq6:focus, .css-v2dlq6[data-focus] {
+                                        box-shadow: var(--chakra-shadows-outline);
+                                    }
+                            </style><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/6288-ash-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a>
+                            <style data-emotion="css 8ylox8">
+                                .css-8ylox8 {
+                                    -webkit-margin-start: var(--chakra-space-5);
+                                    margin-inline-start: var(--chakra-space-5);
+                                    -webkit-margin-end: var(--chakra-space-5);
+                                    margin-inline-end: var(--chakra-space-5);
+                                    margin-top: var(--chakra-space-4);
+                                    margin-bottom: var(--chakra-space-4);
+                                }
+                            </style><div class="ehq-cardItem css-8ylox8">
+                                <style data-emotion="css 1l4uiyf">
+                                    .css-1l4uiyf {
+                                        height: 18px;
+                                    }
+                                </style><span class="ehq-projectYearTextContainer css-1l4uiyf"> 26 Nov 2021</span>
+                            </div><div class="ehq-cardItem css-8ylox8">
+                                <style data-emotion="css kxf6fq">
+                                    .css-kxf6fq {
+                                        font-family: inherit;
+                                        font-weight: var(--chakra-fontWeights-bold);
+                                        font-size: 16px;
+                                        line-height: 1.33;
+                                    }
 
-                            .css-f4h6uy:hover, .css-f4h6uy[data-hover] {
-                                -webkit-text-decoration: underline;
-                                text-decoration: underline;
-                            }
+                                    @media screen and (min-width: 48em) {
+                                        .css-kxf6fq {
+                                            line-height: 1.2;
+                                        }
+                                    }
+                                </style><h2 class="chakra-heading ehq-cardTitle css-kxf6fq">
+                                    <style data-emotion="css f4h6uy">
+                                        .css-f4h6uy {
+                                            transition-property: var(--chakra-transition-property-common);
+                                            transition-duration: var(--chakra-transition-duration-fast);
+                                            transition-timing-function: var(--chakra-transition-easing-ease-out);
+                                            cursor: pointer;
+                                            -webkit-text-decoration: none;
+                                            text-decoration: none;
+                                            outline: 2px solid transparent;
+                                            outline-offset: 2px;
+                                            color: inherit;
+                                        }
 
-                            .css-f4h6uy:focus, .css-f4h6uy[data-focus] {
-                                box-shadow: var(--chakra-shadows-outline);
-                            }
-                    </style><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/6288-ash-st"><span tabindex="0" class="css-0">6288 Ash St (DP-2021-00696) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Ankenman Marchand Architects has applied to the City of Vancouver for permission to develop two multiple dwelling buildings, including a three-storey row house (four units) in the front and a three-storey stacke...</p></div><div class="ehq-cardItem css-8ylox8">
-                    <style data-emotion="css 1lis0pe">
-                        .css-1lis0pe {
-                            height: 25px;
-                            display: -webkit-box;
-                            display: -webkit-flex;
-                            display: -ms-flexbox;
-                            display: flex;
-                            -webkit-align-items: center;
-                            -webkit-box-align: center;
-                            -ms-flex-align: center;
-                            align-items: center;
-                        }
-                    </style><div class="ehq-projectTagsContainer css-1lis0pe">
-                    <style data-emotion="css 1k38vvv">
-                        .css-1k38vvv {
-                            -webkit-padding-start: var(--chakra-space-2);
-                            padding-inline-start: var(--chakra-space-2);
-                            -webkit-padding-end: var(--chakra-space-2);
-                            padding-inline-end: var(--chakra-space-2);
-                            padding-top: var(--chakra-space-1);
-                            padding-bottom: var(--chakra-space-1);
-                            margin-right: 5px;
-                            background: var(--chakra-colors-gray-100);
-                            font-size: var(--chakra-fontSizes-xs);
-                            min-height: var(--chakra-sizes-1);
-                            cursor: pointer;
-                            border-radius: var(--chakra-radii-md);
-                            white-space: nowrap;
-                            display: inline-block;
-                            overflow: hidden;
-                        }
+                                            .css-f4h6uy:hover, .css-f4h6uy[data-hover] {
+                                                -webkit-text-decoration: underline;
+                                                text-decoration: underline;
+                                            }
 
-                            .css-1k38vvv:focus, .css-1k38vvv[data-focus] {
-                                outline: 2px solid transparent;
-                                outline-offset: 2px;
-                                box-shadow: var(--chakra-shadows-outline);
-                            }
-                    </style><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="oakridge">Oakridge</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2029-e-6-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 25 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2029-e-6-ave"><span tabindex="0" class="css-0">2029 E 6th Ave (DP-2020-00123) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">JWT Architecture and Planning has applied to the City of Vancouver for permission to develop on this site:To subdivide the existing lot containing a one-family dwelling with secondary suite, that includes a Heri...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="grandview-woodland">Grandview Woodland</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/227-main-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 24 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/227-main-st"><span tabindex="0" class="css-0">227 Main St (DP-2021-00719) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">David S. Mah Architect has applied to the City of Vancouver for permission to install an outdoor seating area, at the above-noted address, consisting of:Approximately 418.0 sq. ft.To be used in conjunction with ...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="downtown eastside">Downtown Eastside</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/jhp"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 23 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/jhp"><span tabindex="0" class="css-0">John Hendry (Trout Lake) Park Renewal Plan </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">John Hendry (Trout Lake) Park is a beloved park located on the traditional territory of the xʷmə&theta;kʷəy̓əm (Musqueam), Sḵwx̱w&uacute;7mesh (Squamish) and səlil̓ilw̓ətaʔɬ (Tsleil-Waututh) Nations and in East Vanc...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="in progress">In Progress</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="kensington-cedar cottage">Kensington Cedar Cottage</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="parks and recreation">Parks And Recreation</div>
-                    <style data-emotion="css 1uf3yjb">
-                        .css-1uf3yjb {
-                            -webkit-padding-start: var(--chakra-space-2);
-                            padding-inline-start: var(--chakra-space-2);
-                            -webkit-padding-end: var(--chakra-space-2);
-                            padding-inline-end: var(--chakra-space-2);
-                            padding-top: var(--chakra-space-1);
-                            padding-bottom: var(--chakra-space-1);
-                            font-size: var(--chakra-fontSizes-xs);
-                            background: var(--chakra-colors-gray-100);
-                            min-height: var(--chakra-sizes-1);
-                            cursor: pointer;
-                            border-radius: var(--chakra-radii-md);
-                            display: inline-block;
-                        }
+                                            .css-f4h6uy:focus, .css-f4h6uy[data-focus] {
+                                                box-shadow: var(--chakra-shadows-outline);
+                                            }
+                                    </style><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/6288-ash-st"><span tabindex="0" class="css-0">6288 Ash St (DP-2021-00696) development application </span></a>
+                                </h2>
+                            </div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Ankenman Marchand Architects has applied to the City of Vancouver for permission to develop two multiple dwelling buildings, including a three-storey row house (four units) in the front and a three-storey stacke...</p></div><div class="ehq-cardItem css-8ylox8">
+                                <style data-emotion="css 1lis0pe">
+                                    .css-1lis0pe {
+                                        height: 25px;
+                                        display: -webkit-box;
+                                        display: -webkit-flex;
+                                        display: -ms-flexbox;
+                                        display: flex;
+                                        -webkit-align-items: center;
+                                        -webkit-box-align: center;
+                                        -ms-flex-align: center;
+                                        align-items: center;
+                                    }
+                                </style><div class="ehq-projectTagsContainer css-1lis0pe">
+                                    <style data-emotion="css 1k38vvv">
+                                        .css-1k38vvv {
+                                            -webkit-padding-start: var(--chakra-space-2);
+                                            padding-inline-start: var(--chakra-space-2);
+                                            -webkit-padding-end: var(--chakra-space-2);
+                                            padding-inline-end: var(--chakra-space-2);
+                                            padding-top: var(--chakra-space-1);
+                                            padding-bottom: var(--chakra-space-1);
+                                            margin-right: 5px;
+                                            background: var(--chakra-colors-gray-100);
+                                            font-size: var(--chakra-fontSizes-xs);
+                                            min-height: var(--chakra-sizes-1);
+                                            cursor: pointer;
+                                            border-radius: var(--chakra-radii-md);
+                                            white-space: nowrap;
+                                            display: inline-block;
+                                            overflow: hidden;
+                                        }
 
-                            .css-1uf3yjb:focus, .css-1uf3yjb[data-focus] {
-                                outline: 2px solid transparent;
-                                outline-offset: 2px;
-                                box-shadow: var(--chakra-shadows-outline);
-                            }
-                    </style><div tabindex="0" class="ehq-projectTag css-1uf3yjb" aria-label="4 more tags" id="popover-trigger-28" aria-haspopup="dialog" aria-expanded="false" aria-controls="popover-content-28">+4</div>
-                    <style data-emotion="css 1qq679y">
-                        .css-1qq679y {
-                            z-index: 10;
-                        }
-                    </style><div style="visibility:hidden;position:absolute;min-width:max-content;inset:0 auto auto 0" class="chakra-popover__popper css-1qq679y">
-                    <style data-emotion="css 3trjpo">
-                        .css-3trjpo {
-                            position: relative;
-                            display: -webkit-box;
-                            display: -webkit-flex;
-                            display: -ms-flexbox;
-                            display: flex;
-                            -webkit-flex-direction: column;
-                            -ms-flex-direction: column;
-                            flex-direction: column;
-                            --popper-bg: var(--chakra-colors-white);
-                            background: var(--popper-bg);
-                            --popper-arrow-bg: var(--popper-bg);
-                            --popper-arrow-shadow-color: var(--chakra-colors-gray-200);
-                            width: auto;
-                            border: 1px solid;
-                            border-color: inherit;
-                            border-radius: var(--chakra-radii-md);
-                            box-shadow: var(--chakra-shadows-sm);
-                            z-index: 4;
-                        }
+                                            .css-1k38vvv:focus, .css-1k38vvv[data-focus] {
+                                                outline: 2px solid transparent;
+                                                outline-offset: 2px;
+                                                box-shadow: var(--chakra-shadows-outline);
+                                            }
+                                    </style><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="oakridge">Oakridge</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2029-e-6-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 25 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2029-e-6-ave"><span tabindex="0" class="css-0">2029 E 6th Ave (DP-2020-00123) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">JWT Architecture and Planning has applied to the City of Vancouver for permission to develop on this site:To subdivide the existing lot containing a one-family dwelling with secondary suite, that includes a Heri...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="grandview-woodland">Grandview Woodland</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/227-main-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 24 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/227-main-st"><span tabindex="0" class="css-0">227 Main St (DP-2021-00719) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">David S. Mah Architect has applied to the City of Vancouver for permission to install an outdoor seating area, at the above-noted address, consisting of:Approximately 418.0 sq. ft.To be used in conjunction with ...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="downtown eastside">Downtown Eastside</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft">
+                        <div class="ehq-card css-vmaeo2">
+                            <a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/jhp"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 23 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/jhp"><span tabindex="0" class="css-0">John Hendry (Trout Lake) Park Renewal Plan </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">John Hendry (Trout Lake) Park is a beloved park located on the traditional territory of the xʷmə&theta;kʷəy̓əm (Musqueam), Sḵwx̱w&uacute;7mesh (Squamish) and səlil̓ilw̓ətaʔɬ (Tsleil-Waututh) Nations and in East Vanc...</p></div><div class="ehq-cardItem css-8ylox8">
+                                <div class="ehq-projectTagsContainer css-1lis0pe">
+                                    <div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="in progress">In Progress</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="kensington-cedar cottage">Kensington Cedar Cottage</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="parks and recreation">Parks And Recreation</div>
+                                    <style data-emotion="css 1uf3yjb">
+                                        .css-1uf3yjb {
+                                            -webkit-padding-start: var(--chakra-space-2);
+                                            padding-inline-start: var(--chakra-space-2);
+                                            -webkit-padding-end: var(--chakra-space-2);
+                                            padding-inline-end: var(--chakra-space-2);
+                                            padding-top: var(--chakra-space-1);
+                                            padding-bottom: var(--chakra-space-1);
+                                            font-size: var(--chakra-fontSizes-xs);
+                                            background: var(--chakra-colors-gray-100);
+                                            min-height: var(--chakra-sizes-1);
+                                            cursor: pointer;
+                                            border-radius: var(--chakra-radii-md);
+                                            display: inline-block;
+                                        }
 
-                            .css-3trjpo:focus, .css-3trjpo[data-focus] {
-                                outline: 2px solid transparent;
-                                outline-offset: 2px;
-                                box-shadow: var(--chakra-shadows-outline);
-                            }
-                    </style><section class="chakra-popover__content ehq-projectTagPopover css-3trjpo" style="transform-origin:var(--popper-transform-origin);opacity:0;visibility:hidden;transform:scale(0.95) translateZ(0)" id="popover-content-28" tabindex="-1" role="dialog"><div data-popper-arrow="" style="position:absolute" class="chakra-popover__arrow-positioner css-0"><div class="chakra-popover__arrow css-0" data-popper-arrow-inner=""></div></div>
-                    <style data-emotion="css osy5qn">
-                        .css-osy5qn {
-                            -webkit-padding-start: var(--chakra-space-3);
-                            padding-inline-start: var(--chakra-space-3);
-                            -webkit-padding-end: var(--chakra-space-3);
-                            padding-inline-end: var(--chakra-space-3);
-                            padding-top: var(--chakra-space-3);
-                            padding-bottom: var(--chakra-space-2);
-                        }
-                    </style><div id="popover-body-28" class="chakra-popover__body css-osy5qn">
-                    <style data-emotion="css 1touz2u">
-                        .css-1touz2u {
-                            -webkit-padding-start: var(--chakra-space-2);
-                            padding-inline-start: var(--chakra-space-2);
-                            -webkit-padding-end: var(--chakra-space-2);
-                            padding-inline-end: var(--chakra-space-2);
-                            padding-top: var(--chakra-space-1);
-                            padding-bottom: var(--chakra-space-1);
-                            margin-right: 5px;
-                            background: var(--chakra-colors-gray-100);
-                            font-size: var(--chakra-fontSizes-xs);
-                            min-height: var(--chakra-sizes-1);
-                            cursor: pointer;
-                            border-radius: var(--chakra-radii-md);
-                            overflow: hidden;
-                            white-space: nowrap;
-                            display: inline-block;
-                        }
+                                            .css-1uf3yjb:focus, .css-1uf3yjb[data-focus] {
+                                                outline: 2px solid transparent;
+                                                outline-offset: 2px;
+                                                box-shadow: var(--chakra-shadows-outline);
+                                            }
+                                    </style><div tabindex="0" class="ehq-projectTag css-1uf3yjb" aria-label="4 more tags" id="popover-trigger-28" aria-haspopup="dialog" aria-expanded="false" aria-controls="popover-content-28">+4</div>
+                                    <style data-emotion="css 1qq679y">
+                                        .css-1qq679y {
+                                            z-index: 10;
+                                        }
+                                    </style><div style="visibility:hidden;position:absolute;min-width:max-content;inset:0 auto auto 0" class="chakra-popover__popper css-1qq679y">
+                                        <style data-emotion="css 3trjpo">
+                                            .css-3trjpo {
+                                                position: relative;
+                                                display: -webkit-box;
+                                                display: -webkit-flex;
+                                                display: -ms-flexbox;
+                                                display: flex;
+                                                -webkit-flex-direction: column;
+                                                -ms-flex-direction: column;
+                                                flex-direction: column;
+                                                --popper-bg: var(--chakra-colors-white);
+                                                background: var(--popper-bg);
+                                                --popper-arrow-bg: var(--popper-bg);
+                                                --popper-arrow-shadow-color: var(--chakra-colors-gray-200);
+                                                width: auto;
+                                                border: 1px solid;
+                                                border-color: inherit;
+                                                border-radius: var(--chakra-radii-md);
+                                                box-shadow: var(--chakra-shadows-sm);
+                                                z-index: 4;
+                                            }
 
-                            .css-1touz2u:focus, .css-1touz2u[data-focus] {
-                                outline: 2px solid transparent;
-                                outline-offset: 2px;
-                                box-shadow: var(--chakra-shadows-outline);
-                            }
-                    </style><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="project">Project</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="public space">Public Space</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="virtual open house">Virtual Open House</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="water">Water</div></div></section></div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/710-se-marine-dr"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 22 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/710-se-marine-dr"><span tabindex="0" class="css-0">710 SE Marine Dr (DP-2021-00792) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Suncor Energy Products Partnerships has applied to the City of Vancouver for permission to develop on the site a Convenience store in conjunction with a Gasoline station (Split Island) and a Restaurant-Class 1 c...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="sunset">Sunset</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2403-w-37-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 22 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2403-w-37-ave"><span tabindex="0" class="css-0">2403 W 37th Ave (DP-2021-00828) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Diamond Group Architecture Inc. has applied to the City of Vancouver for permission to develop the following on this site:Alter, add and convert this existing Heritage A one-family dwelling to a Multiple Convers...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="arbutus ridge">Arbutus Ridge</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/3861-w-27-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 18 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/3861-w-27-ave"><span tabindex="0" class="css-0">3861 W 27th Ave (DP-2020-00070) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">David Lin Design Studio has applied to the City of Vancouver for permission to develop the following on this site:A two-storey plus basement one-family dwelling with a secondary suite located in the basement wit...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="dunbar-southlands">Dunbar Southlands</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/536-e-11-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 18 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/536-e-11-ave"><span tabindex="0" class="css-0">536 E 11th Ave (DP-2021-00757) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">My Home Designer Ltd. has applied to the City of Vancouver for permission to alter and convert this existing one-family dwelling with a secondary suite to a two-units Multiple Conversion Dwelling (Building 1) an...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="mount pleasant">Mount Pleasant</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/887-great-northern-way"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 16 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/887-great-northern-way"><span tabindex="0" class="css-0">887 Great Northern Way (DP-2021-00776) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">David Eaton Architect Inc. has applied to the City of Vancouver for permission to perform interior alterations, consolidate units #4 and #5 and change of use from Retail Store to Retail Type-2 Liquor Store on th...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="strathcona">Strathcona</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2050-rupert-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2050-rupert-st"><span tabindex="0" class="css-0">2050 Rupert St (DP-2021-00851) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Beulah Garden Homes Society has applied to the City of Vancouver for permission to develop this site, consisting of:A six-storey multiple dwelling, social housing;64 dwelling units for seniorsAn approximate floo...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="hastings-sunrise">Hastings Sunrise</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/burrard-view-garden"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/burrard-view-garden"><span tabindex="0" class="css-0">Burrard View Community Garden</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Share your ideas about a proposed community garden in Burrard View Park.About this projectIn April 2020, the Vancouver Urban Food Forest Foundation (VUFFF) reached out to us (the Vancouver Board of Parks and Rec...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="hastings-sunrise">Hastings Sunrise</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="in progress">In Progress</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="parks and recreation">Parks And Recreation</div><div tabindex="0" class="ehq-projectTag css-1uf3yjb" aria-label="2 more tags" id="popover-trigger-74" aria-haspopup="dialog" aria-expanded="false" aria-controls="popover-content-74">+2</div><div style="visibility:hidden;position:absolute;min-width:max-content;inset:0 auto auto 0" class="chakra-popover__popper css-1qq679y"><section class="chakra-popover__content ehq-projectTagPopover css-3trjpo" style="transform-origin:var(--popper-transform-origin);opacity:0;visibility:hidden;transform:scale(0.95) translateZ(0)" id="popover-content-74" tabindex="-1" role="dialog"><div data-popper-arrow="" style="position:absolute" class="chakra-popover__arrow-positioner css-0"><div class="chakra-popover__arrow css-0" data-popper-arrow-inner=""></div></div><div id="popover-body-74" class="chakra-popover__body css-osy5qn"><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="project">Project</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="public space">Public Space</div></div></section></div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/724-e-56-ave-2"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/724-e-56-ave-2"><span tabindex="0" class="css-0">724 E 56th Ave (DP-2021-00842) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Cornerstone Architecture has applied to the City of Vancouver for permission to develop the following on this site: Two Passive House multiple dwelling townhouse buildingsA site total of twelve secured market re...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="sunset">Sunset</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/305-main-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/305-main-st"><span tabindex="0" class="css-0">305 Main St (DP-2021-00795) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">MA+HG Architects has applied to the City of Vancouver for permission to develop the following on this site:A 11-storey mixed-use buildingIncluding a total of 117 residential units, consisting of 70 social housin...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="downtown eastside">Downtown Eastside</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/bute-greenway"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/bute-greenway"><span tabindex="0" class="css-0">Bute Greenway</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Share your input and help us build a shore-to-shore connectionWe are exploring ideas to improve and prioritize Bute Street for:Walking, rolling, and cycling for people of all ages and abilitiesProviding a variet...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="active transportation">Active Transportation</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="blue green systems">Blue Green Systems</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="downtown">Downtown</div><div tabindex="0" class="ehq-projectTag css-1uf3yjb" aria-label="2 more tags" id="popover-trigger-96" aria-haspopup="dialog" aria-expanded="false" aria-controls="popover-content-96">+2</div><div style="visibility:hidden;position:absolute;min-width:max-content;inset:0 auto auto 0" class="chakra-popover__popper css-1qq679y"><section class="chakra-popover__content ehq-projectTagPopover css-3trjpo" style="transform-origin:var(--popper-transform-origin);opacity:0;visibility:hidden;transform:scale(0.95) translateZ(0)" id="popover-content-96" tabindex="-1" role="dialog"><div data-popper-arrow="" style="position:absolute" class="chakra-popover__arrow-positioner css-0"><div class="chakra-popover__arrow css-0" data-popper-arrow-inner=""></div></div><div id="popover-body-96" class="chakra-popover__body css-osy5qn"><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="public space">Public Space</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="west end">West End</div></div></section></div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/1657-w-king-edward-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 12 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/1657-w-king-edward-ave"><span tabindex="0" class="css-0">1657 W King Edward Ave (DP-2021-00826) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Formwerks Architectural Inc. has applied to the City of Vancouver for permission to develop a two-and-a-half-storey plus basement, one-family dwelling with a detached accessory building at the rear, consisting o...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="shaughnessy">Shaughnessy</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/1064-balfour-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 09 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/1064-balfour-ave"><span tabindex="0" class="css-0">1064 Balfour Ave (DP-2020-00865) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Architrix Studio has applied to the City of Vancouver for permission to develop on this site a total of five dwelling units:To perform interior and exterior alterations to the existing Multiple Conversion Dwelli...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="shaughnessy">Shaughnessy</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2141-e-hastings-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 08 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2141-e-hastings-st"><span tabindex="0" class="css-0">2141 E Hastings St (DP-2021-00817) cannabis retail development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">The Village Collaborative Inc. has applied to the City of Vancouver for permission to perform interior alterations, consolidate units 2137 + 2139 and change of use from Health and Beauty to Retail Cannabis Store...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="cannabis">Cannabis</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="grandview-woodland">Grandview Woodland</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/1928-graveley-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 08 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/1928-graveley-st"><span tabindex="0" class="css-0">1928 Graveley St (DP-2021-00756) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">The owner has applied to the City of Vancouver for permission to develop a two-storey infill one-family dwelling on the south side of the lot of this existing one-family dwelling, consisting of:A proposed height...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="grandview-woodland">Grandview Woodland</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft">
+                                                .css-3trjpo:focus, .css-3trjpo[data-focus] {
+                                                    outline: 2px solid transparent;
+                                                    outline-offset: 2px;
+                                                    box-shadow: var(--chakra-shadows-outline);
+                                                }
+                                        </style><section class="chakra-popover__content ehq-projectTagPopover css-3trjpo" style="transform-origin:var(--popper-transform-origin);opacity:0;visibility:hidden;transform:scale(0.95) translateZ(0)" id="popover-content-28" tabindex="-1" role="dialog">
+                                            <div data-popper-arrow="" style="position:absolute" class="chakra-popover__arrow-positioner css-0"><div class="chakra-popover__arrow css-0" data-popper-arrow-inner=""></div></div>
+                                            <style data-emotion="css osy5qn">
+                                                .css-osy5qn {
+                                                    -webkit-padding-start: var(--chakra-space-3);
+                                                    padding-inline-start: var(--chakra-space-3);
+                                                    -webkit-padding-end: var(--chakra-space-3);
+                                                    padding-inline-end: var(--chakra-space-3);
+                                                    padding-top: var(--chakra-space-3);
+                                                    padding-bottom: var(--chakra-space-2);
+                                                }
+                                            </style><div id="popover-body-28" class="chakra-popover__body css-osy5qn">
+                                                <style data-emotion="css 1touz2u">
+                                                    .css-1touz2u {
+                                                        -webkit-padding-start: var(--chakra-space-2);
+                                                        padding-inline-start: var(--chakra-space-2);
+                                                        -webkit-padding-end: var(--chakra-space-2);
+                                                        padding-inline-end: var(--chakra-space-2);
+                                                        padding-top: var(--chakra-space-1);
+                                                        padding-bottom: var(--chakra-space-1);
+                                                        margin-right: 5px;
+                                                        background: var(--chakra-colors-gray-100);
+                                                        font-size: var(--chakra-fontSizes-xs);
+                                                        min-height: var(--chakra-sizes-1);
+                                                        cursor: pointer;
+                                                        border-radius: var(--chakra-radii-md);
+                                                        overflow: hidden;
+                                                        white-space: nowrap;
+                                                        display: inline-block;
+                                                    }
+
+                                                        .css-1touz2u:focus, .css-1touz2u[data-focus] {
+                                                            outline: 2px solid transparent;
+                                                            outline-offset: 2px;
+                                                            box-shadow: var(--chakra-shadows-outline);
+                                                        }
+                                                </style><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="project">Project</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="public space">Public Space</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="virtual open house">Virtual Open House</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="water">Water</div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/710-se-marine-dr"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 22 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/710-se-marine-dr"><span tabindex="0" class="css-0">710 SE Marine Dr (DP-2021-00792) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Suncor Energy Products Partnerships has applied to the City of Vancouver for permission to develop on the site a Convenience store in conjunction with a Gasoline station (Split Island) and a Restaurant-Class 1 c...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="sunset">Sunset</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2403-w-37-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 22 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2403-w-37-ave"><span tabindex="0" class="css-0">2403 W 37th Ave (DP-2021-00828) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Diamond Group Architecture Inc. has applied to the City of Vancouver for permission to develop the following on this site:Alter, add and convert this existing Heritage A one-family dwelling to a Multiple Convers...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="arbutus ridge">Arbutus Ridge</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/3861-w-27-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 18 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/3861-w-27-ave"><span tabindex="0" class="css-0">3861 W 27th Ave (DP-2020-00070) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">David Lin Design Studio has applied to the City of Vancouver for permission to develop the following on this site:A two-storey plus basement one-family dwelling with a secondary suite located in the basement wit...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="dunbar-southlands">Dunbar Southlands</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/536-e-11-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 18 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/536-e-11-ave"><span tabindex="0" class="css-0">536 E 11th Ave (DP-2021-00757) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">My Home Designer Ltd. has applied to the City of Vancouver for permission to alter and convert this existing one-family dwelling with a secondary suite to a two-units Multiple Conversion Dwelling (Building 1) an...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="mount pleasant">Mount Pleasant</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/887-great-northern-way"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 16 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/887-great-northern-way"><span tabindex="0" class="css-0">887 Great Northern Way (DP-2021-00776) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">David Eaton Architect Inc. has applied to the City of Vancouver for permission to perform interior alterations, consolidate units #4 and #5 and change of use from Retail Store to Retail Type-2 Liquor Store on th...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="strathcona">Strathcona</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2050-rupert-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2050-rupert-st"><span tabindex="0" class="css-0">2050 Rupert St (DP-2021-00851) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Beulah Garden Homes Society has applied to the City of Vancouver for permission to develop this site, consisting of:A six-storey multiple dwelling, social housing;64 dwelling units for seniorsAn approximate floo...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="hastings-sunrise">Hastings Sunrise</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/burrard-view-garden"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/burrard-view-garden"><span tabindex="0" class="css-0">Burrard View Community Garden</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Share your ideas about a proposed community garden in Burrard View Park.About this projectIn April 2020, the Vancouver Urban Food Forest Foundation (VUFFF) reached out to us (the Vancouver Board of Parks and Rec...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="hastings-sunrise">Hastings Sunrise</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="in progress">In Progress</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="parks and recreation">Parks And Recreation</div><div tabindex="0" class="ehq-projectTag css-1uf3yjb" aria-label="2 more tags" id="popover-trigger-74" aria-haspopup="dialog" aria-expanded="false" aria-controls="popover-content-74">+2</div><div style="visibility:hidden;position:absolute;min-width:max-content;inset:0 auto auto 0" class="chakra-popover__popper css-1qq679y"><section class="chakra-popover__content ehq-projectTagPopover css-3trjpo" style="transform-origin:var(--popper-transform-origin);opacity:0;visibility:hidden;transform:scale(0.95) translateZ(0)" id="popover-content-74" tabindex="-1" role="dialog"><div data-popper-arrow="" style="position:absolute" class="chakra-popover__arrow-positioner css-0"><div class="chakra-popover__arrow css-0" data-popper-arrow-inner=""></div></div><div id="popover-body-74" class="chakra-popover__body css-osy5qn"><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="project">Project</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="public space">Public Space</div></div></section></div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/724-e-56-ave-2"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/724-e-56-ave-2"><span tabindex="0" class="css-0">724 E 56th Ave (DP-2021-00842) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Cornerstone Architecture has applied to the City of Vancouver for permission to develop the following on this site: Two Passive House multiple dwelling townhouse buildingsA site total of twelve secured market re...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="sunset">Sunset</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/305-main-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/305-main-st"><span tabindex="0" class="css-0">305 Main St (DP-2021-00795) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">MA+HG Architects has applied to the City of Vancouver for permission to develop the following on this site:A 11-storey mixed-use buildingIncluding a total of 117 residential units, consisting of 70 social housin...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="downtown eastside">Downtown Eastside</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/bute-greenway"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 15 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/bute-greenway"><span tabindex="0" class="css-0">Bute Greenway</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Share your input and help us build a shore-to-shore connectionWe are exploring ideas to improve and prioritize Bute Street for:Walking, rolling, and cycling for people of all ages and abilitiesProviding a variet...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="active transportation">Active Transportation</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="blue green systems">Blue Green Systems</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="downtown">Downtown</div><div tabindex="0" class="ehq-projectTag css-1uf3yjb" aria-label="2 more tags" id="popover-trigger-96" aria-haspopup="dialog" aria-expanded="false" aria-controls="popover-content-96">+2</div><div style="visibility:hidden;position:absolute;min-width:max-content;inset:0 auto auto 0" class="chakra-popover__popper css-1qq679y"><section class="chakra-popover__content ehq-projectTagPopover css-3trjpo" style="transform-origin:var(--popper-transform-origin);opacity:0;visibility:hidden;transform:scale(0.95) translateZ(0)" id="popover-content-96" tabindex="-1" role="dialog"><div data-popper-arrow="" style="position:absolute" class="chakra-popover__arrow-positioner css-0"><div class="chakra-popover__arrow css-0" data-popper-arrow-inner=""></div></div><div id="popover-body-96" class="chakra-popover__body css-osy5qn"><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="public space">Public Space</div><div tabindex="0" class="ehq-projectTag css-1touz2u" data-tname="west end">West End</div></div></section></div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/1657-w-king-edward-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 12 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/1657-w-king-edward-ave"><span tabindex="0" class="css-0">1657 W King Edward Ave (DP-2021-00826) development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Formwerks Architectural Inc. has applied to the City of Vancouver for permission to develop a two-and-a-half-storey plus basement, one-family dwelling with a detached accessory building at the rear, consisting o...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="shaughnessy">Shaughnessy</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/1064-balfour-ave"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 09 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/1064-balfour-ave"><span tabindex="0" class="css-0">1064 Balfour Ave (DP-2020-00865) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">Architrix Studio has applied to the City of Vancouver for permission to develop on this site a total of five dwelling units:To perform interior and exterior alterations to the existing Multiple Conversion Dwelli...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="shaughnessy">Shaughnessy</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/2141-e-hastings-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 08 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/2141-e-hastings-st"><span tabindex="0" class="css-0">2141 E Hastings St (DP-2021-00817) cannabis retail development application </span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">The Village Collaborative Inc. has applied to the City of Vancouver for permission to perform interior alterations, consolidate units 2137 + 2139 and change of use from Health and Beauty to Retail Cannabis Store...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="cannabis">Cannabis</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="grandview-woodland">Grandview Woodland</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft"><div class="ehq-card css-vmaeo2"><a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/1928-graveley-st"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 08 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8"><h2 class="chakra-heading ehq-cardTitle css-kxf6fq"><a target="_blank" rel="noopener noreferrer" class="chakra-link css-f4h6uy" href="https://shapeyourcity.ca/1928-graveley-st"><span tabindex="0" class="css-0">1928 Graveley St (DP-2021-00756) development application</span></a></h2></div><div class="ehq-cardItem css-8ylox8"><p class="ehq-projectDescriptionContainer css-0">The owner has applied to the City of Vancouver for permission to develop a two-storey infill one-family dwelling on the south side of the lot of this existing one-family dwelling, consisting of:A proposed height...</p></div><div class="ehq-cardItem css-8ylox8"><div class="ehq-projectTagsContainer css-1lis0pe"><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="development">Development</div><div tabindex="0" class="ehq-projectTag css-1k38vvv" data-tname="grandview-woodland">Grandview Woodland</div></div></div></div></div><div class="ehq-projectCardContainer css-4p0eft">
                         <div class="ehq-card css-vmaeo2">
                             <a target="_blank" rel="noopener noreferrer" class="chakra-link ehq-projectCoverImg css-v2dlq6" href="https://shapeyourcity.ca/memorial-square-redesign"><div class="lazyload-wrapper "><div style="height:250px" class="lazyload-placeholder"></div></div></a><div class="ehq-cardItem css-8ylox8"><span class="ehq-projectYearTextContainer css-1l4uiyf"> 08 Nov 2021</span></div><div class="ehq-cardItem css-8ylox8">
                                 <h2 class="chakra-heading ehq-cardTitle css-kxf6fq">

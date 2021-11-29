@@ -6,9 +6,9 @@ using static Spectre.Console.AnsiConsole;
 
 namespace RezoningScraper;
 
-public static class TokenHelper
+internal static class TokenHelper
 {
-    public static async Task<Token> GetTokenFromDbOrWebsite(SqliteConnection db)
+    internal static async Task<Token> GetTokenFromDbOrWebsite(SqliteConnection db)
     {
         Token? tokenFromDb = db.GetToken();
 
@@ -40,7 +40,7 @@ public static class TokenHelper
         }
     }
 
-    public static string ExtractTokenFromHtml(string html)
+    internal static string ExtractTokenFromHtml(string html)
     {
         var parser = new HtmlParser();
         var document = parser.ParseDocument(html);
@@ -60,12 +60,11 @@ public static class TokenHelper
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
     }
 
-    public static DateTimeOffset GetExpirationFromEncodedJWT(string jwt)
+    internal static DateTimeOffset GetExpirationFromEncodedJWT(string jwt)
     {
         var token = new JwtSecurityToken(jwt);
         string unparsedExp = token.Claims.Single(c => c.Type == "exp").Value;
         long exp = long.Parse(unparsedExp);
         return DateTimeOffset.FromUnixTimeSeconds(exp);
     }
-
 }

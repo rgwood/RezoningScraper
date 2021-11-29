@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
-using System.Reflection;
 using System.Text.Json;
 
 namespace RezoningScraper;
@@ -28,7 +27,6 @@ public static class DbHelper
         return connection;
     }
 
-
     public static void InitializeSchemaIfNeeded(this SqliteConnection conn)
     {
         string sql = @"
@@ -40,7 +38,7 @@ Projects(
 
 CREATE TABLE IF NOT EXISTS
 TokenCache(
-    Expiration TEXT NOT NULL,
+    Expiration INTEGER NOT NULL,
     Token TEXT NOT NULL
 );";
         conn.Execute(sql);

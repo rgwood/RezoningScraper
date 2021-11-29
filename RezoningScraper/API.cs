@@ -6,7 +6,7 @@ namespace RezoningScraper;
 
 public static class API
 {
-	private const int ResultsPerPage = 100;
+	private const int ResultsPerPage = 200; // chosen arbitrarily; higher numbers work too
 
 	/// <summary>
 	/// Get all projects from the ShapeYourCity API.
