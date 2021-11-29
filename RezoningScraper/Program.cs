@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Reflection;
 using static Spectre.Console.AnsiConsole;
 
-MarkupLine($"[green]Welcome to RezoningScraper v{ Assembly.GetExecutingAssembly().GetName().Version}[/]");
+MarkupLine($"[green]Welcome to RezoningScraper v{Assembly.GetExecutingAssembly().GetName().Version}[/]");
 WriteLine();
 
-await Status().StartAsync("Opening DB...", async ctx => 
+await AnsiConsole.Status().StartAsync("Opening DB...", async ctx => 
 {
     try
     {
@@ -20,24 +20,24 @@ await Status().StartAsync("Opening DB...", async ctx =>
         ctx.Status = "Querying API...";
         WriteLine("Starting API query...");
         var stopwatch = Stopwatch.StartNew();
-        var results = await API.GetAllProjects(token.JWT).ToListAsync();
-        MarkupLine($"API query finished: retrieved {results.Count} projects in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
+        var latestProjects = await API.GetAllProjects(token.JWT).ToListAsync();
+        MarkupLine($"API query finished: retrieved {latestProjects.Count} projects in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
 
-        ctx.Status = "Comparing against existing database...";
-
-        List<Project> newProjects = new();
-        List<(Project Old, Project Latest)> modifiedProjects = new();
-
+        ctx.Status = "Comparing against projects in local database...";
         stopwatch.Restart();
+        List<Project> newProjects = new();
+        List<ChangedProject> changedProjects = new();
         var tran = db.BeginTransaction();
-        foreach (var project in results)
+        foreach (var project in latestProjects)
         {
-            if (db.ContainsProject(project.id!))
+            if (db.ContainsProject(project))
             {
                 var oldVersion = db.GetProject(project.id!);
-                if (DidProjectChange(oldVersion, project, out var changedAttributes))
+                var comparer = new ProjectComparer(oldVersion, project);
+
+                if (comparer.DidProjectChange(out var changes))
                 {
-                    modifiedProjects.Add((oldVersion, project));
+                    changedProjects.Add(new (oldVersion, project, changes));
                 }
             }
             else
@@ -49,12 +49,13 @@ await Status().StartAsync("Opening DB...", async ctx =>
         }
         tran.Commit();
 
-        MarkupLine($"Upserted {results.Count} projects to the DB in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
-        MarkupLine($"Found [green]{newProjects.Count}[/] new projects and [green]{modifiedProjects.Count}[/] modified projects.");
+        MarkupLine($"Upserted {latestProjects.Count} projects to the DB in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
+        MarkupLine($"Found [green]{newProjects.Count}[/] new projects and [green]{changedProjects.Count}[/] modified projects.");
 
-        // We've got the info we need; now do something with it
-        HandleNewProjects(newProjects);
-        HandleModifiedProjects(modifiedProjects);
+        // TODO: post changes to Slack
+
+        PrintNewProjects(newProjects);
+        PrintChangedProjects(changedProjects);
     }
     catch (Exception ex)
     {
@@ -63,7 +64,7 @@ await Status().StartAsync("Opening DB...", async ctx =>
     }
 });
 
-void HandleNewProjects(List<Project> newProjects)
+void PrintNewProjects(List<Project> newProjects)
 {
     if (newProjects.Count == 0) return;
 
@@ -87,27 +88,25 @@ void HandleNewProjects(List<Project> newProjects)
     }
 }
 
-void HandleModifiedProjects(List<(Project Old, Project Latest)> modifiedProjects)
+void PrintChangedProjects(List<ChangedProject> changedProjects)
 {
-    // TODO: implement
-}
+    if (changedProjects.Count == 0) return;
 
-bool DidProjectChange(Project oldVersion, Project newVersion, out Dictionary<string, AttributeChange> changedAttributes)
-{
-    bool changed = false;
-    // todo: check more fields (all attributes), and return data about what exactly changed
-    changedAttributes = new Dictionary<string, AttributeChange>();
+    WriteLine();
+    MarkupLine("[bold underline green]Changed Projects[/]");
+    WriteLine();
 
-    var oldAttrs = oldVersion.attributes!;
-    var newAttrs = newVersion.attributes!;
-
-    if (oldAttrs.name != newAttrs.name)
+    foreach (var changedProject in changedProjects)
     {
-        changed = true;
-        changedAttributes.Add("Name", new(oldAttrs.name, newAttrs.name));
-    }
+        MarkupLine($"[bold underline]{changedProject.LatestVersion.attributes!.name!.EscapeMarkup()}[/]");
 
-    return oldVersion?.attributes?.name != newVersion?.attributes?.name;
+        foreach (var change in changedProject.Changes)
+        {
+            WriteLine($"{change.Key}: '{change.Value.OldValue}' -> '{change.Value.NewValue}'");
+        }
+
+        WriteLine();
+    }
 }
 
-public record AttributeChange(string OldValue, string NewValue);
+record ChangedProject(Project OldVersion, Project LatestVersion, Dictionary<string, AttributeChange> Changes);

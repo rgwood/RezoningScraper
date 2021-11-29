@@ -6,6 +6,10 @@ namespace RezoningScraper;
 
 public record Token(DateTimeOffset Expiration, string JWT);
 
+/// <summary>
+/// A bunch of extension methods for working with the database.
+/// This is getting a bit messy; maybe refactor into a repository or similar if this project gets bigger.
+/// </summary>
 public static class DbHelper
 {
     /// <summary>Creates or opens a SQLite DB</summary>
@@ -46,6 +50,9 @@ TokenCache(
 
     public static bool ContainsProject(this SqliteConnection conn, string id) 
         => conn.ExecuteScalar<int>("SELECT COUNT(*) FROM Projects WHERE id = @id", new { id }) > 0;
+
+    public static bool ContainsProject(this SqliteConnection conn, Project p)
+        => conn.ContainsProject(p.id!);
 
     public static Project GetProject(this SqliteConnection conn, string id)
     {
