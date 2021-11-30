@@ -2,14 +2,15 @@
 
 A small project written for [Abundant Housing Vancouver](http://www.abundanthousingvancouver.com).
 
-Scrapes the City of Vancouver's website for rezoning and development applications, then notifies people of any changes via Slack. It's a simple standalone console app using  SQLite as a data store. Just copy the app (1 file, no dependencies) to a server and run it with a cron job, no further steps needed.
+Scrapes the City of Vancouver's website for rezoning and development applications, then notifies people of any changes via Slack. It's a simple standalone app using SQLite as a data store, runs on any major OS. Just copy the app (1 file, no dependencies) to a server and run it with a cron job, no further steps needed.
 
 ![image](https://user-images.githubusercontent.com/26268125/143966385-3ff0f2ae-b8ef-4bf1-bc17-c52aa7ed7e16.png)
 
-![image](https://user-images.githubusercontent.com/26268125/143966785-750be3e1-1a91-4fe2-8fdd-d6e929eeeae0.png)
-
+<img width="369" alt="image" src="https://user-images.githubusercontent.com/26268125/143972637-ea41827c-85a8-4daf-8e6a-a063cc4981a8.png">
 
 ## How to use
+
+Download from [the releases page](https://github.com/rgwood/RezoningScraper/releases) or build it from source (requires the .NET 6 SDK). Then run it:
 
 ```
 ❯ .\RezoningScraper.exe --help
