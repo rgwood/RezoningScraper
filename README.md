@@ -35,7 +35,10 @@ Public domain. Do whatever you like with this code, no attribution needed.
 - [ ] GitHub Actions for build+test
 - [ ] GitHub Action to automatically publish trimmed executables as a release
 - [ ] `--dry-run` flag that doesn't update the local DB
+- [ ] Add retries to the token fetching. It times out fairly often
 - [ ] Some kind of development cache thingy. The API is slowwwww and that makes iterative development painful
 - [ ] Discord integration?
 - [ ] Twitter integration?
 - [ ] Display more project fields?
+- [ ] [This is rough](https://github.com/rgwood/RezoningScraper/blob/ca38460e6ffbd177ef842b0362ff3449737bf3a5/RezoningScraper/TokenHelper.cs#L54-L60), there's gotta be a better way to query JSON
+- [ ] Consider archiving old versions of projects
