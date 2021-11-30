@@ -6,7 +6,7 @@ Scrapes the City of Vancouver's website for rezoning and development application
 
 ![image](https://user-images.githubusercontent.com/26268125/143966385-3ff0f2ae-b8ef-4bf1-bc17-c52aa7ed7e16.png)
 
-<img width="369" alt="image" src="https://user-images.githubusercontent.com/26268125/143972637-ea41827c-85a8-4daf-8e6a-a063cc4981a8.png">
+![image](https://user-images.githubusercontent.com/26268125/143972856-7f01362c-867c-4a0c-90d7-18c1730bd522.png)
 
 ## How to use
 
