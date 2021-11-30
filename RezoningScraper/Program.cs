@@ -116,6 +116,12 @@ public class Program
 
         foreach (var changedProject in changedProjects)
         {
+            // don't report on projects being archived, too much noise
+            if (changedProject.Changes.Any(c => c.Key == "state" && c.Value.NewValue == "archived"))
+            {
+                continue;
+            }
+
             message.AppendLine($"Changed item: *<{changedProject.LatestVersion.links!.self!}|{changedProject.LatestVersion.attributes!.name!}>*");
 
             foreach (var change in changedProject.Changes)
