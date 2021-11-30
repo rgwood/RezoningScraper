@@ -101,27 +101,36 @@ public class Program
 
         foreach (var proj in newProjects)
         {
-            message.AppendLine($"New: *<{proj.links!.self!}|{proj.attributes!.name!}>*\n");
+            message.AppendLine($"New item: *<{proj.links!.self!}|{proj.attributes!.name!}>*");
+
+            var tags = proj.attributes?.projecttaglist ?? new string[0];
+            if (tags.Any())
+            {
+                message.AppendLine($"• Tags: {string.Join(", ", tags).EscapeMarkup()}");
+            }
+
+            message.AppendLine($"• State: {Capitalize(proj.attributes?.state)}");
+
+            message.AppendLine();
         }
 
         foreach (var changedProject in changedProjects)
         {
-            message.AppendLine($"Changed: *<{changedProject.LatestVersion.links!.self!}|{changedProject.LatestVersion.attributes!.name!}>*\n");
+            message.AppendLine($"Changed item: *<{changedProject.LatestVersion.links!.self!}|{changedProject.LatestVersion.attributes!.name!}>*");
 
             foreach (var change in changedProject.Changes)
             {
                 const int MaxLength = 100; // arbitrary; we just need some way to avoid huuuuuuuge descriptions that look bad in Slack
                 if (change.Value.OldValue?.Length > MaxLength || change.Value.NewValue?.Length > MaxLength)
                 {
-                    message.AppendLine($"    {Capitalize(change.Key)} changed, too big to show");
+                    message.AppendLine($"• {Capitalize(change.Key)} changed, too big to show");
                 }
                 else
                 {
-                    message.AppendLine($"    {Capitalize(change.Key)}: {change.Value.OldValue} ➡️ {change.Value.NewValue}");
+                    message.AppendLine($"• {Capitalize(change.Key)}: {change.Value.OldValue} ➡️ {change.Value.NewValue}");
                 }
 
-                string Capitalize(string str) => str.Substring(0, 1).ToUpper() + str.Substring(1);
-
+                message.AppendLine();
             }
         }
 
@@ -176,6 +185,13 @@ public class Program
 
             WriteLine();
         }
+    }
+
+    private static string? Capitalize(string? str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) { return str; }
+
+        return str.Substring(0, 1).ToUpper() + str.Substring(1);
     }
 
     record ChangedProject(Project OldVersion, Project LatestVersion, Dictionary<string, AttributeChange> Changes);
