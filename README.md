@@ -29,3 +29,9 @@ Options:
 ## License
 
 Public domain. Do whatever you like with this code, no attribution needed.
+
+## To Do
+
+- [ ] GitHub Actions for build+test
+- [ ] GitHub Action to automatically publish trimmed executables as a release
+- [ ] `--dry-run` flag
