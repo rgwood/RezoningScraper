@@ -34,4 +34,8 @@ Public domain. Do whatever you like with this code, no attribution needed.
 
 - [ ] GitHub Actions for build+test
 - [ ] GitHub Action to automatically publish trimmed executables as a release
-- [ ] `--dry-run` flag
+- [ ] `--dry-run` flag that doesn't update the local DB
+- [ ] Some kind of development cache thingy. The API is slowwwww and that makes iterative development painful
+- [ ] Discord integration?
+- [ ] Twitter integration?
+- [ ] Display more project fields?
