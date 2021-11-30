@@ -4,28 +4,10 @@ A small project written for [Abundant Housing Vancouver](http://www.abundanthous
 
 Scrapes the City of Vancouver's [rezoning application page](http://rezoning.vancouver.ca/applications/) then notifies people of any changes via Slack. It's an [Azure Function](https://duckduckgo.com/?q=azure+function&t=ffab&ia=web) written in C# using .NET Core, uses HtmlAgilityPack for HTML parsing and Azure Table+Blob storage. It costs just a few pennies/month to run.
 
-## Update Nov 2021
+I'm in the middle of patching it up and modernizing it, things aren't 100% working yet.
 
-The City changed their website and this has been broken since February 2021. I'm taking this opportunity to rewrite the whole thing, work is happening on this branch: https://github.com/rgwood/RezoningScraper/tree/v2
+Previously this relied on cloud compute+storage. I've soured on the cloud somewhat in recent years, my plan for version 2 is to make this a simple standalone console app with SQLite as a data store. Just copy the app (1 file) to a server and run it with a cron job, no further steps needed.
 
-#### License
+## License
 
 Public domain. Do whatever you like with this code, no attribution needed.
-
-#### Build
-Just run `dotnet build`.
-
-#### Development + Deployment
-
-I use the Azure Functions extension in VS Code. 
-
-To run this locally, you may first need to use the "Initialize project for use with VS Code" command.
-
-To deploy, use the "Deploy to function app" command and point it at the publish output folder (`/RezoningScraper.Functions/bin/Release/netstandard2.0/publish`).
-
-Troubleshooting: try opening the `RezoningScraper.Functions` folder and deploying from there – sometimes doesn't work from the solution directory, need to figure out why.
-
-#### Tests
-`dotnet test`
-
-Note that there is a bug (?) in the current version of .NET Core that means when you run `dotnet test` on a solution, it attempts to run tests in _all_ projects (and fails on projects that contain no tests). I'm using [this handy fix by Martin Ullrich ](https://dasmulli.blog/2018/01/20/make-dotnet-test-work-on-solution-files/), as found in [this GitHub issue](https://github.com/Microsoft/vstest/issues/1129).
