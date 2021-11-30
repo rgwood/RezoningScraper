@@ -6,6 +6,9 @@ Scrapes the City of Vancouver's website for rezoning and development application
 
 ![image](https://user-images.githubusercontent.com/26268125/143966385-3ff0f2ae-b8ef-4bf1-bc17-c52aa7ed7e16.png)
 
+![image](https://user-images.githubusercontent.com/26268125/143966785-750be3e1-1a91-4fe2-8fdd-d6e929eeeae0.png)
+
+
 ## How to use
 
 ```
