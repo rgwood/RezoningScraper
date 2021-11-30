@@ -106,7 +106,7 @@ public class Program
             var tags = proj.attributes?.projecttaglist ?? new string[0];
             if (tags.Any())
             {
-                message.AppendLine($"• Tags: {string.Join(", ", tags).EscapeMarkup()}");
+                message.AppendLine($"• Tags: {string.Join(", ", tags)}");
             }
 
             message.AppendLine($"• State: {Capitalize(proj.attributes?.state)}");
@@ -153,12 +153,12 @@ public class Program
         foreach (var project in newProjects)
         {
             MarkupLine($"[bold underline]{project.attributes!.name!.EscapeMarkup()}[/]");
-            MarkupLine($"State: {project.attributes.state.EscapeMarkup()}");
+            WriteLine($"State: {project.attributes.state}");
 
             var tags = project?.attributes?.projecttaglist ?? new string[0];
             if (tags.Any())
             {
-                MarkupLine($"Tags: {string.Join(',', tags).EscapeMarkup()}");
+                WriteLine($"Tags: {string.Join(',', tags)}");
             }
 
             WriteLine($"URL: {project!.links!.self}");
