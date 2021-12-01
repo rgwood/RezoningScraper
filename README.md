@@ -42,6 +42,5 @@ Public domain. Do whatever you like with this code, no attribution needed.
 - [ ] Display more project fields?
 - [ ] [This is rough](https://github.com/rgwood/RezoningScraper/blob/ca38460e6ffbd177ef842b0362ff3449737bf3a5/RezoningScraper/TokenHelper.cs#L54-L60), there's gotta be a better way to query JSON
 - [ ] Consider archiving old versions of projects
-- [ ] Escape `|` character in project names when posting to Slack - it breaks their link format. Ex:  "Chinatown Memorial Square Redesign |
-唐人街紀念廣場重新設計"
+- [ ] Strip line breaks from project titles - CoV does that sometimes and it breaks the Slack link format.
 - [x] Consider excluding `published -> archived` state transitions from Slack. Lots of noise, not particularly useful
