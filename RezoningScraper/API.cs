@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Polly;
 
 namespace RezoningScraper;
 
@@ -12,10 +13,14 @@ public static class API
 	/// Get all projects from the ShapeYourCity API.
 	/// </summary>
 	/// <returns>An async enumerable of projects (because the API is paginated)</returns>
-	public static async IAsyncEnumerable<Project> GetAllProjects(string jwt)
+	public static async IAsyncEnumerable<Project> GetAllProjects(string jwt, bool useCache = false)
 	{
+
+			IAsyncPolicy<Projects> cachePolicy = useCache
+				? Policy.CacheAsync<Projects>(new CacheManager<Projects>(), TimeSpan.FromHours(1))
+				: Policy.NoOpAsync<Projects>();
+			var client = new HttpClient();
 		string startUrl = $"https://shapeyourcity.ca/api/v2/projects?per_page={ResultsPerPage}";
-        HttpClient client = new();
 
 		string? next = startUrl;
 
@@ -24,24 +29,22 @@ public static class API
 		// loop over result pages
 		while (next != null)
 		{
-            HttpRequestMessage message = new(HttpMethod.Get, next);
+			HttpRequestMessage message = new(HttpMethod.Get, next);
 			message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            HttpResponseMessage response = await client.SendAsync(message);
-			string responseContent = await response.Content.ReadAsStringAsync();
-            
-			var deserialized = JsonSerializer.Deserialize<Projects>(responseContent);
-			var data = deserialized?.data;
-
-			if (data != null)
+			var deserializedResponse = await cachePolicy.ExecuteAsync(async context =>
 			{
-				AnsiConsole.WriteLine($"Retrieved page {++pageCount} ({data.Count()} items)");
-				foreach (var item in data)
+				var response = await Policy.Handle<Exception>().RetryAsync(3).ExecuteAsync(async () => await client.SendAsync(message));
+				return JsonSerializer.Deserialize<Projects>(await response.Content.ReadAsStringAsync()) ?? new Projects();
+			}, new Context(next));
+			if (deserializedResponse?.data is not null)
+			{
+				AnsiConsole.WriteLine($"Retrieved page {++pageCount} ({deserializedResponse.data.Count()} items)");
+				foreach (var item in deserializedResponse?.data ?? Enumerable.Empty<Project>())
 				{
 					yield return item;
 				}
+				next = deserializedResponse?.links?.next;
 			}
-
-			next = deserialized?.links?.next;
 		}
 	}
 }

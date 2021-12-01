@@ -1,6 +1,8 @@
 ﻿using AngleSharp.Html.Parser;
 using Microsoft.Data.Sqlite;
+using Polly;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Text.Json.Nodes;
 using static Spectre.Console.AnsiConsole;
 
@@ -8,10 +10,9 @@ namespace RezoningScraper;
 
 internal static class TokenHelper
 {
-    internal static async Task<Token> GetTokenFromDbOrWebsite(SqliteConnection db)
+    internal static async Task<Token> GetTokenFromDbOrWebsite(SqliteConnection db, bool useCache)
     {
         Token? tokenFromDb = db.GetToken();
-
         if (tokenFromDb != null && tokenFromDb.Expiration > DateTimeOffset.UtcNow.AddMinutes(1))
         {
             WriteLine($"Loaded API token from database. Cached token will expire on {tokenFromDb.Expiration}");
@@ -20,23 +21,29 @@ internal static class TokenHelper
         else
         {
             // TODO: add retries, this page seems unreliable
-
+            IAsyncPolicy<Token> cachePolicy = useCache
+                ? Policy.CacheAsync<Token>(new CacheManager<Token>(), TimeSpan.FromMinutes(1))
+                : Policy.NoOpAsync<Token>();
             WriteLine("Getting latest anonymous user token from shapeyourcity.ca");
             var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(20) };
-            var htmlToParse = await client.GetStringAsync("https://shapeyourcity.ca/embeds/projectfinder");
+            return await cachePolicy.ExecuteAsync(async context =>
+            {
+                var htmlToParse = await Policy.Handle<Exception>()
+                    .RetryAsync(3)
+                    .ExecuteAsync(async () => await client.GetStringAsync("https://shapeyourcity.ca/embeds/projectfinder"));
+                string jwt = ExtractTokenFromHtml(htmlToParse);
 
-            string jwt = ExtractTokenFromHtml(htmlToParse);
+                DateTimeOffset expiration = GetExpirationFromEncodedJWT(jwt);
 
-            DateTimeOffset expiration = GetExpirationFromEncodedJWT(jwt);
+                WriteLine($"Retrieved JWT with expiration date {expiration}");
 
-            WriteLine($"Retrieved JWT with expiration date {expiration}");
+                var newToken = new Token(expiration, jwt);
 
-            var newToken = new Token(expiration, jwt);
+                db.SetToken(newToken);
+                WriteLine($"Cached JWT in local database");
 
-            db.SetToken(newToken);
-            WriteLine($"Cached JWT in local database");
-
-            return newToken;
+                return newToken;
+            }, new Context("https://shapeyourcity.ca/embeds/projectfinder"));
         }
     }
 
