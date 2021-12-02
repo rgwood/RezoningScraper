@@ -15,13 +15,16 @@ Download from [the releases page](https://github.com/rgwood/RezoningScraper/rele
 ```
 ❯ .\RezoningScraper.exe --help
 RezoningScraper
-  A tool to detect new+modified postings on Vancouver's shapeyourcity.ca website. Data is stored in a local SQLite database next to the executable.
+  A tool to detect new+modified postings on Vancouver's shapeyourcity.ca website.
+  Data is stored in a local SQLite database next to the executable.
 
 Usage:
   RezoningScraper [options]
 
 Options:
-  --slack-webhook-url <slack-webhook-url>  A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this address.
+  --slack-webhook-url <slack-webhook-url>  A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this
+                                           address.
+  --save-to-db                             Whether to save the API results to database. [default: True]
   --version                                Show version information
   -?, -h, --help                           Show help and usage information
 ```
@@ -34,4 +37,15 @@ Public domain. Do whatever you like with this code, no attribution needed.
 
 - [ ] GitHub Actions for build+test
 - [ ] GitHub Action to automatically publish trimmed executables as a release
-- [ ] `--dry-run` flag
+- [x] `--dry-run` flag that doesn't update the local DB
+- [ ] Add retries to the token fetching. It times out fairly often
+- [ ] Some kind of development cache thingy. The API is slowwwww and that makes iterative development painful
+- [ ] Discord integration?
+- [ ] Twitter integration?
+- [ ] Display more project fields?
+- [ ] [This is rough](https://github.com/rgwood/RezoningScraper/blob/ca38460e6ffbd177ef842b0362ff3449737bf3a5/RezoningScraper/TokenHelper.cs#L54-L60), there's gotta be a better way to query JSON
+- [ ] Consider archiving old versions of projects
+- [ ] Hook up to Sentry for error reporting
+- [ ] Script deployment (just rsync and cron lol) to a remote server
+- [x] Strip line breaks from project titles - CoV does that sometimes and it breaks the Slack link format.
+- [x] Consider excluding `published -> archived` state transitions from Slack. Lots of noise, not particularly useful
