@@ -19,16 +19,21 @@ public class Program
             new Option<string?>("--slack-webhook-url",
                 getDefaultValue: () => "",
                 description: "A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this address."),
+            new Option<bool>("--save-to-db",
+                getDefaultValue: () => true,
+                description: "Whether to save the API results to database."),
         };
 
-        rootCommand.Handler = CommandHandler.Create<string>(RunScraper);
+        rootCommand.Handler = CommandHandler.Create<string, bool>(RunScraper);
         return await rootCommand.InvokeAsync(args);
     }
 
-    static async Task RunScraper(string slackWebhookUrl)
+    static async Task RunScraper(string slackWebhookUrl, bool saveToDb)
     {
         MarkupLine($"[green]Welcome to RezoningScraper v{Assembly.GetExecutingAssembly().GetName().Version}[/]");
         if(string.IsNullOrWhiteSpace(slackWebhookUrl)) { WriteLine($"Slack URI not specified; will not publish updates to Slack."); }
+        if (!saveToDb) { WriteLine("Dry run; will not write results to database"); }
+        
         WriteLine();
 
         // Use Spectre.Console's Status UI https://spectreconsole.net/live/status
@@ -70,7 +75,7 @@ public class Program
                         newProjects.Add(project);
                     }
 
-                    db.UpsertProject(project);
+                    if (saveToDb) { db.UpsertProject(project); }
                 }
                 tran.Commit();
 
@@ -101,7 +106,7 @@ public class Program
 
         foreach (var proj in newProjects)
         {
-            message.AppendLine($"New item: *<{proj.links!.self!}|{proj.attributes!.name!}>*");
+            message.AppendLine($"New item: *<{proj.links!.self!}|{RemoveLineBreaks(proj.attributes!.name!)}>*");
 
             var tags = proj.attributes?.projecttaglist ?? new string[0];
             if (tags.Any())
@@ -110,35 +115,35 @@ public class Program
             }
 
             message.AppendLine($"• State: {Capitalize(proj.attributes?.state)}");
-
             message.AppendLine();
         }
 
-        foreach (var changedProject in changedProjects)
-        {
-            // don't report on projects being archived, too much noise
-            if (changedProject.Changes.Any(c => c.Key == "state" && c.Value.NewValue == "archived"))
-            {
-                continue;
-            }
+        // Disabled posting changed projects for now; too much noise from minor description tweaks. 
+        //foreach (var changedProject in changedProjects)
+        //{
+        //    // don't report on projects being archived, too much noise
+        //    if (changedProject.Changes.Any(c => c.Key == "state" && c.Value.NewValue == "archived"))
+        //    {
+        //        continue;
+        //    }
 
-            message.AppendLine($"Changed item: *<{changedProject.LatestVersion.links!.self!}|{changedProject.LatestVersion.attributes!.name!}>*");
+        //    message.AppendLine($"Changed item: *<{changedProject.LatestVersion.links!.self!}|{RemoveLineBreaks(changedProject.LatestVersion.attributes!.name!)}>*");
 
-            foreach (var change in changedProject.Changes)
-            {
-                const int MaxLength = 100; // arbitrary; we just need some way to avoid huuuuuuuge descriptions that look bad in Slack
-                if (change.Value.OldValue?.Length > MaxLength || change.Value.NewValue?.Length > MaxLength)
-                {
-                    message.AppendLine($"• {Capitalize(change.Key)} changed, too big to show");
-                }
-                else
-                {
-                    message.AppendLine($"• {Capitalize(change.Key)}: {change.Value.OldValue} ➡️ {change.Value.NewValue}");
-                }
+        //    foreach (var change in changedProject.Changes)
+        //    {
+        //        const int MaxLength = 100; // arbitrary; we just need some way to avoid huuuuuuuge descriptions that look bad in Slack
+        //        if (change.Value.OldValue?.Length > MaxLength || change.Value.NewValue?.Length > MaxLength)
+        //        {
+        //            message.AppendLine($"• {Capitalize(change.Key)} changed, too big to show");
+        //        }
+        //        else
+        //        {
+        //            message.AppendLine($"• {Capitalize(change.Key)}: {change.Value.OldValue} ➡️ {change.Value.NewValue}");
+        //        }
 
-                message.AppendLine();
-            }
-        }
+        //        message.AppendLine();
+        //    }
+        //}
 
         var json = JsonSerializer.Serialize(new { text = message.ToString() });
         var client = new HttpClient();
@@ -199,6 +204,9 @@ public class Program
 
         return str.Substring(0, 1).ToUpper() + str.Substring(1);
     }
+
+    private static string RemoveLineBreaks(string str)
+        => str.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
 
     record ChangedProject(Project OldVersion, Project LatestVersion, Dictionary<string, AttributeChange> Changes);
 }
