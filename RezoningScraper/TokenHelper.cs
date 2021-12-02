@@ -20,7 +20,6 @@ internal static class TokenHelper
         }
         else
         {
-            // TODO: add retries, this page seems unreliable
             IAsyncPolicy<Token> cachePolicy = useCache
                 ? Policy.CacheAsync<Token>(new CacheManager<Token>(), TimeSpan.FromMinutes(1))
                 : Policy.NoOpAsync<Token>();
