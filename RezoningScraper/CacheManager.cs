@@ -4,15 +4,15 @@ using System.Text.Json;
 using System.Security.Cryptography;
 using System.Text;
 using static Spectre.Console.AnsiConsole;
+using Dapper;
 
 namespace RezoningScraper
 {
     public class CacheManager<TResult> : IAsyncCacheProvider<TResult>
     {
-        record CachedRecord<T>(DateTime Ttl, T Record);
         public async Task PutAsync(string key, TResult value, Ttl ttl, CancellationToken ct, bool continueOnCapturedContext)
         {
-            using IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Domain | IsolatedStorageScope.Assembly, null, null);
+            using var dbConnection = DbHelper.CreateOrOpenFileDb("RezoningScraper.db");
             using var sha = SHA256.Create();
             var hashbytes = sha.ComputeHash(Encoding.UTF8.GetBytes(key));
             var hashstring = new StringBuilder();
@@ -20,13 +20,27 @@ namespace RezoningScraper
             {
                 hashstring.Append(b.ToString("X2"));
             }
-            using var openFile = isoStore.OpenFile(hashstring.ToString(), FileMode.Create, FileAccess.Write);
-            await JsonSerializer.SerializeAsync(openFile, new CachedRecord<TResult>(DateTime.UtcNow + ttl.Timespan, value), cancellationToken: ct);
+
+            using var ms = new MemoryStream();
+            await JsonSerializer.SerializeAsync(ms, value, cancellationToken: ct);
+
+            
+            using var tran = dbConnection.BeginTransaction();
+            dbConnection.Execute(
+                "REPLACE INTO Cache(Key, Expiration, Value) VALUES(@Key, @Expiration,@Value)",
+                new {
+                    Key = hashstring.ToString(),
+                    Expiration = (DateTimeOffset.UtcNow + ttl.Timespan).ToUnixTimeMilliseconds(),
+                    Value = Encoding.UTF8.GetString(ms.ToArray())
+                });
+
+            tran.Commit();
             WriteLine($"Completed put cache for {key}");
         }
 
-        public Task<(bool, TResult)> TryGetAsync(string key, CancellationToken ct, bool continueOnCapturedContext)
+        public async Task<(bool, TResult)> TryGetAsync(string key, CancellationToken ct, bool continueOnCapturedContext)
         {
+            using var dbConnection = DbHelper.CreateOrOpenFileDb("RezoningScraper.db");
             using var sha = SHA256.Create();
             var hashbytes = sha.ComputeHash(Encoding.UTF8.GetBytes(key));
             var hashstring = new StringBuilder();
@@ -34,33 +48,28 @@ namespace RezoningScraper
             {
                 hashstring.Append(b.ToString("X2"));
             }
-            using IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Domain | IsolatedStorageScope.Assembly, null, null);
+
+            var cachedValue = await dbConnection.ExecuteScalarAsync<string>("SELECT Value FROM Cache WHERE Key = @Key AND Expiration > @Expiration",
+                new
+                {
+                    Key=hashstring.ToString(),
+                    Expiration=DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+                });
             try
             {
-                if (!isoStore.FileExists(hashstring.ToString()))
+                if (string.IsNullOrEmpty(cachedValue))
                 {
                     WriteLine($"No value in cache for {key}");
-                    return Task.FromResult((false, default(TResult)));
+                    return (false, default(TResult));
                 }
-                using var openFile = isoStore.OpenFile(hashstring.ToString(), FileMode.Open, FileAccess.Read);
-                using var sr = new StreamReader(openFile);
-                var model = JsonSerializer.Deserialize<CachedRecord<TResult>>(sr.ReadToEnd());
-                if (model?.Ttl < DateTime.UtcNow || model is null || model.Record is null)
-                {
-                    WriteLine($"Expired/missing value in cache for {key}");
-                    return Task.FromResult((false, default(TResult)));
-                }
-                else
-                {
-
+                var model = JsonSerializer.Deserialize<TResult>(cachedValue);
                     WriteLine($"Found value in cache for {key}");
-                    return Task.FromResult((true, model.Record));
-                }
+                    return (true, model);
             }
             catch
             {
                 WriteLine($"Error on get cache for {key}");
-                return Task.FromResult((false, default(TResult)));
+                return (false, default(TResult));
             }
         }
     }

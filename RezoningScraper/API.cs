@@ -15,11 +15,10 @@ public static class API
 	/// <returns>An async enumerable of projects (because the API is paginated)</returns>
 	public static async IAsyncEnumerable<Project> GetAllProjects(string jwt, bool useCache = false)
 	{
-
-			IAsyncPolicy<Projects> cachePolicy = useCache
-				? Policy.CacheAsync<Projects>(new CacheManager<Projects>(), TimeSpan.FromHours(1))
-				: Policy.NoOpAsync<Projects>();
-			var client = new HttpClient();
+		IAsyncPolicy<Projects> cachePolicy = useCache
+			? Policy.CacheAsync<Projects>(new CacheManager<Projects>(), TimeSpan.FromHours(1))
+			: Policy.NoOpAsync<Projects>();
+		var client = new HttpClient();
 		string startUrl = $"https://shapeyourcity.ca/api/v2/projects?per_page={ResultsPerPage}";
 
 		string? next = startUrl;
