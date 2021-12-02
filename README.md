@@ -45,5 +45,7 @@ Public domain. Do whatever you like with this code, no attribution needed.
 - [ ] Display more project fields?
 - [ ] [This is rough](https://github.com/rgwood/RezoningScraper/blob/ca38460e6ffbd177ef842b0362ff3449737bf3a5/RezoningScraper/TokenHelper.cs#L54-L60), there's gotta be a better way to query JSON
 - [ ] Consider archiving old versions of projects
+- [ ] Hook up to Sentry for error reporting
+- [ ] Script deployment (just rsync and cron lol) to a remote server
 - [x] Strip line breaks from project titles - CoV does that sometimes and it breaks the Slack link format.
 - [x] Consider excluding `published -> archived` state transitions from Slack. Lots of noise, not particularly useful
