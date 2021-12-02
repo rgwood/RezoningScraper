@@ -44,7 +44,15 @@ CREATE TABLE IF NOT EXISTS
 TokenCache(
     Expiration INTEGER NOT NULL,
     Token TEXT NOT NULL
-);";
+);
+
+CREATE TABLE IF NOT EXISTS
+Cache(
+  Key TEXT PRIMARY KEY,
+  Expiration INTEGER NOT NULL,
+  Value TEXT NOT NULL
+);
+";
         conn.Execute(sql);
     }
 

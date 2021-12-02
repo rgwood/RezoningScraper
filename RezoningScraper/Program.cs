@@ -19,16 +19,17 @@ public class Program
             new Option<string?>("--slack-webhook-url",
                 getDefaultValue: () => "",
                 description: "A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this address."),
+            new Option<bool>("--use-cache", description: "Use cached json queries, as long as they are fresh enough."),
             new Option<bool>("--save-to-db",
                 getDefaultValue: () => true,
-                description: "Whether to save the API results to database."),
+                description: "Whether to save the API results to database.")
         };
 
         rootCommand.Handler = CommandHandler.Create<string, bool>(RunScraper);
         return await rootCommand.InvokeAsync(args);
     }
 
-    static async Task RunScraper(string slackWebhookUrl, bool saveToDb)
+    static async Task RunScraper(string slackWebhookUrl, bool useCache, bool saveToDb)
     {
         MarkupLine($"[green]Welcome to RezoningScraper v{Assembly.GetExecutingAssembly().GetName().Version}[/]");
         if(string.IsNullOrWhiteSpace(slackWebhookUrl)) { WriteLine($"Slack URI not specified; will not publish updates to Slack."); }
@@ -45,12 +46,12 @@ public class Program
                 db.InitializeSchemaIfNeeded();
 
                 ctx.Status = "Loading token...";
-                var token = await TokenHelper.GetTokenFromDbOrWebsite(db);
+                var token = await TokenHelper.GetTokenFromDbOrWebsite(db, useCache);
 
                 ctx.Status = "Querying API...";
                 WriteLine("Starting API query...");
                 var stopwatch = Stopwatch.StartNew();
-                var latestProjects = await API.GetAllProjects(token.JWT).ToListAsync();
+                var latestProjects = await API.GetAllProjects(token.JWT, useCache).ToListAsync();
                 MarkupLine($"API query finished: retrieved {latestProjects.Count} projects in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
 
                 ctx.Status = "Comparing against projects in local database...";
