@@ -25,7 +25,7 @@ public class Program
                 description: "Whether to save the API results to database.")
         };
 
-        rootCommand.Handler = CommandHandler.Create<string, bool>(RunScraper);
+        rootCommand.Handler = CommandHandler.Create<string, bool, bool>(RunScraper);
         return await rootCommand.InvokeAsync(args);
     }
 
