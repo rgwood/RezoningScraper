@@ -38,8 +38,8 @@ Public domain. Do whatever you like with this code, no attribution needed.
 - [ ] GitHub Actions for build+test
 - [ ] GitHub Action to automatically publish trimmed executables as a release
 - [x] `--dry-run` flag that doesn't update the local DB
-- [ ] Add retries to the token fetching. It times out fairly often
-- [ ] Some kind of development cache thingy. The API is slowwwww and that makes iterative development painful
+- [x] Add retries to the token fetching. It times out fairly often
+- [x] Some kind of development cache thingy. The API is slowwwww and that makes iterative development painful
 - [ ] Discord integration?
 - [ ] Twitter integration?
 - [ ] Display more project fields?
