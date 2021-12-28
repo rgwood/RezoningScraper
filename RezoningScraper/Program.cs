@@ -13,6 +13,8 @@ public class Program
 {
     static async Task<int> Main(string[] args)
     {
+        DotEnv.Load();
+
         // Set up the CLI with System.CommandLine: https://github.com/dotnet/command-line-api/tree/main/docs
         var rootCommand = new RootCommand("A tool to detect new+modified postings on Vancouver's shapeyourcity.ca website. Data is stored in a local SQLite database next to the executable.")
         {
