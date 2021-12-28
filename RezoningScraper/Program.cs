@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using Sentry;
+using Spectre.Console;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
@@ -27,8 +28,30 @@ public class Program
                 description: "Whether to save the API results to database.")
         };
 
-        rootCommand.Handler = CommandHandler.Create<string, bool, bool>(RunScraper);
+        rootCommand.Handler = CommandHandler.Create<string, bool, bool>(RunScraperWithSentryExceptionLogging);
+
         return await rootCommand.InvokeAsync(args);
+    }
+
+    // System.CommandLine has extremely annoying exception handling that means we can't do this in Main()
+    // https://github.com/dotnet/command-line-api/issues/796
+    static async Task RunScraperWithSentryExceptionLogging(string slackWebhookUrl, bool useCache, bool saveToDb)
+    {
+        using var sentry = SentrySdk.Init(o =>
+        {
+            o.Dsn = "https://de37ba1d6fde4781b3bb1f400c0d01d7@o1100469.ingest.sentry.io/6125607";
+            o.TracesSampleRate = 1.0; // Capture 100% of transactions
+        });
+
+        try
+        {
+            await RunScraper(slackWebhookUrl, useCache, saveToDb);
+        }
+        catch (Exception ex)
+        {
+            SentrySdk.CaptureException(ex);
+            throw;
+        }
     }
 
     static async Task RunScraper(string slackWebhookUrl, bool useCache, bool saveToDb)
