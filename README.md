@@ -10,7 +10,7 @@ Scrapes the City of Vancouver's website for rezoning and development application
 
 ## How to use
 
-Download from [the releases page](https://github.com/rgwood/RezoningScraper/releases) or build it from source (requires the .NET 6 SDK). Then run it:
+Download a binary from [the releases page](https://github.com/rgwood/RezoningScraper/releases) (no external dependencies needed) or build it from source (requires the .NET 6 SDK). Then run it:
 
 ```
 ❯ .\RezoningScraper.exe --help
