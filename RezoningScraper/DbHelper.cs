@@ -24,6 +24,13 @@ public static class DbHelper
         return connection;
     }
 
+    public static SqliteConnection OpenInitializedDbFromFile()
+    {
+        var db = CreateOrOpenFileDb("RezoningScraper.db");
+        db.InitializeSchemaIfNeeded();
+        return db;
+    }
+
     public static SqliteConnection CreateInMemoryDb()
     {
         SqliteConnection connection = new("DataSource=:memory:");
@@ -37,7 +44,8 @@ public static class DbHelper
 CREATE TABLE IF NOT EXISTS
 Projects(
     Id TEXT PRIMARY KEY NOT NULL,
-    Serialized TEXT NOT NULL
+    Serialized TEXT NOT NULL,
+    Tweeted INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS
@@ -80,6 +88,8 @@ Cache(
 
         return result;
     }
+
+
 
     public static void UpsertProject(this SqliteConnection conn, Project datum)
     {

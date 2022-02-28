@@ -59,8 +59,7 @@ public class Program
         // Use Spectre.Console's Status UI https://spectreconsole.net/live/status
         await AnsiConsole.Status().StartAsync("Opening DB...", async ctx =>
         {
-            var db = DbHelper.CreateOrOpenFileDb("RezoningScraper.db");
-            db.InitializeSchemaIfNeeded();
+            var db = DbHelper.OpenInitializedDbFromFile();
 
             ctx.Status = "Loading token...";
             var token = await TokenHelper.GetTokenFromDbOrWebsite(db, useCache);
@@ -109,7 +108,6 @@ public class Program
             PrintChangedProjects(changedProjects);
         });
     }
-
 
     static async Task TweetWithExceptionHandling()
     {
