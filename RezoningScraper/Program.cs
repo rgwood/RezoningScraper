@@ -1,7 +1,6 @@
 ﻿using Sentry;
 using Spectre.Console;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -17,18 +16,22 @@ public class Program
         DotEnv.Load();
 
         // Set up the CLI with System.CommandLine: https://github.com/dotnet/command-line-api/tree/main/docs
+        var slackWebhookOpt = new Option<string?>("--slack-webhook-url",
+                getDefaultValue: () => "",
+                description: "A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this address.");
+        var useCacheOpt = new Option<bool>("--use-cache", description: "Use cached json queries, as long as they are fresh enough.");
+        var saveToDbOpt = new Option<bool>("--save-to-db",
+                getDefaultValue: () => true,
+                description: "Whether to save the API results to database.");
+
         var rootCommand = new RootCommand("A tool to detect new+modified postings on Vancouver's shapeyourcity.ca website. Data is stored in a local SQLite database next to the executable.")
         {
-            new Option<string?>("--slack-webhook-url",
-                getDefaultValue: () => "",
-                description: "A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this address."),
-            new Option<bool>("--use-cache", description: "Use cached json queries, as long as they are fresh enough."),
-            new Option<bool>("--save-to-db",
-                getDefaultValue: () => true,
-                description: "Whether to save the API results to database.")
+            slackWebhookOpt, useCacheOpt, saveToDbOpt
         };
 
-        rootCommand.Handler = CommandHandler.Create<string, bool, bool>(RunScraperWithSentryExceptionLogging);
+        rootCommand.SetHandler(
+            (string slackWebhookUrl, bool useCache, bool saveToDb) => RunScraperWithSentryExceptionLogging(slackWebhookUrl, useCache, saveToDb), 
+                slackWebhookOpt, useCacheOpt, saveToDbOpt);
 
         return await rootCommand.InvokeAsync(args);
     }
