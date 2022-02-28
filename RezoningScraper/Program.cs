@@ -1,6 +1,6 @@
-﻿using Sentry;
+﻿using Cocona;
+using Sentry;
 using Spectre.Console;
-using System.CommandLine;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -11,34 +11,7 @@ namespace RezoningScraper;
 
 public class Program
 {
-    static async Task<int> Main(string[] args)
-    {
-        DotEnv.Load();
-
-        // Set up the CLI with System.CommandLine: https://github.com/dotnet/command-line-api/tree/main/docs
-        var slackWebhookOpt = new Option<string?>("--slack-webhook-url",
-                getDefaultValue: () => "",
-                description: "A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this address.");
-        var useCacheOpt = new Option<bool>("--use-cache", description: "Use cached json queries, as long as they are fresh enough.");
-        var saveToDbOpt = new Option<bool>("--save-to-db",
-                getDefaultValue: () => true,
-                description: "Whether to save the API results to database.");
-
-        var rootCommand = new RootCommand("A tool to detect new+modified postings on Vancouver's shapeyourcity.ca website. Data is stored in a local SQLite database next to the executable.")
-        {
-            slackWebhookOpt, useCacheOpt, saveToDbOpt
-        };
-
-        rootCommand.SetHandler(
-            (string slackWebhookUrl, bool useCache, bool saveToDb) => RunScraperWithSentryExceptionLogging(slackWebhookUrl, useCache, saveToDb), 
-                slackWebhookOpt, useCacheOpt, saveToDbOpt);
-
-        return await rootCommand.InvokeAsync(args);
-    }
-
-    // System.CommandLine has extremely annoying exception handling that means we can't do this in Main()
-    // https://github.com/dotnet/command-line-api/issues/796
-    static async Task RunScraperWithSentryExceptionLogging(string slackWebhookUrl, bool useCache, bool saveToDb)
+    static void Main()
     {
         using var sentry = SentrySdk.Init(o =>
         {
@@ -46,6 +19,24 @@ public class Program
             o.TracesSampleRate = 1.0; // Capture 100% of transactions
         });
 
+        DotEnv.Load();
+
+        var app = CoconaLiteApp.Create();
+
+        app.AddCommand(RunScraperWithExceptionHandling).WithDescription("A tool to detect new+modified postings on Vancouver's shapeyourcity.ca website. Data is stored in a local SQLite database next to the executable.");
+        app.AddCommand("tweet", TweetWithExceptionHandling).WithDescription("Tweet a recent item.");
+
+        app.Run();
+    }
+
+    static async Task RunScraperWithExceptionHandling(
+        [Option(Description = "A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this address.")]
+        string? slackWebhookUrl,
+        [Option(Description = "Use cached json queries, as long as they are fresh enough.")]
+        bool useCache,
+        [Option(Description = "Whether to save the API results to database.")]
+        bool saveToDb = true)
+    {
         try
         {
             await RunScraper(slackWebhookUrl, useCache, saveToDb);
@@ -57,74 +48,82 @@ public class Program
         }
     }
 
-    static async Task RunScraper(string slackWebhookUrl, bool useCache, bool saveToDb)
+    static async Task RunScraper(string? slackWebhookUrl, bool useCache, bool saveToDb)
     {
         MarkupLine($"[green]Welcome to RezoningScraper v{Assembly.GetExecutingAssembly().GetName().Version}[/]");
-        if(string.IsNullOrWhiteSpace(slackWebhookUrl)) { WriteLine($"Slack URI not specified; will not publish updates to Slack."); }
+        if (string.IsNullOrWhiteSpace(slackWebhookUrl)) { WriteLine($"Slack URI not specified; will not publish updates to Slack."); }
         if (!saveToDb) { WriteLine("Dry run; will not write results to database"); }
-        
+
         WriteLine();
 
         // Use Spectre.Console's Status UI https://spectreconsole.net/live/status
         await AnsiConsole.Status().StartAsync("Opening DB...", async ctx =>
         {
-            try
+            var db = DbHelper.CreateOrOpenFileDb("RezoningScraper.db");
+            db.InitializeSchemaIfNeeded();
+
+            ctx.Status = "Loading token...";
+            var token = await TokenHelper.GetTokenFromDbOrWebsite(db, useCache);
+
+            ctx.Status = "Querying API...";
+            WriteLine("Starting API query...");
+            var stopwatch = Stopwatch.StartNew();
+            var latestProjects = await API.GetAllProjects(token.JWT, useCache).ToListAsync();
+            MarkupLine($"API query finished: retrieved {latestProjects.Count} projects in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
+
+            ctx.Status = "Comparing against projects in local database...";
+            stopwatch.Restart();
+            List<Project> newProjects = new();
+            List<ChangedProject> changedProjects = new();
+            var tran = db.BeginTransaction();
+            foreach (var project in latestProjects)
             {
-                var db = DbHelper.CreateOrOpenFileDb("RezoningScraper.db");
-                db.InitializeSchemaIfNeeded();
-
-                ctx.Status = "Loading token...";
-                var token = await TokenHelper.GetTokenFromDbOrWebsite(db, useCache);
-
-                ctx.Status = "Querying API...";
-                WriteLine("Starting API query...");
-                var stopwatch = Stopwatch.StartNew();
-                var latestProjects = await API.GetAllProjects(token.JWT, useCache).ToListAsync();
-                MarkupLine($"API query finished: retrieved {latestProjects.Count} projects in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
-
-                ctx.Status = "Comparing against projects in local database...";
-                stopwatch.Restart();
-                List<Project> newProjects = new();
-                List<ChangedProject> changedProjects = new();
-                var tran = db.BeginTransaction();
-                foreach (var project in latestProjects)
+                if (db.ContainsProject(project))
                 {
-                    if (db.ContainsProject(project))
-                    {
-                        var oldVersion = db.GetProject(project.id!);
-                        var comparer = new ProjectComparer(oldVersion, project);
+                    var oldVersion = db.GetProject(project.id!);
+                    var comparer = new ProjectComparer(oldVersion, project);
 
-                        if (comparer.DidProjectChange(out var changes))
-                        {
-                            changedProjects.Add(new(oldVersion, project, changes));
-                        }
-                    }
-                    else
+                    if (comparer.DidProjectChange(out var changes))
                     {
-                        newProjects.Add(project);
+                        changedProjects.Add(new(oldVersion, project, changes));
                     }
-
-                    if (saveToDb) { db.UpsertProject(project); }
                 }
-                tran.Commit();
-
-                MarkupLine($"Upserted {latestProjects.Count} projects to the DB in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
-                MarkupLine($"Found [green]{newProjects.Count}[/] new projects and [green]{changedProjects.Count}[/] modified projects.");
-
-                if (!string.IsNullOrEmpty(slackWebhookUrl) && (newProjects.Any() || changedProjects.Any()))
+                else
                 {
-                    await PostToSlack(slackWebhookUrl, newProjects, changedProjects);
+                    newProjects.Add(project);
                 }
 
-                PrintNewProjects(newProjects);
-                PrintChangedProjects(changedProjects);
+                if (saveToDb) { db.UpsertProject(project); }
             }
-            catch (Exception ex)
+            tran.Commit();
+
+            MarkupLine($"Upserted {latestProjects.Count} projects to the DB in [yellow]{stopwatch.ElapsedMilliseconds}ms[/]");
+            MarkupLine($"Found [green]{newProjects.Count}[/] new projects and [green]{changedProjects.Count}[/] modified projects.");
+
+            if (!string.IsNullOrEmpty(slackWebhookUrl) && (newProjects.Any() || changedProjects.Any()))
             {
-                MarkupLine("[red]Fatal exception thrown[/]");
-                WriteException(ex);
+                await PostToSlack(slackWebhookUrl, newProjects, changedProjects);
             }
+
+            PrintNewProjects(newProjects);
+            PrintChangedProjects(changedProjects);
         });
+    }
+
+
+    static async Task TweetWithExceptionHandling()
+    {
+        try
+        {
+            MarkupLine("[green]Time to tweet![/]");
+            await Task.Delay(100);
+            throw new NotImplementedException();
+        }
+        catch (Exception ex)
+        {
+            SentrySdk.CaptureException(ex);
+            throw;
+        }
     }
 
     private static async Task PostToSlack(string slackWebhookUri, List<Project> newProjects, List<ChangedProject> changedProjects)
@@ -146,33 +145,6 @@ public class Program
             message.AppendLine($"• State: {Capitalize(proj.attributes?.state)}");
             message.AppendLine();
         }
-
-        // Disabled posting changed projects for now; too much noise from minor description tweaks. 
-        //foreach (var changedProject in changedProjects)
-        //{
-        //    // don't report on projects being archived, too much noise
-        //    if (changedProject.Changes.Any(c => c.Key == "state" && c.Value.NewValue == "archived"))
-        //    {
-        //        continue;
-        //    }
-
-        //    message.AppendLine($"Changed item: *<{changedProject.LatestVersion.links!.self!}|{RemoveLineBreaks(changedProject.LatestVersion.attributes!.name!)}>*");
-
-        //    foreach (var change in changedProject.Changes)
-        //    {
-        //        const int MaxLength = 100; // arbitrary; we just need some way to avoid huuuuuuuge descriptions that look bad in Slack
-        //        if (change.Value.OldValue?.Length > MaxLength || change.Value.NewValue?.Length > MaxLength)
-        //        {
-        //            message.AppendLine($"• {Capitalize(change.Key)} changed, too big to show");
-        //        }
-        //        else
-        //        {
-        //            message.AppendLine($"• {Capitalize(change.Key)}: {change.Value.OldValue} ➡️ {change.Value.NewValue}");
-        //        }
-
-        //        message.AppendLine();
-        //    }
-        //}
 
         var json = JsonSerializer.Serialize(new { text = message.ToString() });
         var client = new HttpClient();
