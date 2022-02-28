@@ -10,7 +10,7 @@ Scrapes the City of Vancouver's website for rezoning and development application
 
 ## How to use
 
-Download from [the releases page](https://github.com/rgwood/RezoningScraper/releases) or build it from source (requires the .NET 6 SDK). Then run it:
+Download a binary from [the releases page](https://github.com/rgwood/RezoningScraper/releases) (no external dependencies needed) or build it from source (requires the .NET 6 SDK). Then run it:
 
 ```
 ❯ .\RezoningScraper.exe --help
@@ -36,12 +36,11 @@ Public domain. Do whatever you like with this code, no attribution needed.
 ## To Do
 
 - [ ] GitHub Actions for build+test
-- [ ] GitHub Action to automatically publish trimmed executables as a release
 - [x] `--dry-run` flag that doesn't update the local DB
 - [x] Add retries to the token fetching. It times out fairly often
 - [x] Some kind of development cache thingy. The API is slowwwww and that makes iterative development painful
 - [ ] Discord integration?
-- [ ] Twitter integration?
+- [ ] Twitter integration
 - [ ] Display more project fields?
 - [ ] [This is rough](https://github.com/rgwood/RezoningScraper/blob/ca38460e6ffbd177ef842b0362ff3449737bf3a5/RezoningScraper/TokenHelper.cs#L54-L60), there's gotta be a better way to query JSON
 - [ ] Consider archiving old versions of projects
