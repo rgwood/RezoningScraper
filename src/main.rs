@@ -4,13 +4,56 @@ use base64::Engine;
 use chrono::{DateTime, TimeZone, Utc};
 use scraper::{Html, Selector};
 use serde_json::Value;
+use std::time::Duration;
 
 mod models;
 mod db;
 use models::Projects;
+use db::{Database, Token};
+
+fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
+    // Check if we have a valid token in the DB
+    if let Some(token) = db.get_token()? {
+        let now = Utc::now();
+        if token.expiration > now + chrono::Duration::minutes(1) {
+            println!("Loaded API token from database. Cached token will expire on {}", token.expiration);
+            return Ok(token);
+        }
+    }
+
+    println!("Getting latest anonymous user token from shapeyourcity.ca");
+    let client = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(20))
+        .build()?;
+
+    let html = client.get("https://shapeyourcity.ca/embeds/projectfinder")
+        .send()?
+        .text()?;
+
+    let jwt = extract_token_from_html(&html)?;
+    let expiration = get_expiration_from_encoded_jwt(&jwt)?;
+    
+    println!("Retrieved JWT with expiration date {}", expiration);
+    
+    let token = Token {
+        expiration,
+        jwt,
+    };
+
+    db.set_token(&token)?;
+    println!("Cached JWT in local database");
+
+    Ok(token)
+}
 
 fn main() -> Result<()> {
-    println!("Hello, world! Soon this will be a Rust port of the rezoning scraper...");
+    let mut db = Database::new_in_memory()?;
+    let token = get_token_from_db_or_website(&mut db)?;
+    
+    println!("\nToken details:");
+    println!("JWT: {}", token.jwt);
+    println!("Expires: {}", token.expiration);
+    
     Ok(())
 }
 
