@@ -26,3 +26,7 @@ local.settings.json
 .DS_Store
 
 artifacts-dotnet-releaser
+
+RezoningScraper.db
+
+publish/*
