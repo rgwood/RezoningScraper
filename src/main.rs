@@ -11,85 +11,13 @@ mod models;
 use db::{Database, Token};
 use models::{Project, Projects};
 
-fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
-    // Check if we have a valid token in the DB
-    if let Some(token) = db.get_token()? {
-        let now = Utc::now();
-        if token.expiration > now + chrono::Duration::minutes(1) {
-            println!(
-                "Loaded API token from database. Cached token will expire on {}",
-                token.expiration
-            );
-            return Ok(token);
-        }
-    }
-
-    println!("Getting latest anonymous user token from shapeyourcity.ca");
-    let client = reqwest::blocking::Client::builder()
-        .timeout(Duration::from_secs(20))
-        .build()?;
-
-    let html = client
-        .get("https://shapeyourcity.ca/embeds/projectfinder")
-        .send()?
-        .text()?;
-
-    let jwt = extract_token_from_html(&html)?;
-    let expiration = get_expiration_from_encoded_jwt(&jwt)?;
-
-    println!("Retrieved JWT with expiration date {}", expiration);
-
-    let token = Token { expiration, jwt };
-
-    db.set_token(&token)?;
-    println!("Cached JWT in local database");
-
-    Ok(token)
-}
-
-fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str) -> Result<Vec<Project>> {
-    const RESULTS_PER_PAGE: u32 = 200;
-    let mut all_projects = Vec::new();
-    let mut next_url = Some(format!(
-        "https://shapeyourcity.ca/api/v2/projects?per_page={}",
-        RESULTS_PER_PAGE
-    ));
-    let mut page_count = 0;
-
-    while let Some(url) = next_url {
-        let response = client
-            .get(&url)
-            .header("Authorization", format!("Bearer {}", jwt))
-            .send()?
-            .json::<Projects>()?;
-
-        page_count += 1;
-        println!(
-            "Retrieved page {} ({} items)",
-            page_count,
-            response.data.len()
-        );
-
-        all_projects.extend(response.data);
-        next_url = response.links.next;
-    }
-
-    Ok(all_projects)
-}
-
-#[derive(Debug)]
-struct ProjectChange {
-    field: String,
-    old_value: String,
-    new_value: String,
-}
 
 fn main() -> Result<()> {
     println!("Welcome to RezoningScraper");
 
     // Open database
     println!("Opening database...");
-    let mut db = Database::new_in_memory()?;
+    let mut db = Database::new_from_file("rezoning_scraper.db")?;
 
     // Get token
     println!("Loading token...");
@@ -175,6 +103,79 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
+    // Check if we have a valid token in the DB
+    if let Some(token) = db.get_token()? {
+        let now = Utc::now();
+        if token.expiration > now + chrono::Duration::minutes(1) {
+            println!(
+                "Loaded API token from database. Cached token will expire on {}",
+                token.expiration
+            );
+            return Ok(token);
+        }
+    }
+
+    println!("Getting latest anonymous user token from shapeyourcity.ca");
+    let client = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(20))
+        .build()?;
+
+    let html = client
+        .get("https://shapeyourcity.ca/embeds/projectfinder")
+        .send()?
+        .text()?;
+
+    let jwt = extract_token_from_html(&html)?;
+    let expiration = get_expiration_from_encoded_jwt(&jwt)?;
+
+    println!("Retrieved JWT with expiration date {}", expiration);
+
+    let token = Token { expiration, jwt };
+
+    db.set_token(&token)?;
+    println!("Cached JWT in local database");
+
+    Ok(token)
+}
+
+fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str) -> Result<Vec<Project>> {
+    const RESULTS_PER_PAGE: u32 = 200;
+    let mut all_projects = Vec::new();
+    let mut next_url = Some(format!(
+        "https://shapeyourcity.ca/api/v2/projects?per_page={}",
+        RESULTS_PER_PAGE
+    ));
+    let mut page_count = 0;
+
+    while let Some(url) = next_url {
+        let response = client
+            .get(&url)
+            .header("Authorization", format!("Bearer {}", jwt))
+            .send()?
+            .json::<Projects>()?;
+
+        page_count += 1;
+        println!(
+            "Retrieved page {} ({} items)",
+            page_count,
+            response.data.len()
+        );
+
+        all_projects.extend(response.data);
+        next_url = response.links.next;
+    }
+
+    Ok(all_projects)
+}
+
+#[derive(Debug)]
+struct ProjectChange {
+    field: String,
+    old_value: String,
+    new_value: String,
 }
 
 fn extract_token_from_html(html: &str) -> Result<String> {
