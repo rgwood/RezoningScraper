@@ -49,14 +49,40 @@ fn main() -> Result<()> {
         if db.contains_project(&project.id)? {
             let old_version = db.get_project(&project.id)?;
 
-            // For now just compare name field as an example
+            let mut changes = Vec::new();
+            
+            // Compare important fields
             if old_version.attributes.name != project.attributes.name {
-                let change = ProjectChange {
+                changes.push(ProjectChange {
                     field: "name".to_string(),
                     old_value: old_version.attributes.name,
                     new_value: project.attributes.name.clone(),
-                };
-                changed_projects.push((project.clone(), vec![change]));
+                });
+            }
+            if old_version.attributes.permalink != project.attributes.permalink {
+                changes.push(ProjectChange {
+                    field: "permalink".to_string(),
+                    old_value: old_version.attributes.permalink,
+                    new_value: project.attributes.permalink.clone(),
+                });
+            }
+            if old_version.attributes.state != project.attributes.state {
+                changes.push(ProjectChange {
+                    field: "state".to_string(),
+                    old_value: old_version.attributes.state,
+                    new_value: project.attributes.state.clone(),
+                });
+            }
+            if old_version.attributes.description != project.attributes.description {
+                changes.push(ProjectChange {
+                    field: "description".to_string(),
+                    old_value: old_version.attributes.description.unwrap_or_default(),
+                    new_value: project.attributes.description.clone().unwrap_or_default(),
+                });
+            }
+
+            if !changes.is_empty() {
+                changed_projects.push((project.clone(), changes));
             }
         } else {
             new_projects.push(project.clone());
