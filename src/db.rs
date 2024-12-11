@@ -1,6 +1,6 @@
 use anyhow::Result;
 use chrono::{DateTime, Utc};
-use rusqlite::{Connection, params};
+use rusqlite::{params, Connection};
 use serde_json;
 
 use crate::models::Project;
@@ -11,7 +11,7 @@ pub struct Token {
 }
 
 pub struct Database {
-    conn: Connection
+    conn: Connection,
 }
 
 impl Database {
@@ -54,7 +54,7 @@ impl Database {
         let count: i64 = self.conn.query_row(
             "SELECT COUNT(*) FROM Projects WHERE Id = ?",
             params![id],
-            |row| row.get(0)
+            |row| row.get(0),
         )?;
         Ok(count > 0)
     }
@@ -63,15 +63,15 @@ impl Database {
         let json: String = self.conn.query_row(
             "SELECT Serialized FROM Projects WHERE Id = ?",
             params![id],
-            |row| row.get(0)
+            |row| row.get(0),
         )?;
-        
+
         Ok(serde_json::from_str(&json)?)
     }
 
     pub fn upsert_project(&self, project: &Project) -> Result<()> {
         let json = serde_json::to_string(project)?;
-        
+
         self.conn.execute(
             "INSERT INTO Projects(Id, Serialized) VALUES(?1, ?2)
              ON CONFLICT(Id) DO UPDATE SET Serialized = excluded.Serialized",
@@ -89,33 +89,27 @@ impl Database {
                 let timestamp: i64 = row.get(0)?;
                 let jwt: String = row.get(1)?;
                 Ok((timestamp, jwt))
-            }
+            },
         );
 
         match result {
-            Ok((timestamp, jwt)) => {
-                Ok(Some(Token {
-                    expiration: DateTime::from_timestamp(timestamp / 1000, 0)
-                        .unwrap_or_default(),
-                    jwt,
-                }))
-            }
+            Ok((timestamp, jwt)) => Ok(Some(Token {
+                expiration: DateTime::from_timestamp(timestamp / 1000, 0).unwrap_or_default(),
+                jwt,
+            })),
             Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
-            Err(e) => Err(e.into())
+            Err(e) => Err(e.into()),
         }
     }
 
     pub fn set_token(&mut self, token: &Token) -> Result<()> {
         let transaction = self.conn.transaction()?;
-        
+
         transaction.execute("DELETE FROM TokenCache", [])?;
-        
+
         transaction.execute(
             "INSERT INTO TokenCache(Expiration, Token) VALUES(?1, ?2)",
-            params![
-                token.expiration.timestamp_millis(),
-                token.jwt,
-            ],
+            params![token.expiration.timestamp_millis(), token.jwt,],
         )?;
 
         transaction.commit()?;
@@ -137,9 +131,9 @@ mod tests {
     #[test]
     fn test_contains_works() -> Result<()> {
         let db = Database::new_in_memory()?;
-        
+
         assert!(!db.contains_project("foo")?);
-        
+
         let project = Project {
             id: "foo".to_string(),
             project_type: "".to_string(),
@@ -147,10 +141,10 @@ mod tests {
             relationships: Default::default(),
             links: Default::default(),
         };
-        
+
         db.upsert_project(&project)?;
         assert!(db.contains_project("foo")?);
-        
+
         Ok(())
     }
 
@@ -165,7 +159,7 @@ mod tests {
             relationships: Default::default(),
             links: Default::default(),
         };
-        
+
         db.upsert_project(&project1)?;
         let retrieved = db.get_project("foo")?;
         assert_eq!(retrieved.project_type, "first");
@@ -174,18 +168,18 @@ mod tests {
             project_type: "second".to_string(),
             ..project1
         };
-        
+
         db.upsert_project(&project2)?;
         let retrieved = db.get_project("foo")?;
         assert_eq!(retrieved.project_type, "second");
-        
+
         Ok(())
     }
 
     #[test]
     fn test_token_works() -> Result<()> {
         let mut db = Database::new_in_memory()?;
-        
+
         assert!(db.get_token()?.is_none());
 
         let token = Token {
@@ -195,10 +189,10 @@ mod tests {
 
         db.set_token(&token)?;
         let retrieved = db.get_token()?.unwrap();
-        
+
         assert_eq!(token.jwt, retrieved.jwt);
         assert!((token.expiration.timestamp() - retrieved.expiration.timestamp()).abs() <= 1);
-        
+
         Ok(())
     }
 }
