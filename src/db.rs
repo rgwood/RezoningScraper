@@ -18,6 +18,7 @@ impl Database {
     #[allow(dead_code)]
     pub fn new_in_memory() -> Result<Self> {
         let conn = Connection::open_in_memory()?;
+        conn.pragma_update(None, "synchronous", "NORMAL")?;
         let db = Database { conn };
         db.initialize_schema()?;
         Ok(db)
@@ -25,6 +26,7 @@ impl Database {
 
     pub fn new_from_file(path: &str) -> Result<Self> {
         let conn = Connection::open(path)?;
+        conn.pragma_update(None, "synchronous", "NORMAL")?;
         let db = Database { conn };
         db.initialize_schema()?;
         Ok(db)
