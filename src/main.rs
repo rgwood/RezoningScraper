@@ -8,7 +8,7 @@ use std::time::Duration;
 
 mod models;
 mod db;
-use models::Projects;
+use models::{Project, Projects};
 use db::{Database, Token};
 
 fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
@@ -46,13 +46,116 @@ fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
     Ok(token)
 }
 
+fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str) -> Result<Vec<Project>> {
+    const RESULTS_PER_PAGE: u32 = 200;
+    let mut all_projects = Vec::new();
+    let mut next_url = Some(format!(
+        "https://shapeyourcity.ca/api/v2/projects?per_page={}", 
+        RESULTS_PER_PAGE
+    ));
+    let mut page_count = 0;
+
+    while let Some(url) = next_url {
+        let response = client.get(&url)
+            .header("Authorization", format!("Bearer {}", jwt))
+            .send()?
+            .json::<Projects>()?;
+
+        page_count += 1;
+        println!("Retrieved page {} ({} items)", page_count, response.data.len());
+        
+        all_projects.extend(response.data);
+        next_url = response.links.next;
+    }
+    
+    Ok(all_projects)
+}
+
+#[derive(Debug)]
+struct ProjectChange {
+    field: String,
+    old_value: String,
+    new_value: String,
+}
+
 fn main() -> Result<()> {
+    println!("Welcome to RezoningScraper");
+    
+    // Open database
+    println!("Opening database...");
     let mut db = Database::new_in_memory()?;
+    
+    // Get token
+    println!("Loading token...");
     let token = get_token_from_db_or_website(&mut db)?;
     
-    println!("\nToken details:");
-    println!("JWT: {}", token.jwt);
-    println!("Expires: {}", token.expiration);
+    // Setup HTTP client
+    println!("Querying API...");
+    let client = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(20))
+        .build()?;
+        
+    // Fetch projects
+    let start = std::time::Instant::now();
+    let latest_projects = fetch_all_projects(&client, &token.jwt)?;
+    println!("API query finished: retrieved {} projects in {}ms", 
+        latest_projects.len(), start.elapsed().as_millis());
+    
+    // Compare against database
+    println!("Comparing against projects in local database...");
+    let start = std::time::Instant::now();
+    
+    let mut new_projects = Vec::new();
+    let mut changed_projects = Vec::new();
+    
+    for project in &latest_projects {
+        if db.contains_project(&project.id)? {
+            let old_version = db.get_project(&project.id)?;
+            
+            // For now just compare name field as an example
+            if old_version.attributes.name != project.attributes.name {
+                let change = ProjectChange {
+                    field: "name".to_string(),
+                    old_value: old_version.attributes.name,
+                    new_value: project.attributes.name.clone(),
+                };
+                changed_projects.push((project.clone(), vec![change]));
+            }
+        } else {
+            new_projects.push(project.clone());
+        }
+        
+        db.upsert_project(project)?;
+    }
+    
+    println!("Upserted {} projects to DB in {}ms",
+        latest_projects.len(), start.elapsed().as_millis());
+    println!("Found {} new projects and {} modified projects",
+        new_projects.len(), changed_projects.len());
+        
+    // Print results
+    if !new_projects.is_empty() {
+        println!("\nNew Projects:");
+        for project in new_projects {
+            println!("\n{}", project.attributes.name);
+            println!("State: {}", project.attributes.state);
+            if !project.attributes.project_tag_list.is_empty() {
+                println!("Tags: {}", project.attributes.project_tag_list.join(", "));
+            }
+            println!("URL: {}", project.links.self_link);
+        }
+    }
+    
+    if !changed_projects.is_empty() {
+        println!("\nChanged Projects:");
+        for (project, changes) in changed_projects {
+            println!("\n{}", project.attributes.name);
+            for change in changes {
+                println!("{}: '{}' -> '{}'", 
+                    change.field, change.old_value, change.new_value);
+            }
+        }
+    }
     
     Ok(())
 }
