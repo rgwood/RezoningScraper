@@ -34,3 +34,5 @@ publish/*
 # Added by cargo
 
 /target
+.aider*
+.env
