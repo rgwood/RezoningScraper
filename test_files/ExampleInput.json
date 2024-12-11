@@ -1,0 +1,2096 @@
+﻿{
+	"data": [
+		{
+			"id": "12267",
+			"type": "projects",
+			"attributes": {
+				"description": "<p>Help create a bold new plan for our city&rsquo;s future. The Vancouver Plan will guide growth and change for our entire city to 2050 and beyond so that current and future generations on these traditional unceded lands we call Vancouver can thrive. With your help, we will hear from all the voices that are representative of the diversity and richness of our population.</p><p>Visit <a href=\"https://vancouverplan.ca/\" target=\"_blank\"><input type=\"button\" style=\"background-color:#00a09c; color:white;width:150px; height:30px; background-position: left bottom;\" value=\"vancouverplan.ca\" class=\"fr-rounded\"></a> to learn more about the Vancouver Plan, <a href=\"https://vancouverplan.ca/our-process/\">who we&#39;ve heard</a> from and <a href=\"https://vancouverplan.ca/get-involved/\">how to get involved.</a></p><p><span style=\"font-size: 14px;\"><strong>Where are we now?</strong></span></p><p>Starting October 25, the City will share choices and priorities for how Vancouver could grow into the future that are based on feedback from the community to date. Everyone who lives, works or plays in Vancouver is invited and encouraged to visit <a href=\"https://vancouverplan.ca/get-involved/\">vancouverplan.ca</a> to pre-register for upcoming engagement events:</p><ul><li>Online survey about different ways Vancouver could grow.</li><li>Virtual open house provides background information, including the many ways to participate.</li><li>Virtual neighbourhood area workshops facilitated by City staff to discuss ideas and directions, and gather feedback from neighbourhood perspectives.</li><li>Outdoor community pop-ups with unique, socially-distanced in-person booths. No registration required.</li><li>Drop in open house at City Lab (511 W Broadway, Vancouver). No registration required.</li></ul><p>Please subscribe for updates by hitting the &ldquo;subscribe&rdquo; button on this page or email us at <a href=\"mailto:PlanningTogether@vancouver.ca\"><strong>planningtogether@vancouver.ca</strong></a></p><p>We look forward to hearing from you!</p>",
+				"name": "Vancouver Plan                                                                                         ",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "vancouver-plan",
+				"state": "published",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"City Planning",
+					"Citywide",
+					"In Progress",
+					"Project"
+				],
+				"project-tag-list": [
+					"City Planning",
+					"Citywide",
+					"In Progress",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/dc525f5c0f6a8c0bb06fa5222668c9047c7d631a/original/1633561249/0b6d771c30256db7bfd52ea8d12e7021_7.png?1633561249",
+				"image-caption": "Planning Vancouver Together",
+				"image-description": "Image: text reads “Planning Vancouver Together” above illustration of people representing diverse backgrounds and abilities standing/sitting on platforms to bring them to an equal height.",
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": null,
+				"subscribers-count": 0,
+				"view-count": 20395,
+				"home-project": false,
+				"published-at": "2021-05-13T11:14:50-07:00",
+				"forum-topics": 0,
+				"survey-tools": 2,
+				"banner-caption": "Planning Vancouver Together. Image of three umbrellas",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-01-21T12:37:25-08:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 1229,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": [
+						{
+							"id": "51115",
+							"type": "participant-segments"
+						}
+					]
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/vancouver-plan"
+			}
+		},
+		{
+			"id": "12339",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><br></p><div class=\"fr-img-space-wrap\"><span class=\"fr-img-caption fr-fic fr-dii fr-fir\" style=\"width: 339px;\"><span class=\"fr-img-wrap\"><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/fdc90153d710389353dd20894679c4ce5a17e729/original/1619115035/ba1e05bf975db39b78c66b02ac7ccc56_5080_Quebec_-_5-storey.jpg?1619115035\" alt=\"Photo of 5080 Quebec St. 5-Storey Building\"><span class=\"fr-inner\"></span></span></span></div><p class=\"fr-img-space-wrap2\">As Vancouver grows, we need to ensure there are a variety of housing options to meet the diverse needs and range of household incomes of people who live and work here. Building more secure rental housing in all areas of the city is a critical component to this.</p><p>The majority of Vancouver&rsquo;s households are renters, and the need for secure rental housing has grown as fewer are able afford the rapidly rising costs of homeownership. In the mid 1970s, strata condos began to dominate new apartment construction and almost no new secure rental housing was built in Vancouver for 30 years. These lost decades resulted in a significant shortfall of rental that has contributed to the current housing crisis. While the City introduced incentives for the construction of new rental housing in 2009 that have resulted in some new rental buildings, there is still a lot of catching up required to meet the need rental housing need.</p><p>In November 2019, following a 10 year review of the City&rsquo;s Rental Incentive Programs, Council approved the <a href=\"https://bylaws.vancouver.ca/zoning/policy-rezoning-secured-rental.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><strong>Secured Rental Policy</strong></a><strong>. This policy consolidates, updates and strengthens rental incentive policies that have been in place in Vancouver for over a decade. </strong>The Secured Rental Policy identifies two key changes needed to make it easier to building secure rental housing in Vancouver:</p><ol><li>Changes to C-2 zoning to allow new 6 storey rental buildings through the same process as new 4 storey condo buildings (without rezoning)<br><br></li><li>Changes to policy for rezoning in low-density areas (RS or RT zones) to simplify the process by standardizing regulations through new rental zones, focusing on areas within walking distance of public transportation, shopping and other daily needs</li></ol><p><strong>Learn more about the </strong><a href=\"https://shapeyourcity.ca/rental-rz/news_feed/proposed-actions\" rel=\"noopener noreferrer\" target=\"_blank\"><strong>proposed actions</strong></a>.</p><p>The updated Secured Rental Policy is the<span style=\"background-color: transparent;\"> </span>outcome of extensive public and stakeholder consultation over the last 4 years<strong style=\"background-color: transparent;\">, </strong><span style=\"background-color: transparent;\">including what we&rsquo;ve heard through engagement on the </span><a href=\"https://vancouver.ca/people-programs/housing-vancouver-strategy.aspx\" rel=\"noopener noreferrer\" target=\"_blank\"><span style=\"background-color: transparent;\">Housing Vancouver Strategy</span></a><span style=\"background-color: transparent;\"> and 3-Year Action Plan (2017), </span><a href=\"https://vancouver.ca/people-programs/creating-new-market-rental-housing.aspx\" rel=\"noopener noreferrer\" target=\"_blank\"><span style=\"background-color: transparent;\">the Rental Incentive Program Review</span></a><span style=\"background-color: transparent;\"> (2019), and the </span><a href=\"https://vancouver.ca/people-programs/creating-new-market-rental-housing.aspx\" rel=\"noopener noreferrer\" target=\"_blank\"><span style=\"background-color: transparent;\">Secured Rental Policy implementation work</span></a><span style=\"background-color: transparent;\"> for C-2 zones and low-density areas (2020).</span></p>",
+				"name": "Streamlining Rental: Making it easier to build secure rental housing in more neighbourhoods",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "rental-rz",
+				"state": "published",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "truncated",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Housing",
+					"Citywide",
+					"In Progress",
+					"Project"
+				],
+				"project-tag-list": [
+					"Housing",
+					"Citywide",
+					"In Progress",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/fdc90153d710389353dd20894679c4ce5a17e729/original/1592418456/5080_Quebec_-_5-storey.jpg_15c58b364e1d73e4aa5f00c61717b8c5?1592418456",
+				"image-caption": "Example of a 5 storey apartment building",
+				"image-description": "Example of a 5 storey apartment building",
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": null,
+				"subscribers-count": 0,
+				"view-count": 37558,
+				"home-project": false,
+				"published-at": "2021-05-13T16:00:50-07:00",
+				"forum-topics": 0,
+				"survey-tools": 2,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-01-27T11:11:20-08:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 2141,
+				"scheduled-at": "2021-05-13T16:00:00-07:00",
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": {
+						"id": "2254",
+						"type": "activity-schedules"
+					}
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/rental-rz"
+			}
+		},
+		{
+			"id": "12417",
+			"type": "projects",
+			"attributes": {
+				"description": "<h2>How would you spend $100,000 in Vancouver&#39;s West End?</h2><p>Participatory budgeting (PB) is a process used in cities around the world to involve citizens in government spending decisions that impact or benefit them. While the mechanics and processes of participatory budgeting can vary, they generally follow an agreed upon series of steps:</p><ul><li>Community outreach and engagement</li><li>Proposal development for community improvement projects</li><li>Community vote</li><li>Report back.</li></ul><p>In late 2017, the we proposed our first ever participatory budgeting (PB) process in the West End to distribute additional revenue collected through permit parking fees. A total of $100,000 of this parking revenue was approved by Council for the purpose of this pilot project.</p><p>In fall of 2018, we helped convene the WE Choo$e Impact Team, a community-led steering committee, to guide and oversee the process. The Impact Team has, since then, led the community idea collection and project proposal development.</p><p>Most recently, the Impact Team has completed the community vote and the Pilot is currently awaiting the next steps in implementation - which includes a report back to Council. For the results of the vote, please check our <a href=\"https://vancouver.ca/news-calendar/community-vote-results-from-vancouver-s-participatory-budgeting-pilot-released.aspx\" rel=\"noopener noreferrer\" target=\"_blank\">news release</a>.</p><p><span style='color: rgb(0, 0, 0); font-family: \"Open Sans\", sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;'><strong>For more information on: </strong></span></p><ul><li>the voting process and the 14 shortlisted projects, please read the <a href=\"https://vancouver.ca/files/cov/we-choose-voting-and-projects-guide.pdf\" rel=\"noopener noreferrer\" target=\"_blank\">Voters&#39; Guidebook</a></li><li>the process and how the community is involved, please read the <a href=\"https://vancouver.ca/files/cov/we-choose-rulebook.pdf\" rel=\"noopener noreferrer\" target=\"_blank\">Rulebook</a></li></ul><p><br></p>",
+				"name": "West End participatory budgeting pilot",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "participatory-budgeting",
+				"state": "archived",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Project"
+				],
+				"project-tag-list": [
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8fc56352cfb213fb0ec135a4447df636cbfc0c32/original/1581718564/Ballot_Box_resized.jpg_87b5562abb02a7377dd1bc9260ea4451?1581718564",
+				"image-caption": "Participatory Budgeting",
+				"image-description": "Participatory Budgeting",
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": null,
+				"subscribers-count": 0,
+				"view-count": 1670,
+				"home-project": false,
+				"published-at": "2020-02-05T09:12:57-08:00",
+				"forum-topics": 0,
+				"survey-tools": 0,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-01-30T10:03:05-08:00",
+				"archival-reason-message": "<p>Consultation has concluded.</p>",
+				"access": false,
+				"contribution-count": 0,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/participatory-budgeting"
+			}
+		},
+		{
+			"id": "12536",
+			"type": "projects",
+			"attributes": {
+				"description": "<p>We would like to hear from you. We are looking for your feedback as we develop a policy statement for the Jericho Lands. We will use this page to provide project updates and ask for your input at different stages of the planning program.</p><p>The Jericho Lands planning program is a comprehensive planning process which will help create a policy statement to guide future development of the site.</p><p>The program is being developed at the request of the landowners, a joint venture partnership between the Musqueam, Squamish, and Tsleil-Waututh (MST) Partnership, and the Canada Lands Company (CLC).</p><p>The policy statement will create a framework which will guide future redevelopment of the site and help create a new community that is sustainable, socially and culturally inclusive, and highly livable.</p><p>The planning program will explore options that address important priorities including:</p><ul><li>Ways to advance our collective work toward reconciliation</li><li>Creating a complete community with a range of housing options with different income levels and tenures</li><li>Providing new housing within a walking distance of existing and future transit routes, including a potential SkyTrain extension to UBC</li><li>Providing shops, services, childcare, and employment space to support the new community and the rest of the city</li><li>Recognizing and celebrating cultural and heritage assets</li><li>Creating new parks and open spaces, and a comprehensive package of other community amenities to be determined through the process</li></ul><h2>About the Jericho Lands</h2><p>The Jericho Lands is within the unceded traditional territories of the xʷmə&theta;kʷəy̓əm (Musqueam), Sḵwx̱w&uacute;7mesh (Squamish), and səlilwətaɬ (Tsleil-Waututh) Nations.</p><p>It is a 36-hectare (90-acre) site located in Vancouver&rsquo;s West Point Grey neighbourhood and is bound by West 4<sup>th</sup> Avenue, Highbury Street, West 8<sup>th</sup> Avenue, and West Point Grey Park.</p><p><br></p><p><br></p>",
+				"name": "Jericho Lands planning program",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "jericho-lands",
+				"state": "published",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"In Progress",
+					"West Point Grey",
+					"Public Space",
+					"Active Transportation",
+					"City Planning",
+					"Housing",
+					"Project"
+				],
+				"project-tag-list": [
+					"In Progress",
+					"West Point Grey",
+					"Public Space",
+					"Active Transportation",
+					"City Planning",
+					"Housing",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/ef78266c66aa036f4cde9ebc8756a2f9b6bfcfa2/original/1582582431/Site_Image_1-01.jpg_b3a6e02fb3acfcbd3287b9e03fa799d7?1582582431",
+				"image-caption": "Aerial photograph of Jericho Lands and Jericho Park",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": 25175,
+				"subscribers-count": 0,
+				"view-count": 49654,
+				"home-project": false,
+				"published-at": "2020-07-08T13:50:01-07:00",
+				"forum-topics": 0,
+				"survey-tools": 7,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-02-10T11:24:26-08:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 1593,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/jericho-lands"
+			}
+		},
+		{
+			"id": "12541",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><strong><span style=\"font-size: 18px;\">Together with the community, we are working on the rezoning phase of the Britannia Renewal.</span></strong></p><p>In 2018, project partners (the City of Vancouver, Vancouver Park Board, Vancouver<strong> </strong>School Board, Vancouver Public Library and Britannia Community Services Society) adopted a Master Plan that sets out the vision for the renewal of the Britannia Community Services Centre.</p><p><br></p><p><strong><span style=\"font-size: 18px;\">What&#39;s happening? </span></strong></p><p>We are now working on the rezoning phase of the Britannia Renewal. Rezoning is the process of changing how a property can be used or developed. Before we submit a formal rezoning application for the renewed Britannia, we will explore a series of development site options to discuss priorities for dedicated and shared spaces, trade-offs, and to find creative solutions to meet the diverse needs of the community.</p><p>Some considerations that will inform site options include:</p><ul><li>Site organization and interconnections between spaces</li><li>Scale of buildings</li><li>Preserving and increasing green space</li><li>Preserving view corridors</li><li>Opportunities for non-market housing including number of units and height</li></ul><p><br></p><p><strong><span style=\"font-size: 18px;\">Get involved: </span></strong></p><p>As we discuss options for how to bring to life the vision for the Britannia Renewal, we will continue to work with community. In 2022 we will host small group workshops, visioning sessions and an online survey to get your input on the site options. Check back here to keep up to date with upcoming engagement opportunities!</p><p><br></p><p><span style=\"font-size: 18px;\"><strong>Learn more:</strong></span></p><ul><li><a href=\"https://shapeyourcity.ca/britannia-renewal/news_feed/join-a-community-conversation\" rel=\"noopener noreferrer\" target=\"_blank\">Find out what we&#39;ve heard so far</a> during the rezoning phase.<a href=\"https://www.youtube.com/watch?v=ltG6RW2ZGWw&list=PLF8s0XPMBBO15Eg_VSIehqdVu2syphR5o&index=2&t=2s\"></a></li><li>Watch this <a href=\"https://www.youtube.com/watch?v=ltG6RW2ZGWw&list=PLF8s0XPMBBO15Eg_VSIehqdVu2syphR5o&index=2&t=2s\" rel=\"noopener noreferrer\" target=\"_blank\">video</a> for an overview of the progress to date on the Renewal and what work is being done during the rezoning phase.<a href=\"https://www.youtube.com/watch?v=ltG6RW2ZGWw&list=PLF8s0XPMBBO15Eg_VSIehqdVu2syphR5o&index=2&t=2s\"></a></li><li>Review <a href=\"https://shapeyourcity.ca/britannia-renewal/widgets/49933/documents\" rel=\"noopener noreferrer\" target=\"_blank\">background documents</a> to learn more about the Master Plan</li></ul>",
+				"name": "Britannia Renewal ",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "britannia-renewal",
+				"state": "published",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Grandview-Woodland",
+					"In Progress",
+					"Parks and Recreation",
+					"City Planning",
+					"Project"
+				],
+				"project-tag-list": [
+					"Grandview-Woodland",
+					"In Progress",
+					"Parks and Recreation",
+					"City Planning",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/a361ecc37c5c67db306e19bfa8d7490246541d2d/original/1630691304/7cc28eff0d9dd6334f3640f9d8680665_BR-SYC-Website-04.jpg?1630691304",
+				"image-caption": "Community members at Britannia chat while crafting. ",
+				"image-description": "Britannia Renewal Logo against a blue background and artwork of a heart and eagle by Wade Davis",
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": 25175,
+				"subscribers-count": 0,
+				"view-count": 11007,
+				"home-project": false,
+				"published-at": "2021-03-09T13:40:50-08:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-02-10T15:42:22-08:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 47,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/britannia-renewal"
+			}
+		},
+		{
+			"id": "12605",
+			"type": "projects",
+			"attributes": {
+				"description": "<p>We&#39;re developing conceptual plans for a new walking, rolling, and cycling path across the Granville Bridge.</p><p>Thank you to everyone who provided input on the project so far. Through three phases of engagement, we&#39;ve heard from over 3,000 people at public open houses and workshops, and received over 9,000 survey responses!</p><p>We&#39;re recommending a refined version of the West Side Plus option that was shown in Phase 2, with changes based on public feedback.</p><p>See the <u><a href=\"https://shapeyourcity.ca/granville-connector/news_feed/key-features\">key features</a></u> of the West Side Plus option.</p>",
+				"name": "Granville Connector",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "granville-connector",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Closed",
+					"Transportation",
+					"Active Transportation",
+					"Downtown",
+					"Fairview",
+					"Project"
+				],
+				"project-tag-list": [
+					"Closed",
+					"Transportation",
+					"Active Transportation",
+					"Downtown",
+					"Fairview",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/a866c3d9e4ae1507eac863639c7417de579d6083/original/1582056498/Granville_Bridge_Connector_-_Main_Image_copy.jpg_080c2e779f590ca14a1dc7328ea42845?1582056498",
+				"image-caption": null,
+				"image-description": null,
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": null,
+				"subscribers-count": 0,
+				"view-count": 2452,
+				"home-project": false,
+				"published-at": "2020-02-20T11:30:52-08:00",
+				"forum-topics": 0,
+				"survey-tools": 0,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-02-14T06:45:24-08:00",
+				"archival-reason-message": "Consultation has concluded",
+				"access": false,
+				"contribution-count": 0,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/granville-connector"
+			}
+		},
+		{
+			"id": "12864",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><br></p><p>John Hendry (Trout Lake) Park is a beloved park located on the traditional territory of the xʷmə&theta;kʷəy̓əm (Musqueam), Sḵwx̱w&uacute;7mesh (Squamish) and səlil̓ilw̓ətaʔɬ (Tsleil-Waututh) Nations and in East Vancouver&rsquo;s Cedar Cottage neighbourhood.</p><p>We are developing a long-range renewal plan for John Hendry Park that will recommend a broad range of park improvements to ensure the park remains a vibrant and well-loved community gathering space for decades to come.<br><br></p><hr><h2><span style=\"font-size: 12px;\"></span>Give your feedback on the Phase 2 refined recommendations</h2><p>The project team has prepared an updated draft park renewal plan and is now seeking feedback on key recommendations<a href=\"#_msocom_2\" id=\"_anchor_2\" language=\"JavaScript\" name=\"_msoanchor_2\"></a>. This work incorporates the feedback provided in fall 2019 during Phase 1.</p><p>We invite all park users and stakeholders to review the information presented here to help us establish directions and investment priorities for future park development.</p><p><a href=\"https://shapeyourcity.ca/jhp/survey_tools/john-hendry-trout-lake-park-renewal-plan\" rel=\"noopener noreferrer\" target=\"_blank\"><strong>Take the survey</strong></a><strong><a href=\"http://shapeyourcity.ca/jhp/survey\" rel=\"noopener noreferrer\" target=\"_blank\"></a></strong><strong> from November 23 to December 14, 2021.</strong></p><p><br></p>",
+				"name": "John Hendry (Trout Lake) Park Renewal Plan ",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "jhp",
+				"state": "published",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"In Progress",
+					"Public Space",
+					"Parks and Recreation",
+					"Kensington-Cedar Cottage",
+					"Virtual Open House",
+					"Water",
+					"Project"
+				],
+				"project-tag-list": [
+					"In Progress",
+					"Public Space",
+					"Parks and Recreation",
+					"Kensington-Cedar Cottage",
+					"Virtual Open House",
+					"Water",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1637103280/b01e6753c17160511cf4dd5da7bca831_blob?1637103280-unsplash--undefined",
+				"image-caption": "John Hendry Park Master Plan",
+				"image-description": "View of Trout Lake facing north with mountains in background and sandy beach in foreground",
+				"text-wrap-mode": "textwrap_center",
+				"parent-id": 25175,
+				"subscribers-count": 0,
+				"view-count": 818,
+				"home-project": false,
+				"published-at": "2021-11-23T09:08:49-08:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "John Hendry Park Graphic Workshop - November 19, 2019",
+				"widget-resource-count": null,
+				"quick-poll-layout": "widget",
+				"created-at": "2020-03-04T10:51:03-08:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 49,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/jhp"
+			}
+		},
+		{
+			"id": "12930",
+			"type": "projects",
+			"attributes": {
+				"description": "<p>As part of our ongoing efforts to understand the impact of our short-term rental regulations, our volunteer community working group helps provide ongoing insights on community impacts from short-term rentals.</p><p>It is a platform to foster mutual understanding and dialogue between different community perspectives on short-term rentals. Input received will help evolve our short-term rental regulations.</p><p><em>Interested in receiving the latest news on the Community Working Group and our short-term rental regulations? <a href=\"https://vancouver.ca/doing-business/short-term-rentals.aspx\"></a><a href=\"https://vancouver.ca/doing-business/short-term-rentals.aspx\">Sign up </a>to receive updates.</em></p>",
+				"name": "Short-term rentals community working group",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "str-working-group",
+				"state": "archived",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"In Progress",
+					"Housing",
+					"Your Property",
+					"Citywide",
+					"Project"
+				],
+				"project-tag-list": [
+					"In Progress",
+					"Housing",
+					"Your Property",
+					"Citywide",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1601421204/blob_6a6e1541b09da688dffccad86a88989e?1601421204",
+				"image-caption": "Residents participating in a virtual working group",
+				"image-description": "An important forum to discuss concerns and opportunities for short-term rentals in Vancouver. Members will provide both insights on community impacts and input to evolve short-term rental regulations. ",
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": null,
+				"subscribers-count": 0,
+				"view-count": 4464,
+				"home-project": false,
+				"published-at": "2020-10-13T08:00:14-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "widget",
+				"created-at": "2020-03-10T09:53:18-07:00",
+				"archival-reason-message": "Consultation has concluded",
+				"access": false,
+				"contribution-count": 92,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/str-working-group"
+			}
+		},
+		{
+			"id": "13848",
+			"type": "projects",
+			"attributes": {
+				"description": "<h2>Inaanyayahan po kayo ng Lungsod ng Vancouver sa isang online na Pulong Bayan, hatid sa inyo ng Tulayan.</h2><p>Mangyaring sumali po sa talakayan kasama ang City Manager Sadhu Johnston at ang COVID-19 Task Force Chief Darrell Reid para malaman ang kasalukuyang tugon ng Lungsod sa COVID-19 at ang ating mga susunod na hakbang.</p><p>Kailan: Miyerkules, Mayo 20, 2020, 3:00 ng hapon</p><p>Saan: Sa Zoom &ndash; <a href=\"https://zoom.us/meeting/register/tJEsc-Crpz4sEtfrNZji59wAVjK98HBH4cJU\">Mag-rehistro dito para makalahok at makapanood</a></p><p>Ang programang ito ay mapapanood lamang sa Facebook Live ng Tulayan sa <a href=\"https://www.facebook.com/Tulayan/\">www.facebook.com/Tulayan</a></p><p>Mangyari po lamang na ipasa ang inyong mga tanong/mga alalahanin bago mag- Pulong Bayan:</p><ul><li>Sa &ldquo;ipasa ang tanong&rdquo; sa kahon sa ibaba</li><li>O sa email: <a href=\"mailto:margarita.pacis@vancouver.ca?subject=Filipino%20Town%20Hall\">margarita.pacis@vancouver.ca</a></li></ul><p>Inaabangan po naming makarinig sa inyo!</p><p><br></p><p>Paalala:</p><ul><li>Masasagot po lamang namin ang katanungan tungkol sa programa at serbisyo ng Lungsod ng Vancouver <a href=\"http://vancouver.ca/covid19\">(mag-klik rito para sa karagdagang impormasyon)</a></li><li>Sisikapin po namin na masagot ang lahat ng mga tanong, pero sa limitadong oras ay maaring bigyan ng prayoridad ang mga sagot batay sa kahalagahan ng paksa.</li></ul><p><br></p><hr><p><br></p><p>[ENGLISH VERSION]</p><h2>The City of Vancouver invites you to an Online Town Hall hosted by Tulayan</h2><p>Join our City Manager Sadhu Johnston and COVID-19 Task Force Chief Darrell Reid in a discussion to learn more about our current response to COVID-19 and our next steps.</p><p>The Online Town Hall will be on Wednesday, May 20 from 3pm to 4pm on Facebook Live.</p><p>View the town hall on <a href=\"https://www.facebook.com/events/3787270048009647\">Facebook Live</a></p><p>Participate in the town hall on <a href=\"https://zoom.us/meeting/register/tJEsc-Crpz4sEtfrNZji59wAVjK98HBH4cJU\">Zoom</a> (registration required)</p><p>We encourage you to ask questions and engage with us during the session. You are a significant part of the multicultural fabric of our city, and we see this as an important opportunity to connect with you.</p><p>Consider sharing your questions and concerns in advance:</p><ul><li>In the &quot;submit your questions&quot; box below</li><li>Via email to <a href=\"mailto:margarita.pacis@vancouver.ca?subject=Filipino%20Town%20Hall\">margarita.pacis@vancouver.ca</a></li></ul><p>We look forward to hearing from you!</p><p><br></p><p>Please note:</p><ul><li>We are only able to answer questions about <a href=\"http://vancouver.ca/covid19\">our services and programs</a></li><li>We will try our best to answer everyone&#39;s questions, but given the limited amount of time we might have to prioritize the answers based on urgency of the subject matter.</li></ul><p><br></p>",
+				"name": "Pilipinong Pulong Bayan (online) | Filipino Town Hall (online)           ",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "filipino-townhall",
+				"state": "archived",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Closed",
+					"Project"
+				],
+				"project-tag-list": [
+					"Closed",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1589334415/blob_019d6c00b9b6008dd09a33821260b884?1589334415",
+				"image-caption": "Image of person on phone",
+				"image-description": "Image of person on phone",
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": null,
+				"subscribers-count": 1,
+				"view-count": 1984,
+				"home-project": false,
+				"published-at": "2020-05-14T11:19:09-07:00",
+				"forum-topics": 2,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "widget",
+				"created-at": "2020-04-03T12:16:53-07:00",
+				"archival-reason-message": "Consultation has concluded",
+				"access": false,
+				"contribution-count": 8,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/filipino-townhall"
+			}
+		},
+		{
+			"id": "13952",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><br></p><p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/db2266837a105e2b0defa32f42c2e30200a22172/original/1610576505/langara-college.JPG_fb9445da553bc64bd29ae9c75bc76bea?1610576505\" style=\"width: 791px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 100 W 49th Ave. The proposal is to amend the existing CD-1 (55) to allow for the phased masterplan Langara College. This proposal includes:</p><p>Five academic and community buildings:</p><ul><li>Sites i, ii, and iv: <span style='color: rgb(68, 68, 68); font-family: Verdana, Arial, \"Trebuchet MS\", san-serif; font-size: 12.96px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;'>a maximum building height of six storeys (31 m)</span></li><li style=\"margin: 0px 0px 0.2em; padding: 0px; list-style-type: disc; line-height: 1.5em;\">Site iii: a maximum building height of four storeys (21 m)</li><li style=\"margin: 0px 0px 0.2em; padding: 0px; list-style-type: disc; line-height: 1.5em;\">Site v: a single-storey Indigenous Meeting House (10 m)</li><li style=\"margin: 0px 0px 0.2em; padding: 0px; list-style-type: disc; line-height: 1.5em;\">A total floor space ratio (FSR) of 1.66 campus-wide</li></ul><p>This rezoning application is being considered under the <a href=\"https://rezoning.vancouver.ca/applications/100w49thave/documents/LangaraCollegePolicyStatement.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><em>Langara College Policy Statement.</em></a></p><p>Development Permits for specific buildings will be submitted individually with each phase of expansion.</p><p><strong>A community open house was held on Tuesday, July 23, 2019 from 5-8 pm in the Gallery space on the second floor of the Science and Technology building, (Langara College, 170 W 49th Ave).</strong></p>",
+				"name": "100 W 49th Ave (Langara College) rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "100-w-49-ave",
+				"state": "archived",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Oakridge",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Oakridge",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/db2266837a105e2b0defa32f42c2e30200a22172/original/1610576521/langara-college.JPG_8ff79f5ceaf094a194ca9b926fffefda?1610576521",
+				"image-caption": "100  W 49th Ave - Langara College site plan",
+				"image-description": "Your description here",
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 1312,
+				"home-project": false,
+				"published-at": "2021-02-08T16:46:33-08:00",
+				"forum-topics": 0,
+				"survey-tools": 0,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "widget",
+				"created-at": "2020-04-09T13:09:36-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on March 11th, 2021.</strong> </p>",
+				"access": false,
+				"contribution-count": 0,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/100-w-49-ave"
+			}
+		},
+		{
+			"id": "13967",
+			"type": "projects",
+			"attributes": {
+				"description": "<h2><strong>We need your help </strong></h2><p>Are you a business or organization with large quantities of medical supplies, cleaning products, food, or services that you are able to donate or provide at reduced cost? We are seeking your support for our most vulnerable citizens through our COVID-19 response work.</p><p>Every day, the need grows for items such as food, cleaning products, and medical supplies. We need your help to ensure we minimize the impact of COVID-19.<br><br>We will work to connect your donation with organizations who have the greatest need.<br><br></p><p><a href=\"https://shapeyourcity.ca/giveahand?tool=survey_tool&tool_id=donate#tool_tab\"><input type=\"button\" class=\"btn btn-primary js-submit\" value=\"Donate Now\"></a></p><p style=\"text-align: left;\"><br><strong>Items of the current greatest need include (<strong>please donate unused supplies in unopened packages)</strong>: </strong></p><ul><li><strong>Toilet paper</strong></li><li><strong>Paper towel</strong></li><li><strong>Disposable tampons and pads </strong></li><li><strong>Adult diapers</strong></li><li><strong>Toothpaste and toothbrushes</strong></li><li><strong>50-250 mL bottles to be filled with hand sanitizer</strong></li><li><strong>Cardboard boxes that can hold up to 30 lbs and are easy to carry</strong></li><li><strong>Empty spray bottles (to be filled with non corrosive cleaner</strong><strong>)</strong></li><li><strong>Bottled water that can be given to people who are isolating or who do not have access to drinking water</strong></li></ul><p><br></p><h3><strong>How does it work? </strong></h3><p>If you are a business or organization that can donate or provide low-cost products, food or services that may include:</p><ul><li>Large quantities of medical supplies</li><li>Large quantities of cleaning products</li><li>Services to donate</li><li>Ability to offer prepared meals, groceries, or food related supplies or services</li><li>Other - please tell us how your business can help</li></ul><p><br>Submit your donation by completing <a href=\"https://shapeyourcity.ca/giveahand/survey_tools/donate\">our form,</a> including the specific details of your offer. We will be in touch with you about your donation.</p><p><br></p><p><br><br></p>",
+				"name": "Give a Hand Vancouver",
+				"meta-description": "Give a Hand Vancouver is an easy way to help. Let the City know if you have supplies or services to donate to help with the COVID-19 pandemic response and recovery.",
+				"meta-keywords": "donations, Vancouver, COVID-19, coronavirus",
+				"redirect-url": null,
+				"permalink": "giveahand",
+				"state": "archived",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"In Progress",
+					"Project"
+				],
+				"project-tag-list": [
+					"In Progress",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/900833d3e65308335d0469e5a9bf0b7338c1df76/original/1587673881/GiveAHand-ThankYou--340x340.jpg_58ae859e64fbc60a454d2f640f94c4f0?1587673881",
+				"image-caption": "Give a Hand Vancouver",
+				"image-description": "",
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": null,
+				"subscribers-count": 0,
+				"view-count": 9661,
+				"home-project": false,
+				"published-at": "2020-04-30T12:02:28-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "widget",
+				"created-at": "2020-04-14T09:43:04-07:00",
+				"archival-reason-message": "Consultation has concluded",
+				"access": false,
+				"contribution-count": 51,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/giveahand"
+			}
+		},
+		{
+			"id": "14048",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/723fd8742a8ba33629c0f1cfdae90bc44a56a65f/original/1600213185/2924-venables.JPG_8938bba0bd3054ff78d6685a5a2482bd?1600213185\" style=\"width: 776px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 2924 Venables St. The proposal is to allow for the development of two 6-storey residential buildings. The rezoning would amend the existing CD-1 (Comprehensive Development) (109) District. The proposal includes:</p><ul><li>146 social housing units</li><li>Floor space ratio (FSR) of 2.06</li><li>Floor area of 10,017 sq. m (107,822 sq. ft.)</li><li>Maximum height of 21 m (68 ft.)</li><li>36 vehicle parking spaces and 232 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/docs/planning/hastings-sunrise-community-vision-full-report.pdf\"><em>Hastings-Sunrise Community Vision.</em></a></p><p>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</p><p><span class=\"fr-video fr-fvc fr-draggable fr-dvb fr-active\" contenteditable=\"false\"><iframe src=\"https://player.vimeo.com/video/427420726\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\" style=\"width: 1010.61px; height: 578px;\"></iframe></span></p>",
+				"name": "2924 Venables St rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "2924-venables-st",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Hastings-Sunrise",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Hastings-Sunrise",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600213225/blob_ab641ad5f8802b8eede92be08dc31547?1600213225",
+				"image-caption": "2924 Venables St - looking southeast at the corner of Venables and Renfrew St",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3961,
+				"home-project": false,
+				"published-at": "2020-06-02T10:18:31-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-04-16T13:55:45-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on December 2nd, 2020. </strong></p>",
+				"access": false,
+				"contribution-count": 29,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/2924-venables-st"
+			}
+		},
+		{
+			"id": "14072",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><strong style=\"box-sizing: border-box; font-weight: 700; color: rgb(68, 68, 68); font-family: Montserrat; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">This application was approved by Council at Public Hearing on March 9, 2021</strong></p><p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/a950a3a57dea449619d3208a2570318185651660/original/1600219645/5910-cambie.JPG_c789f76d6df32be2434c4eb78adb1084?1600219645\" style=\"width: 613px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 5910-5998 Cambie St. The proposal is to allow for a mixed-use development with a 29-storey market residential tower and a 15-storey hotel tower over a podium. The zoning would change from RT-2 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>168 market strata residential units (29 storey)</li><li>270 hotel units (15 storey)</li><li>10 artist live-work studios</li><li>Retail use at grade</li><li>Floor space ratio (FSR) of 10.86</li><li>Floor area of 31,982 sq. m (344,256 sq. ft.)</li><li>Maximum building height of 85 m (278 ft.)</li><li>281 vehicle parking spaces and 377 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/images/web/cambie-corridor/cambie-corridor-plan.pdf\"><em>Cambie Corridor Plan.</em></a></p><p>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</p><p><span class=\"fr-video fr-fvc fr-draggable fr-fvl fr-dvb fr-active\" contenteditable=\"false\"><iframe src=\"https://player.vimeo.com/video/428175433\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\" style=\"width: 730px; height: 440px;\"></iframe></span></p><p><br></p>",
+				"name": "5910-5998 Cambie St rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "5910-5998-cambie-st",
+				"state": "published",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Oakridge",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Oakridge",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600219682/blob_9e935a95f822f192bc4995046bbdfc85?1600219682",
+				"image-caption": "5910-5998 Cambie St - looking southeast at Cambie St and 43rd avenue",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 1,
+				"view-count": 5875,
+				"home-project": false,
+				"published-at": "2020-06-02T10:22:14-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-04-20T11:55:33-07:00",
+				"archival-reason-message": "<p>This application was approved by Council at Public Hearing on March 9th, 2021.</p>",
+				"access": false,
+				"contribution-count": 29,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/5910-5998-cambie-st"
+			}
+		},
+		{
+			"id": "14107",
+			"type": "projects",
+			"attributes": {
+				"description": "<p>In March 2019, we launched a planning process to create a comprehensive community plan for the area within Vine Street to Clark Drive and 1st Avenue to 16th Avenue. The 30-year plan will focus on opportunities to integrate new housing, jobs, and amenities around the new Broadway Subway. This webpage provides a one-stop location where you can learn about the Broadway Plan, provide your feedback and stay up to date on engagement opportunities.</p><p><br></p><hr><h2>Give your feedback about the Phase 3 Refined Directions</h2><p>How should Kitsilano, Fairview, and Mount Pleasant grow and change around the future Broadway Subway over the next 30 years? The Refined Directions propose how the area may evolve in the future. We&#39;d like your feedback on:</p><ul><li>3D elements of the plan and building heights</li><li>Draft public realm framework</li><li>Housing and job estimates</li><li>More details on some area-wide policies like housing, jobs, transportation, community well-being, arts, culture and music, heritage and public benefits</li></ul><p><br></p><h2>Ways to get involved</h2><p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/45d9e971d1717699ebc69c98240b2ceadcd7c696/original/1636045177/4f44388c7749fd680c44dbf7e68d868b_learn.png?1636045177\" style=\"width: 1500px;\" class=\"fr-fic fr-dib\"></p><h3>Get the highlights</h3><ul><li><a href=\"https://syc.vancouver.ca/projects/broadway-plan/redefined-directions-summary-booklet.pdf\">Summary booklet (30 pages)</a></li><li><a href=\"https://youtu.be/OmgDVW5k7UE\">Summary video (27 minute presentation)</a></li></ul><p><br></p><h3>Read the detailed Refined Directions content</h3><p><a href=\"https://syc.vancouver.ca/projects/broadway-plan/redefined-directions-complete-boards.pdf\">Complete information boards (104 pages)</a></p><p><br></p><h3>Attend the open house</h3><p>Drop by 511 W Broadway in person to review the materials and ask us a question.</p><ul><li><a href=\"https://www.eventbrite.ca/e/broadway-plan-refined-directions-open-house-november-9-2021-tickets-191882845757\">Open House (November 9 4pm-8pm)</a></li><li><a href=\"https://www.eventbrite.ca/e/broadway-plan-refined-directions-open-house-november-10-2021-tickets-191885814637\">Open House (November 10 4pm-8pm)</a></li><li><a href=\"https://www.eventbrite.ca/e/broadway-plan-refined-directions-open-house-november-20-2021-tickets-191869004357\">Open House (November 20 10am-2pm)</a></li></ul><p><br></p><h3><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/b8cabab74eb00ebd4cf2afd298d323f0d1727535/original/1634173498/7a028f57684a30f788e09733445e2779_ask-horizontal-grey.png?1634173498\" class=\"fr-fic fr-dib\" alt=\"Ask\" style=\"width: 1524px;\"></h3><h3>Ask a question</h3><p><a href=\"https://shapeyourcity.ca/broadway-plan?preview=true&tool=qanda#tool_tab\">Ask us in the &quot;Questions&quot; tab</a> and we&#39;ll reply within 2 working days and send you an email notification.</p><p><br></p><h3>Contact a planner</h3><p>Sign up for our office hours if you have a question or comment you&#39;d like to share with us.</p><p><a href=\"https://www.eventbrite.ca/e/broadway-plan-refined-directions-office-hours-tickets-204689952157\">Office hours (every Monday at select times)</a></p><p><br></p><p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/65a6c1c77d91aba4685318505b2f63714c05d9dd/original/1634173516/db0db6522f41cb108e56a8ec7b8f8af9_respond-horizontal-grey.png?1634173516\" class=\"fr-fic fr-dib\" alt=\"Respond\" style=\"width: 1534px;\"></p><h3>Take the online survey</h3><p>Give feedback about the policy topics and places that matter to you. Your feedback will help shape the next steps of the plan.</p><p><a class=\"btn-primary\" href=\"https://talkvancouver.questionpro.ca/t/AB3uoF2ZB3utxp\" rel=\"noopener noreferrer\" target=\"_blank\">Take the survey</a></p><p><br></p><h3>Attend a workshop</h3><p>Register for a 2 hour workshop to provide your feedback about your neighbourhood, public life, or being a renter.</p><ul><li><a href=\"https://www.eventbrite.ca/e/neighbourhood-workshops-kitsilano-tickets-191384194277\">Kitsilano Neighbourhood workshop (November 16 6pm-8pm)</a></li><li><a href=\"https://www.eventbrite.ca/e/neighbourhood-workshops-fairview-tickets-191390422907\">Fairview Neighbourhood workshop (November 17 6pm-8pm)</a></li><li><a href=\"https://www.eventbrite.ca/e/neighbourhood-workshops-mount-pleasant-tickets-191396320547\">Mount Pleasant Neighbourhood workshop (November 18 6pm-8pm)</a> <a href=\"https://www.eventbrite.ca/e/neighbourhood-workshops-mount-pleasant-tickets-191396320547\"></a></li><li><a href=\"https://www.eventbrite.ca/e/public-life-workshop-tickets-191381385877\">Public Life workshop (November 24 6pm-8pm)</a></li><li><a href=\"https://www.eventbrite.ca/e/broadway-plan-refined-directions-renter-roundtable-tickets-204670774797\">Renter Round Table (November 25 6pm-8pm)</a></li></ul>",
+				"name": "Broadway Plan ",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "broadway-plan",
+				"state": "published",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"In Progress",
+					"City Planning",
+					"Fairview",
+					"Kitsilano",
+					"Mount Pleasant",
+					"Feature",
+					"Project"
+				],
+				"project-tag-list": [
+					"In Progress",
+					"City Planning",
+					"Fairview",
+					"Kitsilano",
+					"Mount Pleasant",
+					"Feature",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1613499040/blob_3027f698184658caa48c7725e4bd64e2?1613499040",
+				"image-caption": "Looking west along Broadway",
+				"image-description": "Elevated view looking west along Broadway.",
+				"text-wrap-mode": "textwrap_center",
+				"parent-id": null,
+				"subscribers-count": 20,
+				"view-count": 53019,
+				"home-project": false,
+				"published-at": "2021-02-16T11:06:29-08:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "widget",
+				"created-at": "2020-04-22T09:40:56-07:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 118,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/broadway-plan"
+			}
+		},
+		{
+			"id": "14414",
+			"type": "projects",
+			"attributes": {
+				"description": "<p>[English Version below]</p><p><span style=\"font-size: 18px;\">Th&agrave;nh phố Vancouver mời bạn tham gia một buổi n&oacute;i chuyện được tổ chức với Đ&agrave;i ph&aacute;t thanh Lạc Việt v&agrave; <span style=\"font-size: 18px;\">Bảo Vệ Collective.</span></span></p><p>Tham gia với Gi&aacute;m đốc th&agrave;nh phố Sadhu Johnston v&agrave; Trưởng nh&oacute;m COVID-19 Darrell Reid trong một cuộc thảo luận để t&igrave;m hiểu th&ecirc;m về phản ứng hiện tại của ch&uacute;ng t&ocirc;i đối với dịch COVID-19 v&agrave; c&aacute;c bước tiếp theo của ch&uacute;ng t&ocirc;i. Bạn l&agrave; một phần quan trọng trong kết cấu đa văn h&oacute;a của th&agrave;nh phố ch&uacute;ng t&ocirc;i v&agrave; ch&uacute;ng t&ocirc;i xem đ&acirc;y l&agrave; một cơ hội quan trọng để kết nối với bạn.</p><p><strong>Cuộc n&oacute;i chuyện sẽ ph&aacute;t thanh v&agrave;o Thứ Bảy, ng&agrave;y 30 th&aacute;ng 5, từ 10 giờ s&aacute;ng đến 11 giờ s&aacute;ng tr&ecirc;n Đ&agrave;i ph&aacute;t thanh Lạc Việt (FM 96.1)</strong></p><p>Tham gia v&agrave;o cuộc n&oacute;i chuyện bằng c&aacute;ch gọi điện 604-295-9616 (đường d&acirc;y sẽ mở trong chương tr&igrave;nh trực tiếp) hoặc gởi trước c&acirc;u hỏi của bạn:</p><ul><li>Trong hộp &quot;gởi c&acirc;u hỏi của bạn&quot; b&ecirc;n dưới</li><li>Qua thư điện tử đến: <a href=\"mailto:anthony.hoang@vancouver.ca\">anthony.hoang@vancouver.ca</a></li></ul><p>Ch&uacute;ng t&ocirc;i mong chờ tin từ bạn!</p><p><br></p><p>Xin lưu &yacute;:</p><ul><li>Ch&uacute;ng t&ocirc;i chỉ c&oacute; thể trả lời c&aacute;c c&acirc;u hỏi về <a href=\"http://www.vancouver.ca/covid19\" rel=\"noopener noreferrer\" target=\"_blank\">c&aacute;c dịch vụ v&agrave; chương tr&igrave;nh của ch&uacute;ng t&ocirc;i</a></li><li>Ch&uacute;ng t&ocirc;i sẽ cố gắng hết sức để trả lời c&acirc;u hỏi của mọi người, nhưng trong khoảng thời gian giới hạn, ch&uacute;ng t&ocirc;i c&oacute; thể phải ưu ti&ecirc;n c&aacute;c c&acirc;u trả lời dựa tr&ecirc;n mức độ khẩn cấp.</li></ul><hr><p><br></p><p><span style=\"font-size: 18px;\">The City of Vancouver invites you to a Radio Town Hall hosted with Lac Viet Radio and Bảo Vệ Collective.</span></p><p>Join our City Manager Sadhu Johnston and COVID-19 Task Force Chief Darrell Reid in a discussion to learn more about our current response to COVID-19 and our next steps. You are a significant part of the multicultural fabric of our city, and we see this as an important opportunity to connect with you.</p><p><strong>The Radio Town Hall will be on Saturday, May 30 from 10am to 11am on Lac Viet Radio (FM 96.1)</strong></p><p>Participate in the town hall by calling in at 604-295-9616 (only live during the show) or submitting your questions in advance:</p><ul><li>In the &quot;submit your questions&quot; box below</li><li>Via email to: <a href=\"mailto:anthony.hoang@vancouver.ca\">anthony.hoang@vancouver.ca</a></li></ul><p>We look forward to hearing from you!</p><p><br></p><p>Please note:</p><ul><li>We are only able to answer questions about <a href=\"http://www.vancouver.ca/covid19\" rel=\"noopener noreferrer\" target=\"_blank\">our services and programs</a></li><li>We will try our best to answer everyone&#39;s questions, but given the limited amount of time we might have to prioritize the answers based on urgency of the subject matter.</li></ul><p><br></p>",
+				"name": "Buổi nói chuyện giữa văn phòng Thành phố và cộng đồng người Việt ở Vancouver (Vietnamese Town Hall)",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "vietnamese-townhall",
+				"state": "archived",
+				"banner-url": "",
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Closed",
+					"Project"
+				],
+				"project-tag-list": [
+					"Closed",
+					"Project"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/a56e533d5d95ba9110376c6af8e8e724aa3e95fa/original/1590534578/MomDaughter-Banner-320x320.jpg_3bbc38ceb8c6018b0262476bb3742dc8?1590534578",
+				"image-caption": "Your caption here",
+				"image-description": "Vietnamese TownHall",
+				"text-wrap-mode": "textwrap_right",
+				"parent-id": null,
+				"subscribers-count": 0,
+				"view-count": 578,
+				"home-project": false,
+				"published-at": "2020-05-28T15:19:27-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "widget",
+				"created-at": "2020-05-06T23:10:20-07:00",
+				"archival-reason-message": "Consultation has concluded",
+				"access": false,
+				"contribution-count": 0,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/vietnamese-townhall"
+			}
+		},
+		{
+			"id": "14538",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/ad0a9f18ce1db93808976362ecb84599957f772e/original/1591894159/524-528-powell-st-development-application.jpg_41055ebe2216bbd787e19b44709239b7?1591894159\" style=\"width: 100%;\" class=\"fr-fic fr-dib\"></p><p>NSDA Architects has applied to the City of Vancouver for permission to develop on this site a new seven-storey, mixed-use building, consisting of:</p><ul><li>114 social housing units (3rd to 7th floors)</li><li>Retail/office and a community amenity space (ground and 2nd floors)</li><li>One level of underground parking, providing a total of 20 parking spaces having vehicular access from the lane</li><li>A total floor space ratio of 4.38 (approximately 7,445 m&sup2;)</li><li>A maximum geodetic building height of 25.76 m</li></ul><p>Under the site&rsquo;s existing <a href=\"https://bylaws.vancouver.ca/odp/odp-downtown-eastside-oppenheimer.pdf\">DEOD zoning</a>, the application is conditional so it may be permitted. However, it requires the decision of the <a href=\"https://vancouver.ca/home-property-development/development-permit-board.aspx\">Development Permit Board</a>.</p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><br></p>",
+				"name": "524-528 Powell St (DP-2020-00287) development application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "524-528-powell-st",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Downtown",
+					"Approved",
+					"Development"
+				],
+				"project-tag-list": [
+					"Downtown",
+					"Approved",
+					"Development"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1591221994/blob_084c5776515ef942dfead49f7cfd5816?1591221994",
+				"image-caption": "Rendering",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 1,
+				"view-count": 2760,
+				"home-project": false,
+				"published-at": "2020-07-21T15:19:50-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-13T22:26:07-07:00",
+				"archival-reason-message": "<p><strong>The Development Permit Board approved this application, and a Development Permit was issued on September 20, 2021.</strong></p><p><br></p>",
+				"access": false,
+				"contribution-count": 33,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/524-528-powell-st"
+			}
+		},
+		{
+			"id": "14692",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/ffffcf8b187e31aa007f2a25e69657a312629c6b/original/1600212832/724-e-56-ave-rendering.PNG_f7fbf45940d218f0dc4554f79b24bad9?1600212832\" style=\"width: 781px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 724 E 56th Ave. The proposal is to allow for the development of two 3-storey stacked townhouses. The zoning would change from RS-1 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>12 secured market rental units</li><li>Floor space ratio (FSR) of 1.40</li><li>Floor area of 1,121 sq. m (12,062 sq. ft.)</li><li>Building height of 10.1 m (33.2 ft.)</li><li>18 vehicle parking spaces and 28 bicycle parking spaces, located in the underground level of <a href=\"https://shapeyourcity.ca/7280-fraser-st\" rel=\"noopener noreferrer\" target=\"_blank\">7280 Fraser St</a></li></ul><p>The application is being considered under the <em><a href=\"https://vancouver.ca/files/cov/Affordable-housing-choices-interim-rezoning-policy.pdf\">Affordable Housing Choices Interim Rezoning Policy.</a></em></p><p>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</p><p><br></p><p><span class=\"fr-video fr-fvc fr-draggable fr-dvb\" contenteditable=\"false\"><iframe width=\"640\" height=\"360\" src=\"https://www.youtube.com/embed/p36IpUdvqi4\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\"></iframe></span></p><p><br></p><p><br></p>",
+				"name": "724 E 56th Ave rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "724-e-56-ave",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Sunset",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Sunset",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/ffffcf8b187e31aa007f2a25e69657a312629c6b/original/1600212864/724-e-56-ave-rendering.PNG_bfaf51dbb94c11bfb505362d6a8bc9aa?1600212864",
+				"image-caption": "724 E 56th Ave - Looking southwest from the street",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3254,
+				"home-project": false,
+				"published-at": "2020-06-02T10:12:34-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:36:05-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on December 2nd, 2020. </strong></p>",
+				"access": false,
+				"contribution-count": 10,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/724-e-56-ave"
+			}
+		},
+		{
+			"id": "14693",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/19962495337fac0dd0a30817af775c4dd1b5aa5b/original/1600220229/450-w-georgia-st.JPG_bd0cf9232042c6288991ea53ad62211f?1600220229\" style=\"width: 548px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 450 W Georgia St. The proposal is to allow for the development of a 23-storey office building. The zoning would change from DD (Downtown) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>Public and commercial retail space at grade</li><li>Office use (34,764 sq. m (374,068 sq. ft.)</li><li>Floor space ratio (FSR) of 15.65</li><li>Total floor area of 34,902.8 sq. m (375,554 sq. ft.)</li><li>Building height of 87.2 m (286 ft.)</li><li>270 vehicle parking spaces and 236 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://guidelines.vancouver.ca/R025.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><em>Rezoning Policy for the Central Business District (CBD) and CBD Shoulder</em></a><em>.</em></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p>",
+				"name": "450 W Georgia St rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "450-w-georgia-st",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Downtown",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Downtown",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600220260/blob_8358efcc826fb7b0779832b2b5fe2613?1600220260",
+				"image-caption": "450 W Georgia St - Looking south at the corner of W Georgia and Richards St.",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 5000,
+				"home-project": false,
+				"published-at": "2020-06-02T13:05:40-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:38:35-07:00",
+				"archival-reason-message": "<p><strong>This application has been approved by Council on June 29, 2021, following the Public Hearing on June 15, 2021.</strong></p>",
+				"access": false,
+				"contribution-count": 48,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/450-w-georgia-st"
+			}
+		},
+		{
+			"id": "14694",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/de45915327629b40333d13dc6a7326cd9cde4243/original/1600219915/1325-w-70-ave.JPG_df1a008ec7329756dde5d49a53d01db3?1600219915\" style=\"width: 914px;\" class=\"fr-fic fr-dib\"></p><p>We would like your feedback on a rezoning application at 1325 W 70th Ave. The proposal is to allow for the development of a 6-storey residential building. The zoning would change from RM-3A (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>65 secured market rental units</li><li>Floor space ratio (FSR) of 2.38</li><li>Floor area of 4,492.6 sq. m (48,358.3 sq. ft.)</li><li>Maximum height of 19.1 m (62.5 ft.)</li><li>50 vehicle parking spaces and 112 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/files/cov/marpole-community-plan.pdf\"><em>Marpole Community Plan</em></a><em>.</em></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><br></p><p><span class=\"fr-video fr-fvc fr-draggable fr-fvl fr-dvb\" contenteditable=\"false\"><iframe width=\"640\" height=\"360\" src=\"https://www.youtube.com/embed/efYqKVvkp1g\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\"></iframe></span></p>",
+				"name": "1325 W 70th Ave rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "1325-w-70-ave",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Marpole",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Marpole",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600219933/blob_d832d87e7a5250fc983cb59782e48e62?1600219933",
+				"image-caption": "1325 W 70th Ave - looking north on W 70th Ave",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 2943,
+				"home-project": false,
+				"published-at": "2020-06-02T12:59:45-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:41:12-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on December 8th, 2020.</strong></p>",
+				"access": false,
+				"contribution-count": 71,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/1325-w-70-ave"
+			}
+		},
+		{
+			"id": "14695",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8b4b33a6c4efb5765c0bf82b205528fbc867d77d/original/1600220754/1265-1281-kingsway.JPG_31c3b6e70f6ae72e4be4b1817a45546e?1600220754\" style=\"width: 716px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 1265-1281 Kingsway. The proposal is to allow for the development of a 6-storey mixed-use building. The zoning would change from C-2 (Commercial) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>43 secured market rental residential units</li><li>Commercial use at grade</li><li>Floor space ratio (FSR) of 3.70</li><li>Floor area of 3,962.7 sq. m (42,653.9 sq. ft.)</li><li>Maximum height of 20.9 m (68.6 ft.)</li><li>51 vehicle parking spaces and 89 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://bylaws.vancouver.ca/zoning/policy-rezoning-secured-rental.pdf\"><em>Secured Rental Policy</em></a><em>.</em></p><p>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</p><p><strong><span class=\"fr-video fr-fvc fr-draggable fr-fvl fr-dvb\" contenteditable=\"false\"><iframe src=\"https://player.vimeo.com/video/426059573\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\" style=\"width: 983px; height: 536px;\"></iframe></span></strong></p>",
+				"name": "1265-1281 Kingsway rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "1265-1281-kingsway",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600220830/blob_c50c770b1e9e82b5370745873f91ca63?1600220830",
+				"image-caption": "1265-1281 Kingsway  - Looking northwest from Kingsway",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3018,
+				"home-project": false,
+				"published-at": "2020-06-02T13:10:21-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:42:56-07:00",
+				"archival-reason-message": "<p><strong>This application has been approved Council at Public Hearing on December 2, 2020.</strong></p>",
+				"access": false,
+				"contribution-count": 21,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/1265-1281-kingsway"
+			}
+		},
+		{
+			"id": "14696",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/1f3dd5db24fb796e7a5db3240f39fd7fa5d8d144/original/1600221170/7730-cambie.JPG_53b3600cabb5da47c0514d67da72ae60?1600221170\" style=\"width: 762px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 7730-7772 Cambie St. The proposal is to allow for the development of two 6-storey residential buildings with townhouses at grade. The zoning would change from RT-1 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>68 market strata units</li><li>Floor space ratio (FSR) of 2.70</li><li>Floor area of 6,622.6 sq. m (71,284.9 sq. ft.)</li><li>Maximum height of 20.3 m (66.6 ft.) for Building A and 18.5 m (60.6 ft.) for Building B</li><li>94 vehicle parking spaces and 163 bicycle parking spaces</li></ul><p>The application is being considered under the <em><a href=\"https://vancouver.ca/images/web/cambie-corridor/cambie-corridor-plan.pdf\">Cambie Corridor Plan.</a></em></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><br></p><p><iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/AOstdXCG4k0\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen=\"\"></iframe></p><h2><br></h2>",
+				"name": "7730-7772 Cambie St rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "7730-7772-cambie-st",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Marpole",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Marpole",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600221200/blob_f47b604799f05d9bd31028306db337ed?1600221200",
+				"image-caption": "7730-7770 Cambie St - Looking north from Cambie St",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 2302,
+				"home-project": false,
+				"published-at": "2020-06-02T13:13:28-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:45:05-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on June 17th, 2021.</strong></p>",
+				"access": false,
+				"contribution-count": 7,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/7730-7772-cambie-st"
+			}
+		},
+		{
+			"id": "14697",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/b4fb0ec1ea8476d4e705f1c5b639d15bf5a47901/original/1600221383/24-e-broadway.JPG_ba25d062d3865c0bbd73e70ffa880497?1600221383\" style=\"width: 763px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 24 E Broadway and 2520 Ontario St. The proposal is to allow for a 12-storey office building. The zoning would change from C-3A (Commercial) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>Floor space ratio (FSR) of 7.75</li><li>20,284 sq. ft. of retail space</li><li>104,755 sq. ft. of office space</li><li>Total floor area of 125,039 sq. ft.</li><li>Building height of 147.67 ft.</li><li>7 levels of underground parking with 230 vehicle parking spaces and 68 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/docs/planning/metro-core-jobs-and-economy-study.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><em>Metro Core Jobs and Economy Land Use Plan</em></a><em>.</em></p><p>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</p><p><br></p><p><iframe style=\"width:100%;height:600px;\" src=\"https://vr.yulio.com/embedded/vres/gdl2mZ20eU/fprs/i6xJctLMdc/?type=embed\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"\"></iframe></p><p><br></p>",
+				"name": "24 E Broadway and 2520 Ontario St rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "24-e-broadway-and-2520-ontario-st",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Approved",
+					"Mount Pleasant"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Approved",
+					"Mount Pleasant"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600221406/blob_ae9317a1febdb0170f6d242a2a2ceec5?1600221406",
+				"image-caption": "24 E Broadway and 2520 Ontario St  - Looking east along Broadway",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3372,
+				"home-project": false,
+				"published-at": "2020-06-15T15:26:35-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:46:09-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on October 27th, 2020.</strong></p>",
+				"access": false,
+				"contribution-count": 43,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/24-e-broadway-and-2520-ontario-st"
+			}
+		},
+		{
+			"id": "14698",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/9ff05e1657cf030020e453b0749ad65c37b419ee/original/1600225531/1650-1690-e-12-ave.JPG_d1a6c062a2dab7d7bc5ae9e4d49a7355?1600225531\" style=\"width: 791px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 1650 E 12th Ave. The proposal is to allow for a 6-storey mixed-use building. The zoning would change from C-2C1 (Commercial) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>65 strata residential units</li><li>Commercial retail space at grade</li><li>Floor space ratio (FSR) of 3.00</li><li>Floor area of 5,110.5 sq. m (55,009 sq. ft.)</li><li>Maximum height of 22.7 m (74.3 ft.)</li><li>71 vehicle parking spaces and 117 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/files/cov/grandview-woodland-community-plan.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><em>Grandview-Woodland Community Plan.</em></a></p><p><br></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><span class=\"fr-video fr-fvc fr-draggable fr-fvl fr-dvb\" contenteditable=\"false\"><iframe src=\"https://player.vimeo.com/video/455926332\" width=\"1280\" height=\"720\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\"></iframe></span></p>",
+				"name": "1650 E 12th Ave rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "1650-e-12-ave",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600225553/blob_3010c8795a28cc22e1a5d2813c8b7ea7?1600225553",
+				"image-caption": "1650-1690 E 12th Ave - 12th Ave and Commercial Dr looking southwest ",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3450,
+				"home-project": false,
+				"published-at": "2020-06-29T12:05:05-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:47:15-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on May 18th, 2021.</strong></p>",
+				"access": false,
+				"contribution-count": 18,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/1650-e-12-ave"
+			}
+		},
+		{
+			"id": "14699",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/7cfccdd28ea096c3b0cbbcf463527186cbced725/original/1600222417/618-w-32-ave.JPG_da7a903a631ac7501657347176006dad?1600222417\" style=\"width: 632px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p><span style=\"font-size: 20px; color: red;\">This application is currently on hold.</span></p><p>We would like your feedback on a rezoning application at 618 W 32nd Ave. The proposal is to allow for the development of a 6-storey residential building. The zoning would change from RS-1 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>34 secured market rental units</li><li>Floor space ratio (FSR) of 2.46</li><li>Building height of 21.7 m (71 ft.) from grade</li><li>29 vehicle parking spaces and 64 bicycle parking spaces</li></ul><p>The site is currently approved for a 6-storey building with 15 strata units. The original rezoning application and <a href=\"https://council.vancouver.ca/20170725/documents/p5.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><strong>council report</strong></a><strong> </strong>was approved by Council at <a href=\"https://council.vancouver.ca/20171017/phea20171017ag.htm\" rel=\"noopener noreferrer\" target=\"_blank\"><strong>Public Hearing</strong></a> on October 17, 2017. A new application is being made to change the tenure from strata to market rental units. There is no change in the density, height, or form of development from the prior approved application. This new application will be subject to all current policies, guidelines, bulletins, and development permit requirements.</p><p>The application is being considered under the <a href=\"https://vancouver.ca/images/web/cambie-corridor/cambie-corridor-plan.pdf?_ga=2.245590915.662538090.1591211925-23842710.1591211925\"><em>Cambie Corridor Plan</em></a><em>.</em></p><p><strong>An in-person community open house was held for the original application on May 31, 2016 from 5:00 pm to 8:00 pm at Phoenix Gymnastics, 4588 Clancy Loranger Way.</strong><strong> </strong></p><p><br></p>",
+				"name": "618 W 32nd Ave rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "618-w-32-ave",
+				"state": "published",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"South Cambie",
+					"Public Hearing"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"South Cambie",
+					"Public Hearing"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600222434/blob_bd90b666a8088a0dd5be027af3e5b4e9?1600222434",
+				"image-caption": "618 W 32nd Ave - Looking northeast from Cambie St",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 1646,
+				"home-project": false,
+				"published-at": "2020-06-17T12:19:00-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:48:08-07:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 4,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/618-w-32-ave"
+			}
+		},
+		{
+			"id": "14700",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/bba9698e0d9cdff2a9c5d168f0acd84315786d25/original/1600222217/2246-2268-e-broadway.JPG_befbcb2b8e81efdd5fab633e0fa8733f?1600222217\" style=\"width: 672px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 2246-2268 E Broadway. The proposal is to allow for the development of a 6-storey residential building. The zoning would change from RS-1 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>57 market strata units</li><li>Floor space ratio (FSR) of 2.65</li><li>Floor area of 4,216 sq. m (45,382 sq. ft.)</li><li>Maximum building height of 19.35 m (63.48 ft.)</li><li>47 underground vehicle parking spaces, 4 surface vehicles parking spaces, and 114 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/files/cov/grandview-woodland-community-plan.pdf\" rel=\"noopener noreferrer\" target=\"_blank\">Grandview-Woodland Community Plan.</a></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p style=\"text-align: center;\"><iframe title=\"A 3D model\" width=\"540\" height=\"380\" src=\"https://sketchfab.com/models/9fc8aebe2d754b4090c97aa48d7f3ae6/embed?autostart=1&ui_controls=0&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=1&ui_watermark_link=1\" frameborder=\"0\" allow=\"autoplay; fullscreen; vr\" mozallowfullscreen=\"true\" webkitallowfullscreen=\"true\"></iframe></p><p style=\"font-size: 13px; font-weight: normal; margin: 5px; color: rgb(74, 74, 74); text-align: center;\"><a href=\"https://sketchfab.com/3d-models/e-broadway-garden-rezoning-model-9fc8aebe2d754b4090c97aa48d7f3ae6?utm_medium=embed&utm_source=website&utm_campaign=share-popup\" style=\"font-weight: bold; color: #1CAAD9;\" target=\"_blank\">E Broadway &amp; Garden Rezoning Model</a> by <a href=\"https://sketchfab.com/OmicronAEC?utm_medium=embed&utm_source=website&utm_campaign=share-popup\" style=\"font-weight: bold; color: #1CAAD9;\" target=\"_blank\">OmicronAEC</a> on <a href=\"https://sketchfab.com?utm_medium=embed&utm_source=website&utm_campaign=share-popup\" style=\"font-weight: bold; color: #1CAAD9;\" target=\"_blank\">Sketchfab</a></p><p><br></p><p><strong>Green</strong>: Other rezoning applications<br><strong>Pink</strong>: What is permitted under rezoning policy</p>",
+				"name": "2246-2268 E Broadway rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "2246-2268-e-broadway",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600222238/blob_faf992e26c401563c9d71d609cd46177?1600222238",
+				"image-caption": "2246-2268 E Broadway - Looking southeast on Broadway",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3314,
+				"home-project": false,
+				"published-at": "2020-06-17T11:53:50-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:49:52-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on January 19th, 2021.</strong></p>",
+				"access": false,
+				"contribution-count": 27,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/2246-2268-e-broadway"
+			}
+		},
+		{
+			"id": "14701",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/ae7f4d907963a4444fc773ecad3bf3a3c17fc24b/original/1600221980/208-232-w-41-ave.JPG_6c008ac5b9fd90fbc5d8ed0936e3a2dc?1600221980\" style=\"width: 682px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 208-232 W 41st Ave. The proposal is to allow for the development of a 15-storey mixed-use building. The zoning would change from RS-1 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>156 secured market rental residential units</li><li>Commercial retail space at grade</li><li>Partial 16th storey common amenity space</li><li>Floor space ratio (FSR) of 5.84</li><li>Floor area of 12,391 sq. m (132, 303 sq. ft.)</li><li>Maximum building height of 50.78 m (169 ft.)</li><li>95 vehicle parking spaces and 290 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/images/web/cambie-corridor/cambie-corridor-plan.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><em>Cambie Corridor Plan.</em></a></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><span class=\"fr-video fr-fvc fr-dvb fr-draggable\" contenteditable=\"false\" draggable=\"true\"><iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Z4_B1CuScZc\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen=\"\" class=\"fr-draggable\"></iframe></span><br></p>",
+				"name": "208-232 W 41st Ave rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "208-232-w-41-ave",
+				"state": "published",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Oakridge"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Oakridge"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600221996/blob_75d6ec75f01e0e13ff2f74833dd49c7e?1600221996",
+				"image-caption": "[Address] - [Describe perspective, e.g. looking southwest from 49 Ave]",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3007,
+				"home-project": false,
+				"published-at": "2020-06-16T09:26:31-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:50:51-07:00",
+				"archival-reason-message": null,
+				"access": false,
+				"contribution-count": 7,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/208-232-w-41-ave"
+			}
+		},
+		{
+			"id": "14702",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/e0bb49e59772c993773386b78139d9f0129db70b/original/1600221812/3353-cambie.JPG_6da8a768dfa3dc7ca82e818195994bfd?1600221812\" style=\"width: 786px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 3353 Cambie St. The proposal is to allow for the development of a 6-storey office building. The zoning would change from C-2 (commercial) to CD-1 (comprehensive development). The proposal includes:</p><ul><li>Ground floor commercial use</li><li>Private childcare on level 2</li><li>Office space on levels 3 to 6</li><li>Floor space ratio (FSR) of 3.0</li><li>Floor area of 2,586 sq. m (27,839 sq. ft.)</li><li>Maximum height of 23.8 m (78 ft.)</li><li>36 vehicle parking spaces and 10 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/images/web/cambie-corridor/cambie-corridor-plan.pdf\" rel=\"noopener noreferrer\" target=\"_blank\"><em>Cambie Corridor Plan.</em></a></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p style=\"text-align: left;\"><span class=\"fr-video fr-fvc fr-dvb fr-draggable fr-active\" contenteditable=\"false\" draggable=\"true\"><iframe width=\"720\" height=\"480\" src=\"https://player.vimeo.com/video/436278473\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\"></iframe></span></p>",
+				"name": "3353 Cambie St rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "3353-cambie-st",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"South Cambie",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"South Cambie",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600221829/blob_c22d1163a49e6442118d5aee35533013?1600221829",
+				"image-caption": "3353 Cambie St - View on Cambie St facing east",
+				"image-description": "",
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 2774,
+				"home-project": false,
+				"published-at": "2020-06-16T09:24:47-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:53:04-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on June 17th, 2021.</strong></p>",
+				"access": false,
+				"contribution-count": 52,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/3353-cambie-st"
+			}
+		},
+		{
+			"id": "14703",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/e68b2574632cc8b7c1c103b0ba24c8442b6ff3dc/original/1600226627/4426-4464-knight-st.JPG_00292168a9e8c355f5a2be7a390a8928?1600226627\" style=\"width: 668px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 4426-4464 Knight St and 1406 E 28th Ave. The proposal is to allow for the development of a 6-storey residential building. The zoning would change from RS-1 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>72 secured market rental units, including 10 live-work units at grade</li><li>Floor space ratio (FSR) of 3.1</li><li>Floor area of 5,119.6 sq. m (55,107 sq. ft.)</li><li>Maximum height of 20.1 m (65.9 ft.)</li><li>Two levels of underground parking with 29 vehicle parking spaces and 161 bicycle parking spaces</li></ul><p>The application is being considered under the<em> </em><a href=\"https://vancouver.ca/files/cov/Affordable-housing-choices-interim-rezoning-policy.pdf\"><em>Affordable Housing Choices Interim Rezoning Policy (AHCIRP).</em></a></p><p><br></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><br></p><p><span class=\"fr-video fr-fvc fr-draggable fr-fvl fr-dvb\" contenteditable=\"false\"><iframe width=\"640\" height=\"360\" src=\"https://www.youtube.com/embed/IqebAmMi5tk\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\"></iframe></span></p><h2><br></h2>",
+				"name": "4426-4464 Knight St and 1406 E 28th Ave rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "4426-4464-knight-st-and-1406-e-28-ave",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Kensington-Cedar Cottage",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600226658/blob_a2a8d47ae207d493cd5ece4c125fc549?1600226658",
+				"image-caption": "4426-4464 Knight St and 1406 E 28th Ave - looking southeast from Knight St and E 28th Ave",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 3879,
+				"home-project": false,
+				"published-at": "2020-07-08T16:35:50-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:53:39-07:00",
+				"archival-reason-message": "<p><strong>This application was approved with one amendment by Council on September 21, 2021</strong></p>",
+				"access": false,
+				"contribution-count": 118,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/4426-4464-knight-st-and-1406-e-28-ave"
+			}
+		},
+		{
+			"id": "14704",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/a6ae6e59596e31ab183f9f268f8a0406cc8d3373/original/1600225857/1015-e-hastings-st.png_6b4e565954449277903a4ad2074e5d2f?1600225857\" style=\"width: 687px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 1015 E Hastings St. The proposal is to allow for the development of two mixed-use buildings at 14 storeys and 13 storeys. The zoning would change from M-1 (Industrial) to CD-1 (Comprehensive Development) District. This proposal includes:</p><ul><li>163 units of social housing and market rental housing including:<ul><li>85 units of non-market housing</li><li>53 units of market rental housing</li><li>25 units of transitional housing</li></ul></li><li>80-bed shelter and associated services</li><li>Social enterprise space</li><li>Floor space ratio (FSR) of 6.80</li><li>Floor area of 14,510 sq. m (156,184 sq. ft.)</li><li>Building height of 42.5 m (139.44 ft.)</li><li>59 vehicle parking spaces and 318 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/files/cov/downtown-eastside-plan.pdf\">Downtown Eastside Plan.</a></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><br></p><p><span class=\"fr-video fr-fvc fr-draggable fr-fvl fr-dvb\" contenteditable=\"false\"><iframe src=\"https://player.vimeo.com/video/436265344\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\" style=\"width: 1280px; height: 400px;\"></iframe></span></p>",
+				"name": "1015 E Hastings St rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "1015-e-hastings",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Approved",
+					"Downtown"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Approved",
+					"Downtown"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600225896/blob_92c51e672ef0b465789b152560449326?1600225896",
+				"image-caption": "1015 E Hastings - Looking northeast from Hastings St viaduct",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 4288,
+				"home-project": false,
+				"published-at": "2020-07-03T11:08:13-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:54:31-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on February 16th, 2021.</strong></p>",
+				"access": false,
+				"contribution-count": 63,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/1015-e-hastings"
+			}
+		},
+		{
+			"id": "14705",
+			"type": "projects",
+			"attributes": {
+				"description": "<p><img src=\"https://s3.ca-central-1.amazonaws.com/ehq-production-canada/84cfbaa890c2d780ccf7ff1e88c3480bd50d5afc/original/1600226044/485-w-28-ave.JPG_690a65117627a135907a476218686ebe?1600226044\" style=\"width: 844px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p>We would like your feedback on a rezoning application at 485 W 28th Ave. The proposal is to allow for the development of a 6-storey residential building. The zoning would change from RS-1 (Residential) to CD-1 (Comprehensive Development) District. The proposal includes:</p><ul><li>27 market strata units</li><li>Floor space ratio (FSR) of 2.54</li><li>Floor area of 2455.3 sq. m (26,429 sq. ft.)</li><li>Building height of 19.2 m (63 ft.)</li><li>Partial 7th storey amenity space</li><li>34 vehicle parking spaces and 64 bicycle parking spaces</li></ul><p>The application is being considered under the <a href=\"https://vancouver.ca/images/web/cambie-corridor/cambie-corridor-plan.pdf?_ga=2.107684170.910379884.1592243370-712775391.1590684489\"><em>Cambie Corridor Plan.</em></a></p><p><strong>In response to COVID-19 (Coronavirus), an extended online question and answer (Q&amp;A) period was held in place of an in-person open house for this project.</strong></p><p><br></p><p><span class=\"fr-video fr-fvc fr-draggable fr-fvl fr-dvb\" contenteditable=\"false\"><iframe width=\"640\" height=\"360\" src=\"https://www.youtube.com/embed/uXP4uZk0k-w\" frameborder=\"0\" allowfullscreen=\"\" class=\"fr-draggable\"></iframe></span></p>",
+				"name": "485 W 28th Ave rezoning application",
+				"meta-description": null,
+				"meta-keywords": null,
+				"redirect-url": null,
+				"permalink": "485-w-28-ave",
+				"state": "archived",
+				"banner-url": null,
+				"restrict-forum-creation": true,
+				"description-display-mode": "detailed",
+				"visibility-mode": "Public",
+				"platform-analytics-tag-list": [
+					"Rezoning",
+					"Riley Park",
+					"Approved"
+				],
+				"project-tag-list": [
+					"Rezoning",
+					"Riley Park",
+					"Approved"
+				],
+				"image-url": "https://s3.ca-central-1.amazonaws.com/ehq-production-canada/8e99a9b5c3a7d7b7f21e4de60a1590a0047dc1a0/original/1600226066/blob_517c858970f0cb512fd076fa8d053aa3?1600226066",
+				"image-caption": "485 W 28th Ave - looking southward towards W 28th Ave",
+				"image-description": null,
+				"text-wrap-mode": "textwrap_default",
+				"parent-id": 15404,
+				"subscribers-count": 0,
+				"view-count": 2982,
+				"home-project": false,
+				"published-at": "2020-07-03T11:11:46-07:00",
+				"forum-topics": 0,
+				"survey-tools": 1,
+				"banner-caption": "",
+				"widget-resource-count": null,
+				"quick-poll-layout": "tool",
+				"created-at": "2020-05-22T14:55:08-07:00",
+				"archival-reason-message": "<p><strong>This application was approved by Council at Public Hearing on April 13th, 2021.</strong></p>",
+				"access": false,
+				"contribution-count": 13,
+				"scheduled-at": null,
+				"is-social-sharing-modal-enabled": false,
+				"role-in-current-context": "participant",
+				"image-x-focal-coordinate": null,
+				"image-y-focal-coordinate": null,
+				"is-image-focal-point-enabled": null
+			},
+			"relationships": {
+				"site": {
+					"data": {
+						"id": "526",
+						"type": "sites"
+					}
+				},
+				"segments": {
+					"data": []
+				},
+				"schedule": {
+					"data": null
+				}
+			},
+			"links": {
+				"self": "https://engagevancouver.ca.engagementhq.com/485-w-28-ave"
+			}
+		}
+	],
+	"links": {
+		"self": "https://shapeyourcity.ca/api/v2/projects?page=1&per_page=30",
+		"first": "https://shapeyourcity.ca/api/v2/projects?page=1&per_page=30",
+		"prev": null,
+		"next": "https://shapeyourcity.ca/api/v2/projects?page=2&per_page=30",
+		"last": "https://shapeyourcity.ca/api/v2/projects?page=20&per_page=30"
+	},
+	"meta": {
+		"all": 581,
+		"published": 205,
+		"draft": 0,
+		"archived": 376,
+		"hidden": 0
+	}
+}
