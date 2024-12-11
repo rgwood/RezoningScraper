@@ -6,6 +6,7 @@ use scraper::{Html, Selector};
 use serde_json::Value;
 
 mod models;
+mod db;
 use models::Projects;
 
 fn main() -> Result<()> {
