@@ -5,8 +5,11 @@ use chrono::{DateTime, TimeZone, Utc};
 use scraper::{Html, Selector};
 use serde_json::Value;
 
+mod models;
+use models::Projects;
+
 fn main() -> Result<()> {
-    println!("Hello, world!");
+    println!("Hello, world! Soon this will be a Rust port of the rezoning scraper...");
     Ok(())
 }
 
@@ -57,6 +60,14 @@ fn get_expiration_from_encoded_jwt(jwt: &str) -> Result<DateTime<Utc>> {
 mod tests {
     use super::*;
     
+    #[test]
+    fn can_deserialize() {
+        let json = include_str!("../test_files/ExampleInput.json");
+        let result= serde_json::from_str::<Projects>(json).expect("Should deserialize");
+        
+        assert_eq!(result.data.len(), 30);
+    }
+
     /* { "data": {
            "user_id": 467419949,
            "user_type": "AnonymousUser"
