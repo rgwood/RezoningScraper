@@ -2,18 +2,33 @@ use anyhow::{anyhow, Result};
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use base64::Engine;
 use chrono::{DateTime, TimeZone, Utc};
+use clap::Parser;
 use scraper::{Html, Selector};
 use serde_json::Value;
 use std::time::Duration;
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[arg(
+        long,
+        help = "A Slack Incoming Webhook URL. If specified, will post info about new+modified rezonings to this address."
+    )]
+    slack_webhook_url: Option<String>,
+}
 
 mod db;
 mod models;
 use db::{Database, Token};
 use models::{Project, Projects};
 
-
 fn main() -> Result<()> {
+    let args = Args::parse();
     println!("Welcome to RezoningScraper");
+
+    if args.slack_webhook_url.is_none() {
+        println!("Slack URI not specified; will not publish updates to Slack.");
+    }
 
     let mut db = Database::new_from_file("rezoning_scraper.db")?;
     let token = get_token_from_db_or_website(&mut db)?;
@@ -45,7 +60,7 @@ fn main() -> Result<()> {
             let old_version = db.get_project(&project.id)?;
 
             let mut changes = Vec::new();
-            
+
             // Compare important fields
             if old_version.attributes.name != project.attributes.name {
                 changes.push(ProjectChange {
@@ -77,10 +92,10 @@ fn main() -> Result<()> {
             }
 
             if !changes.is_empty() {
-                changed_projects.push((project, changes));
+                changed_projects.push((project.clone(), changes));
             }
         } else {
-            new_projects.push(project);
+            new_projects.push(project.clone());
         }
 
         db.upsert_project(project)?;
@@ -96,6 +111,13 @@ fn main() -> Result<()> {
         new_projects.len(),
         changed_projects.len()
     );
+
+    // Post to Slack if configured and there are updates
+    if let Some(webhook_url) = args.slack_webhook_url {
+        if !new_projects.is_empty() || !changed_projects.is_empty() {
+            post_to_slack(&webhook_url, &new_projects)?;
+        }
+    }
 
     // Print results
     if !new_projects.is_empty() {
@@ -192,6 +214,51 @@ fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str) -> Result<V
     Ok(all_projects)
 }
 
+fn post_to_slack(webhook_url: &str, new_projects: &Vec<Project>) -> Result<()> {
+    println!("Posting to Slack...");
+
+    let mut message = String::new();
+
+    // Add new projects
+    for proj in new_projects {
+        message.push_str(&format!(
+            "New item: *<{}|{}>*\n",
+            proj.links.self_link,
+            proj.attributes.name.replace('\n', "")
+        ));
+
+        if !proj.attributes.project_tag_list.is_empty() {
+            message.push_str(&format!(
+                "• Tags: {}\n",
+                proj.attributes.project_tag_list.join(", ")
+            ));
+        }
+
+        message.push_str(&format!(
+            "• State: {}\n\n",
+            capitalize(&proj.attributes.state)
+        ));
+    }
+
+    let client = reqwest::blocking::Client::new();
+    let json = serde_json::json!({
+        "text": message
+    });
+
+    client.post(webhook_url).json(&json).send()?;
+
+    println!("Posted new+changed projects to Slack");
+    Ok(())
+}
+
+fn capitalize(s: &str) -> String {
+    let mut chars = s.chars();
+    match chars.next() {
+        None => String::new(),
+        Some(first) => first.to_uppercase().chain(chars).collect(),
+    }
+}
+
 #[derive(Debug)]
 struct ProjectChange {
     field: String,
@@ -237,10 +304,9 @@ fn get_expiration_from_encoded_jwt(jwt: &str) -> Result<DateTime<Utc>> {
         .as_i64()
         .ok_or_else(|| anyhow!("No expiration in JWT"))?;
 
-    Ok(Utc
-        .timestamp_opt(exp, 0)
+    Utc.timestamp_opt(exp, 0)
         .single()
-        .ok_or_else(|| anyhow!("Invalid timestamp"))?)
+        .ok_or_else(|| anyhow!("Invalid timestamp"))
 }
 
 // tests

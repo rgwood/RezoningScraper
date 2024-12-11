@@ -26,7 +26,7 @@ pub struct Meta {
     pub hidden: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Project {
     pub id: String,
     #[serde(rename = "type")]
@@ -36,7 +36,7 @@ pub struct Project {
     pub links: Links1,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct Attributes {
     pub name: String,
@@ -57,24 +57,24 @@ pub struct Attributes {
     pub access: bool,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Relationships {
     pub site: Site,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Site {
     pub data: Data,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Data {
     pub id: String,
     #[serde(rename = "type")]
     pub data_type: String,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Links1 {
     #[serde(rename = "self")]
     pub self_link: String,

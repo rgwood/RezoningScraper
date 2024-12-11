@@ -28,6 +28,7 @@ local.settings.json
 artifacts-dotnet-releaser
 
 RezoningScraper.db
+rezoning_scraper.db
 
 publish/*
 
