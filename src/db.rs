@@ -15,6 +15,7 @@ pub struct Database {
 }
 
 impl Database {
+    #[allow(dead_code)]
     pub fn new_in_memory() -> Result<Self> {
         let conn = Connection::open_in_memory()?;
         let db = Database { conn };

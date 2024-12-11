@@ -82,10 +82,10 @@ fn main() -> Result<()> {
             }
 
             if !changes.is_empty() {
-                changed_projects.push((project.clone(), changes));
+                changed_projects.push((project, changes));
             }
         } else {
-            new_projects.push(project.clone());
+            new_projects.push(project);
         }
 
         db.upsert_project(project)?;
