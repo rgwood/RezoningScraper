@@ -30,3 +30,7 @@ artifacts-dotnet-releaser
 RezoningScraper.db
 
 publish/*
+
+# Added by cargo
+
+/target

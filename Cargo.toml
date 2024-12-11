@@ -1,0 +1,9 @@
+[package]
+name = "rezoning-scraper"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.94"
+clap = "4.5.23"
+scraper = "0.22.0"
