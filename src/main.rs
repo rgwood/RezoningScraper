@@ -15,12 +15,7 @@ use models::{Project, Projects};
 fn main() -> Result<()> {
     println!("Welcome to RezoningScraper");
 
-    // Open database
-    println!("Opening database...");
     let mut db = Database::new_from_file("rezoning_scraper.db")?;
-
-    // Get token
-    println!("Loading token...");
     let token = get_token_from_db_or_website(&mut db)?;
 
     // Setup HTTP client
