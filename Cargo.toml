@@ -14,3 +14,9 @@ serde_json = "1.0"
 rusqlite = { version = "0.32.0", features = ["bundled"] }
 reqwest = { version = "0.12.9", features = ["blocking", "json"] }
 
+# build with `cargo build --profile profiling`
+# to analyze performance with tooling like linux perf
+[profile.profiling]
+inherits = "release"
+strip = false
+debug = true

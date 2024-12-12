@@ -49,6 +49,16 @@ impl Database {
             [],
         )?;
 
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS
+                Cache(
+                  Key TEXT PRIMARY KEY,
+                  Expiration INTEGER NOT NULL,
+                  Value TEXT NOT NULL
+                );",
+            [],
+        )?;
+
         Ok(())
     }
 
