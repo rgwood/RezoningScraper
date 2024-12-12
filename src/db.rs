@@ -127,6 +127,34 @@ impl Database {
         transaction.commit()?;
         Ok(())
     }
+
+    pub fn get_cached_response(&self, url: &str) -> Result<Option<String>> {
+        let now = Utc::now().timestamp();
+        
+        let result = self.conn.query_row(
+            "SELECT Value FROM Cache WHERE Key = ? AND Expiration > ?",
+            params![url, now],
+            |row| row.get::<_, String>(0),
+        );
+
+        match result {
+            Ok(value) => Ok(Some(value)),
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn cache_response(&self, url: &str, value: &str) -> Result<()> {
+        let expiration = Utc::now().timestamp() + 3600; // 1 hour from now
+        
+        self.conn.execute(
+            "INSERT INTO Cache(Key, Expiration, Value) VALUES(?1, ?2, ?3)
+             ON CONFLICT(Key) DO UPDATE SET Expiration = excluded.Expiration, Value = excluded.Value",
+            params![url, expiration, value],
+        )?;
+
+        Ok(())
+    }
 }
 
 #[cfg(test)]

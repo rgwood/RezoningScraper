@@ -15,6 +15,12 @@ struct Args {
         help = "A Slack Incoming Webhook URL. If specified, will post info about new+modified rezonings to this address."
     )]
     slack_webhook_url: Option<String>,
+
+    #[arg(
+        long,
+        help = "Use cached API responses (up to 1 hour old) when available"
+    )]
+    api_cache: bool,
 }
 
 mod db;
@@ -41,7 +47,7 @@ fn main() -> Result<()> {
 
     // Fetch projects
     let start = std::time::Instant::now();
-    let latest_projects = fetch_all_projects(&client, &token.jwt)?;
+    let latest_projects = fetch_all_projects(&client, &token.jwt, &db, args.api_cache)?;
     println!(
         "API query finished: retrieved {} projects in {}ms",
         latest_projects.len(),
@@ -184,7 +190,7 @@ fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
     Ok(token)
 }
 
-fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str) -> Result<Vec<Project>> {
+fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str, db: &Database, use_cache: bool) -> Result<Vec<Project>> {
     const RESULTS_PER_PAGE: u32 = 200;
     let mut all_projects = Vec::new();
     let mut next_url = Some(format!(
@@ -194,11 +200,30 @@ fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str) -> Result<V
     let mut page_count = 0;
 
     while let Some(url) = next_url {
-        let response = client
-            .get(&url)
-            .header("Authorization", format!("Bearer {}", jwt))
-            .send()?
-            .json::<Projects>()?;
+        let response: Projects = if use_cache {
+            if let Some(cached) = db.get_cached_response(&url)? {
+                println!("Using cached response for {}", url);
+                serde_json::from_str(&cached)?
+            } else {
+                let response = client
+                    .get(&url)
+                    .header("Authorization", format!("Bearer {}", jwt))
+                    .send()?
+                    .text()?;
+                
+                db.cache_response(&url, &response)?;
+                serde_json::from_str(&response)?
+            }
+        } else {
+            let response = client
+                .get(&url)
+                .header("Authorization", format!("Bearer {}", jwt))
+                .send()?
+                .text()?;
+            
+            db.cache_response(&url, &response)?;
+            serde_json::from_str(&response)?
+        };
 
         page_count += 1;
         println!(
