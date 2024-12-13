@@ -3,6 +3,8 @@ use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use base64::Engine;
 use chrono::{DateTime, TimeZone, Utc};
 use clap::Parser;
+use colored::Colorize;
+use indicatif::ProgressBar;
 use scraper::{Html, Selector};
 use serde_json::Value;
 use std::time::Duration;
@@ -30,17 +32,29 @@ use models::{Project, Projects};
 
 fn main() -> Result<()> {
     let args = Args::parse();
-    println!("Welcome to RezoningScraper");
+    println!(
+        "{}",
+        format!("Rezoning Scraper v{}", env!("CARGO_PKG_VERSION"))
+            .bold()
+            .green()
+    );
 
     if args.slack_webhook_url.is_none() {
-        println!("Slack URI not specified; will not publish updates to Slack.");
+        println!(
+            "{}",
+            "Slack URI not specified; will not publish updates to Slack.".yellow()
+        );
     }
 
     let mut db = Database::new_from_file("rezoning_scraper.db")?;
-    let token = get_token_from_db_or_website(&mut db)?;
 
-    // Setup HTTP client
-    println!("Querying API...");
+    println!("{}", "Getting API token...".bold().cyan());
+    let token_spinner = ProgressBar::new_spinner();
+    token_spinner.set_message("Getting API token...");
+    token_spinner.enable_steady_tick(Duration::from_millis(100));
+    let token = get_token_from_db_or_website(&mut db, &token_spinner)?;
+
+    println!("{}", "Querying API...".bold().cyan());
     let client = reqwest::blocking::Client::builder()
         .timeout(Duration::from_secs(20))
         .build()?;
@@ -48,14 +62,18 @@ fn main() -> Result<()> {
     // Fetch projects
     let start = std::time::Instant::now();
     let latest_projects = fetch_all_projects(&client, &token.jwt, &db, args.api_cache)?;
+
     println!(
-        "API query finished: retrieved {} projects in {}ms",
-        latest_projects.len(),
-        start.elapsed().as_millis()
+        "Retrieved {} projects in {}ms",
+        format!("{}", latest_projects.len()).green(),
+        format!("{}", start.elapsed().as_millis()).green()
     );
 
     // Compare against database
-    println!("Comparing against projects in local database...");
+    println!("{}", "Comparing against local database...".bold().cyan());
+    let compare_spinner = ProgressBar::new_spinner();
+    compare_spinner.set_message("Comparing projects...");
+    compare_spinner.enable_steady_tick(Duration::from_millis(100));
     let start = std::time::Instant::now();
 
     let mut new_projects = Vec::new();
@@ -107,15 +125,15 @@ fn main() -> Result<()> {
         db.upsert_project(project)?;
     }
 
-    println!(
+    compare_spinner.finish_with_message(format!(
         "Upserted {} projects to DB in {}ms",
         latest_projects.len(),
         start.elapsed().as_millis()
-    );
+    ));
     println!(
         "Found {} new projects and {} modified projects",
-        new_projects.len(),
-        changed_projects.len()
+        new_projects.len().to_string().green(),
+        changed_projects.len().to_string().yellow()
     );
 
     // Post to Slack if configured and there are updates
@@ -127,25 +145,30 @@ fn main() -> Result<()> {
 
     // Print results
     if !new_projects.is_empty() {
-        println!("\nNew Projects:");
+        println!("\n{}", "New Projects:".bold().green());
         for project in new_projects {
-            println!("\n{}", project.attributes.name);
-            println!("State: {}", project.attributes.state);
+            println!("\n{}", project.attributes.name.bold());
+            println!("State: {}", project.attributes.state.cyan());
             if !project.attributes.project_tag_list.is_empty() {
-                println!("Tags: {}", project.attributes.project_tag_list.join(", "));
+                println!(
+                    "Tags: {}",
+                    project.attributes.project_tag_list.join(", ").magenta()
+                );
             }
-            println!("URL: {}", project.links.self_link);
+            println!("URL: {}", project.links.self_link.blue().underline());
         }
     }
 
     if !changed_projects.is_empty() {
-        println!("\nChanged Projects:");
+        println!("\n{}", "Changed Projects:".bold().yellow());
         for (project, changes) in changed_projects {
-            println!("\n{}", project.attributes.name);
+            println!("\n{}", project.attributes.name.bold());
             for change in changes {
                 println!(
                     "{}: '{}' -> '{}'",
-                    change.field, change.old_value, change.new_value
+                    change.field.green(),
+                    change.old_value.red(),
+                    change.new_value.green()
                 );
             }
         }
@@ -154,20 +177,21 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
+fn get_token_from_db_or_website(db: &mut Database, pb: &ProgressBar) -> Result<Token> {
     // Check if we have a valid token in the DB
     if let Some(token) = db.get_token()? {
         let now = Utc::now();
         if token.expiration > now + chrono::Duration::minutes(1) {
-            println!(
+            pb.finish_with_message(format!(
                 "Loaded API token from database. Cached token will expire on {}",
-                token.expiration
-            );
+                token.expiration.to_string().green()
+            ));
+
             return Ok(token);
         }
     }
 
-    println!("Getting latest anonymous user token from shapeyourcity.ca");
+    pb.set_message("Getting latest anonymous user token from shapeyourcity.ca");
     let client = reqwest::blocking::Client::builder()
         .timeout(Duration::from_secs(20))
         .build()?;
@@ -180,17 +204,24 @@ fn get_token_from_db_or_website(db: &mut Database) -> Result<Token> {
     let jwt = extract_token_from_html(&html)?;
     let expiration = get_expiration_from_encoded_jwt(&jwt)?;
 
-    println!("Retrieved JWT with expiration date {}", expiration);
+    pb.finish_with_message(format!(
+        "Retrieved API token from website. Token will expire on {}",
+        expiration.to_string().green()
+    ));
 
     let token = Token { expiration, jwt };
 
     db.set_token(&token)?;
-    println!("Cached JWT in local database");
 
     Ok(token)
 }
 
-fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str, db: &Database, use_cache: bool) -> Result<Vec<Project>> {
+fn fetch_all_projects(
+    client: &reqwest::blocking::Client,
+    jwt: &str,
+    db: &Database,
+    use_cache: bool,
+) -> Result<Vec<Project>> {
     const RESULTS_PER_PAGE: u32 = 200;
     let mut all_projects = Vec::new();
     let mut next_url = Some(format!(
@@ -200,19 +231,22 @@ fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str, db: &Databa
     let mut page_count = 0;
 
     while let Some(url) = next_url {
-        let response: Projects = if use_cache {
+        let pb = ProgressBar::new_spinner();
+        pb.enable_steady_tick(Duration::from_millis(100));
+        pb.set_message(format!("Fetching page {}...", page_count + 1));
+
+        let (response, used_cache): (Projects, bool) = if use_cache {
             if let Some(cached) = db.get_cached_response(&url)? {
-                println!("Using cached response for {}", url);
-                serde_json::from_str(&cached)?
+                (serde_json::from_str(&cached)?, true)
             } else {
                 let response = client
                     .get(&url)
                     .header("Authorization", format!("Bearer {}", jwt))
                     .send()?
                     .text()?;
-                
+
                 db.cache_response(&url, &response)?;
-                serde_json::from_str(&response)?
+                (serde_json::from_str(&response)?, false)
             }
         } else {
             let response = client
@@ -220,17 +254,26 @@ fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str, db: &Databa
                 .header("Authorization", format!("Bearer {}", jwt))
                 .send()?
                 .text()?;
-            
+
             db.cache_response(&url, &response)?;
-            serde_json::from_str(&response)?
+            (serde_json::from_str(&response)?, false)
         };
 
         page_count += 1;
-        println!(
-            "Retrieved page {} ({} items)",
-            page_count,
-            response.data.len()
-        );
+
+        if used_cache {
+            pb.finish_with_message(format!(
+                "Retrieved page {} from cache ({} items)",
+                page_count,
+                response.data.len()
+            ));
+        } else {
+            pb.finish_with_message(format!(
+                "Retrieved page {} ({} items)",
+                page_count,
+                response.data.len()
+            ));
+        }
 
         all_projects.extend(response.data);
         next_url = response.links.next;
@@ -240,7 +283,7 @@ fn fetch_all_projects(client: &reqwest::blocking::Client, jwt: &str, db: &Databa
 }
 
 fn post_to_slack(webhook_url: &str, new_projects: &Vec<Project>) -> Result<()> {
-    println!("Posting to Slack...");
+    println!("{}", "Posting to Slack...".bold().cyan());
 
     let mut message = String::new();
 
@@ -272,7 +315,7 @@ fn post_to_slack(webhook_url: &str, new_projects: &Vec<Project>) -> Result<()> {
 
     client.post(webhook_url).json(&json).send()?;
 
-    println!("Posted new+changed projects to Slack");
+    println!("{}", "Posted new+changed projects to Slack".green());
     Ok(())
 }
 
