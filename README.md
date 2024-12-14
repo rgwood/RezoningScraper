@@ -8,6 +8,8 @@ Scrapes the City of Vancouver's website for rezoning and development application
 
 ![image](https://user-images.githubusercontent.com/26268125/143972856-7f01362c-867c-4a0c-90d7-18c1730bd522.png)
 
+(screenshot is from a slightly older version that was written in C#)
+
 ## How to use
 
 Download a binary from [the releases page](https://github.com/rgwood/RezoningScraper/releases) or build it from source ([install Rust](https://rustup.rs/) then run `cargo build --release`). Then run it:
