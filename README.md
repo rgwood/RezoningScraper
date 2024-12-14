@@ -10,24 +10,27 @@ Scrapes the City of Vancouver's website for rezoning and development application
 
 ## How to use
 
-Download a binary from [the releases page](https://github.com/rgwood/RezoningScraper/releases) (no external dependencies needed) or build it from source (requires the .NET 8 SDK). Then run it:
+Download a binary from [the releases page](https://github.com/rgwood/RezoningScraper/releases) or build it from source ([install Rust](https://rustup.rs/) then run `cargo build --release`). Then run it:
 
 ```
-❯ .\RezoningScraper.exe --help
-RezoningScraper
-  A tool to detect new+modified postings on Vancouver's shapeyourcity.ca website.
-  Data is stored in a local SQLite database next to the executable.
 
-Usage:
-  RezoningScraper [options]
+❯ ./rezoning-scraper --help
+Usage: rezoning-scraper [OPTIONS]
 
 Options:
-  --slack-webhook-url <slack-webhook-url>  A Slack Incoming Webhook URL. If specified, RezoningScraper will post info about new+modified rezonings to this
-                                           address.
-  --save-to-db                             Whether to save the API results to database. [default: True]
-  --version                                Show version information
-  -?, -h, --help                           Show help and usage information
+      --slack-webhook-url <SLACK_WEBHOOK_URL>
+          A Slack Incoming Webhook URL. If specified, will post info about new+modified rezonings to this address.
+      --api-cache
+          Use cached API responses (up to 1 hour old) when available
+      --skip-update-db
+          Skip updating the local database (useful for testing)
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
+
+
 
 ## License
 
@@ -35,16 +38,6 @@ Public domain. Do whatever you like with this code, no attribution needed.
 
 ## To Do
 
-- [ ] GitHub Actions for build+test
-- [x] `--dry-run` flag that doesn't update the local DB
-- [x] Add retries to the token fetching. It times out fairly often
-- [x] Some kind of development cache thingy. The API is slowwwww and that makes iterative development painful
-- [ ] Discord integration?
-- [ ] Twitter integration
-- [ ] Display more project fields?
-- [ ] [This is rough](https://github.com/rgwood/RezoningScraper/blob/ca38460e6ffbd177ef842b0362ff3449737bf3a5/RezoningScraper/TokenHelper.cs#L54-L60), there's gotta be a better way to query JSON
-- [ ] Consider archiving old versions of projects
-- [x] Hook up to Sentry for error reporting
-- [ ] Script deployment+setup (just rsync and cron lol) to a remote server
-- [x] Strip line breaks from project titles - CoV does that sometimes and it breaks the Slack link format.
-- [x] Consider excluding `published -> archived` state transitions from Slack. Lots of noise, not particularly useful
+
+- [ ] Hook up to Sentry for error reporting
+- [ ] Add option to post to Bluesky
