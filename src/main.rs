@@ -23,6 +23,9 @@ struct Args {
         help = "Use cached API responses (up to 1 hour old) when available"
     )]
     api_cache: bool,
+
+    #[arg(long, help = "Skip updating the local database (useful for testing)")]
+    skip_update_db: bool,
 }
 
 mod db;
@@ -122,11 +125,13 @@ fn main() -> Result<()> {
             new_projects.push(project.clone());
         }
 
-        db.upsert_project(project)?;
+        if !args.skip_update_db {
+            db.upsert_project(project)?;
+        }
     }
 
     compare_spinner.finish_with_message(format!(
-        "Upserted {} projects to DB in {}ms",
+        "Compared {} projects to existing ones in {}ms",
         latest_projects.len(),
         start.elapsed().as_millis()
     ));
