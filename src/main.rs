@@ -72,6 +72,12 @@ fn main() -> Result<()> {
         format!("{}", start.elapsed().as_millis()).green()
     );
 
+    // Check if this is first run
+    let is_initialization = db.is_empty()?;
+    if is_initialization {
+        println!("{}", "First run detected - initializing database...".bold().yellow());
+    }
+
     // Compare against database
     println!("{}", "Comparing against local database...".bold().cyan());
     let compare_spinner = ProgressBar::new_spinner();
@@ -141,10 +147,12 @@ fn main() -> Result<()> {
         changed_projects.len().to_string().yellow()
     );
 
-    // Post to Slack if configured and there are updates
+    // Post to Slack if configured and there are updates (skip during initialization)
     if let Some(webhook_url) = args.slack_webhook_url {
-        if !new_projects.is_empty() || !changed_projects.is_empty() {
+        if (!new_projects.is_empty() || !changed_projects.is_empty()) && !is_initialization {
             post_to_slack(&webhook_url, &new_projects)?;
+        } else if is_initialization {
+            println!("{}", "Skipping Slack notification during initialization".yellow());
         }
     }
 

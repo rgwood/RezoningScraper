@@ -144,6 +144,15 @@ impl Database {
         }
     }
 
+    pub fn is_empty(&self) -> Result<bool> {
+        let count: i64 = self.conn.query_row(
+            "SELECT COUNT(*) FROM Projects",
+            [],
+            |row| row.get(0),
+        )?;
+        Ok(count == 0)
+    }
+
     pub fn cache_response(&self, url: &str, value: &str) -> Result<()> {
         let expiration = Utc::now().timestamp() + 3600; // 1 hour from now
 
