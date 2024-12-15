@@ -149,7 +149,7 @@ fn main() -> Result<()> {
 
     // Post to Slack if configured and there are updates (skip during initialization)
     if let Some(webhook_url) = args.slack_webhook_url {
-        if (!new_projects.is_empty() || !changed_projects.is_empty()) && !is_initialization {
+        if !new_projects.is_empty() && !is_initialization {
             post_to_slack(&webhook_url, &new_projects)?;
         } else if is_initialization {
             println!("{}", "Skipping Slack notification during initialization".yellow());
