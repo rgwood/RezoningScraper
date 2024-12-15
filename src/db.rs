@@ -93,7 +93,7 @@ impl Database {
 
     pub fn upsert_projects(&mut self, projects: &[Project]) -> Result<()> {
         let transaction = self.conn.transaction()?;
-        
+
         for project in projects {
             let json = serde_json::to_string(project)?;
             transaction.execute(
@@ -159,11 +159,9 @@ impl Database {
     }
 
     pub fn is_empty(&self) -> Result<bool> {
-        let count: i64 = self.conn.query_row(
-            "SELECT COUNT(*) FROM Projects",
-            [],
-            |row| row.get(0),
-        )?;
+        let count: i64 = self
+            .conn
+            .query_row("SELECT COUNT(*) FROM Projects", [], |row| row.get(0))?;
         Ok(count == 0)
     }
 

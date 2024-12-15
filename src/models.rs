@@ -1,10 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum QueueMessage {
-    SlackMessage {
-        json: String,
-    },
+pub struct SlackMessage {
+    json: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

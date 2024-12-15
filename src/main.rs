@@ -75,7 +75,12 @@ fn main() -> Result<()> {
     // Check if this is first run
     let is_initialization = db.is_empty()?;
     if is_initialization {
-        println!("{}", "First run detected - initializing database...".bold().yellow());
+        println!(
+            "{}",
+            "First run detected - initializing database..."
+                .bold()
+                .yellow()
+        );
     }
 
     // Compare against database
@@ -130,7 +135,6 @@ fn main() -> Result<()> {
         } else {
             new_projects.push(project.clone());
         }
-
     }
 
     compare_spinner.finish_with_message(format!(
@@ -160,7 +164,10 @@ fn main() -> Result<()> {
         if !new_projects.is_empty() && !is_initialization {
             post_to_slack(&webhook_url, &new_projects)?;
         } else if is_initialization {
-            println!("{}", "Skipping Slack notification during initialization".yellow());
+            println!(
+                "{}",
+                "Skipping Slack notification during initialization".yellow()
+            );
         }
     }
 
