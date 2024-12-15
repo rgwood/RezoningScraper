@@ -83,13 +83,27 @@ impl Database {
 
     pub fn upsert_project(&self, project: &Project) -> Result<()> {
         let json = serde_json::to_string(project)?;
-
         self.conn.execute(
             "INSERT INTO Projects(Id, Serialized) VALUES(?1, ?2)
              ON CONFLICT(Id) DO UPDATE SET Serialized = excluded.Serialized",
             params![project.id, json],
         )?;
+        Ok(())
+    }
 
+    pub fn upsert_projects(&self, projects: &[Project]) -> Result<()> {
+        let transaction = self.conn.transaction()?;
+        
+        for project in projects {
+            let json = serde_json::to_string(project)?;
+            transaction.execute(
+                "INSERT INTO Projects(Id, Serialized) VALUES(?1, ?2)
+                 ON CONFLICT(Id) DO UPDATE SET Serialized = excluded.Serialized",
+                params![project.id, json],
+            )?;
+        }
+
+        transaction.commit()?;
         Ok(())
     }
 

@@ -131,9 +131,6 @@ fn main() -> Result<()> {
             new_projects.push(project.clone());
         }
 
-        if !args.skip_update_db {
-            db.upsert_project(project)?;
-        }
     }
 
     compare_spinner.finish_with_message(format!(
@@ -141,6 +138,11 @@ fn main() -> Result<()> {
         latest_projects.len(),
         start.elapsed().as_millis()
     ));
+
+    // Update database in a single transaction if not skipped
+    if !args.skip_update_db {
+        db.upsert_projects(&latest_projects)?;
+    }
     println!(
         "Found {} new projects and {} modified projects",
         new_projects.len().to_string().green(),
