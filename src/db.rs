@@ -91,7 +91,7 @@ impl Database {
         Ok(())
     }
 
-    pub fn upsert_projects(&self, projects: &[Project]) -> Result<()> {
+    pub fn upsert_projects(&mut self, projects: &[Project]) -> Result<()> {
         let transaction = self.conn.transaction()?;
         
         for project in projects {

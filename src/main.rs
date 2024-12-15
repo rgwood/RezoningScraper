@@ -141,7 +141,13 @@ fn main() -> Result<()> {
 
     // Update database in a single transaction if not skipped
     if !args.skip_update_db {
+        let start = std::time::Instant::now();
         db.upsert_projects(&latest_projects)?;
+        println!(
+            "Updated database with {} projects in {}ms",
+            format!("{}", latest_projects.len()).green(),
+            format!("{}", start.elapsed().as_millis()).green()
+        );
     }
     println!(
         "Found {} new projects and {} modified projects",
