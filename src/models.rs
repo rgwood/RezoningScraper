@@ -1,6 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
+pub enum QueueMessage {
+    SlackMessage {
+        json: String,
+    },
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Projects {
     pub data: Vec<Project>,
     pub links: Links,
