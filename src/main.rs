@@ -30,6 +30,7 @@ struct Args {
 
 mod db;
 mod models;
+mod queue;
 use db::{Database, Token};
 use models::{Project, Projects};
 
