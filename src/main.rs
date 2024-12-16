@@ -38,7 +38,8 @@ mod queue;
 use db::{Database, Token};
 use models::{Project, Projects, SlackMessage};
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let args = Args::parse();
     println!(
         "{}",
@@ -60,16 +61,16 @@ fn main() -> Result<()> {
     let token_spinner = ProgressBar::new_spinner();
     token_spinner.set_message("Getting API token...");
     token_spinner.enable_steady_tick(Duration::from_millis(100));
-    let token = get_token_from_db_or_website(&mut db, &token_spinner)?;
+    let token = get_token_from_db_or_website(&mut db, &token_spinner).await?;
 
     println!("{}", "Querying API...".bold().cyan());
-    let client = reqwest::blocking::Client::builder()
+    let client = reqwest::Client::builder()
         .timeout(Duration::from_secs(20))
         .build()?;
 
     // Fetch projects
     let start = std::time::Instant::now();
-    let latest_projects = fetch_all_projects(&client, &token.jwt, &db, args.api_cache)?;
+    let latest_projects = fetch_all_projects(&client, &token.jwt, &db, args.api_cache).await?;
 
     println!(
         "Retrieved {} projects in {}ms",
@@ -175,7 +176,7 @@ fn main() -> Result<()> {
     if let Some(webhook_url) = args.slack_webhook_url {
         let mut failed = vec![];
         while let Some(mut message) = slack_queue.pop(&mut db)? {
-            if let Err(e) = post_to_slack(&webhook_url, &message.payload) {
+            if let Err(e) = post_to_slack(&webhook_url, &message.payload).await {
                 message.attempts += 1;
                 message.last_attempt = Some(Utc::now());
                 eprintln!("Error posting to Slack: {}", e);
@@ -227,7 +228,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn get_token_from_db_or_website(db: &mut Database, pb: &ProgressBar) -> Result<Token> {
+async fn get_token_from_db_or_website(db: &mut Database, pb: &ProgressBar) -> Result<Token> {
     // Check if we have a valid token in the DB
     if let Some(token) = db.get_token()? {
         let now = Utc::now();
@@ -242,14 +243,16 @@ fn get_token_from_db_or_website(db: &mut Database, pb: &ProgressBar) -> Result<T
     }
 
     pb.set_message("Getting latest anonymous user token from shapeyourcity.ca");
-    let client = reqwest::blocking::Client::builder()
+    let client = reqwest::Client::builder()
         .timeout(Duration::from_secs(20))
         .build()?;
 
     let html = client
         .get("https://shapeyourcity.ca/embeds/projectfinder")
-        .send()?
-        .text()?;
+        .send()
+        .await?
+        .text()
+        .await?;
 
     let jwt = extract_token_from_html(&html)?;
     let expiration = get_expiration_from_encoded_jwt(&jwt)?;
@@ -266,8 +269,8 @@ fn get_token_from_db_or_website(db: &mut Database, pb: &ProgressBar) -> Result<T
     Ok(token)
 }
 
-fn fetch_all_projects(
-    client: &reqwest::blocking::Client,
+async fn fetch_all_projects(
+    client: &reqwest::Client,
     jwt: &str,
     db: &Database,
     use_cache: bool,
@@ -292,8 +295,10 @@ fn fetch_all_projects(
                 let response = client
                     .get(&url)
                     .header("Authorization", format!("Bearer {}", jwt))
-                    .send()?
-                    .text()?;
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
 
                 db.cache_response(&url, &response)?;
                 (serde_json::from_str(&response)?, false)
@@ -302,8 +307,10 @@ fn fetch_all_projects(
             let response = client
                 .get(&url)
                 .header("Authorization", format!("Bearer {}", jwt))
-                .send()?
-                .text()?;
+                .send()
+                .await?
+                .text()
+                .await?;
 
             db.cache_response(&url, &response)?;
             (serde_json::from_str(&response)?, false)
@@ -332,14 +339,16 @@ fn fetch_all_projects(
     Ok(all_projects)
 }
 
-fn post_to_slack(webhook_url: &str, message: &SlackMessage) -> Result<()> {
+async fn post_to_slack(webhook_url: &str, message: &SlackMessage) -> Result<()> {
     println!("{}", "Posting to Slack...".bold().cyan());
-    let client = reqwest::blocking::Client::new();
+    let client = reqwest::Client::new();
 
     client.post(webhook_url)
         .header("Content-Type", "application/json")
         .body(message.json.clone())
-        .send()?;
+        .send()
+        .await?
+        .error_for_status()?;
 
     println!("{}", "Posted message to Slack".green());
     Ok(())
