@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SlackMessage {
-    json: String,
+    pub json: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

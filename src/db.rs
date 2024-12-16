@@ -1,7 +1,7 @@
 use anyhow::Result;
 use chrono::{DateTime, Utc};
 use rusqlite::{params, Connection};
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 use crate::models::Project;
 
@@ -19,6 +19,12 @@ impl Deref for Database {
 
     fn deref(&self) -> &Self::Target {
         &self.conn
+    }
+}
+
+impl DerefMut for Database {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.conn
     }
 }
 
@@ -88,16 +94,6 @@ impl Database {
         )?;
 
         Ok(serde_json::from_str(&json)?)
-    }
-
-    pub fn upsert_project(&self, project: &Project) -> Result<()> {
-        let json = serde_json::to_string(project)?;
-        self.conn.execute(
-            "INSERT INTO Projects(Id, Serialized) VALUES(?1, ?2)
-             ON CONFLICT(Id) DO UPDATE SET Serialized = excluded.Serialized",
-            params![project.id, json],
-        )?;
-        Ok(())
     }
 
     pub fn upsert_projects(&mut self, projects: &[Project]) -> Result<()> {
@@ -200,7 +196,7 @@ mod tests {
 
     #[test]
     fn test_contains_works() -> Result<()> {
-        let db = Database::new_in_memory()?;
+        let mut db = Database::new_in_memory()?;
 
         assert!(!db.contains_project("foo")?);
 
@@ -212,7 +208,7 @@ mod tests {
             links: Default::default(),
         };
 
-        db.upsert_project(&project)?;
+        db.upsert_projects(&[project])?;
         assert!(db.contains_project("foo")?);
 
         Ok(())
@@ -220,7 +216,7 @@ mod tests {
 
     #[test]
     fn test_upsert_works() -> Result<()> {
-        let db = Database::new_in_memory()?;
+        let mut db = Database::new_in_memory()?;
 
         let project1 = Project {
             id: "foo".to_string(),
@@ -230,7 +226,7 @@ mod tests {
             links: Default::default(),
         };
 
-        db.upsert_project(&project1)?;
+        db.upsert_projects(&[project1.clone()])?;
         let retrieved = db.get_project("foo")?;
         assert_eq!(retrieved.project_type, "first");
 
@@ -239,7 +235,7 @@ mod tests {
             ..project1
         };
 
-        db.upsert_project(&project2)?;
+        db.upsert_projects(&[project2.clone()])?;
         let retrieved = db.get_project("foo")?;
         assert_eq!(retrieved.project_type, "second");
 

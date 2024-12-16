@@ -4,8 +4,6 @@ use rusqlite::{params, Connection, OptionalExtension};
 use serde::{de::DeserializeOwned, Serialize};
 use std::marker::PhantomData;
 
-const MAX_ATTEMPTS: i32 = 3;
-
 #[derive(Debug, Clone)]
 pub struct Queue<T> {
     name: String,
@@ -46,7 +44,7 @@ where
 
     pub fn push_message(&self, conn: &Connection, msg: &QueueMessage<T>) -> Result<i64> {
         let payload = serde_json::to_string(&msg.payload)?;
-        let now = msg.created_at.timestamp();
+
         let last_attempt = msg.last_attempt.map(|dt| dt.timestamp());
 
         conn.execute(
@@ -56,7 +54,7 @@ where
                 self.name,
                 payload,
                 msg.attempts,
-                now,
+                msg.created_at.timestamp(),
                 last_attempt
             ],
         )?;
@@ -132,7 +130,7 @@ where
         Ok(conn.last_insert_rowid())
     }
 
-
+    #[allow(dead_code)]
     pub fn pop_from_dead_letter(&self, conn: &mut Connection) -> Result<Option<(QueueMessage<T>, String)>> {
         let transaction = conn.transaction()?;
         let result = transaction.query_row(
@@ -178,6 +176,7 @@ where
         }
     }
 
+    #[allow(dead_code)]
     pub fn remove(&self, conn: &Connection, msg_id: i64) -> Result<()> {
         conn.execute(
             "DELETE FROM Queue WHERE id = ? AND queue_name = ?",
@@ -262,7 +261,7 @@ mod tests {
         let msg = TestMessage {
             content: "failed message".to_string(),
         };
-        let id = queue.push(&conn, msg)?;
+        _ = queue.push(&conn, msg)?;
         let message = queue.pop(&mut conn)?.unwrap();
         
         queue.push_to_dead_letter(&conn, &message, "processing failed")?;

@@ -5,16 +5,20 @@ use chrono::{DateTime, TimeZone, Utc};
 use clap::Parser;
 use colored::Colorize;
 use indicatif::ProgressBar;
+use queue::Queue;
 use scraper::{Html, Selector};
 use serde_json::Value;
-use std::time::Duration;
+use std::{time::Duration, vec};
+
+const MAX_MESSAGE_PROCESSING_ATTEMPTS: i32 = 3;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
     #[arg(
         long,
-        help = "A Slack Incoming Webhook URL. If specified, will post info about new+modified rezonings to this address."
+        help = "A Slack Incoming Webhook URL. If specified, will post info about new+modified rezonings to this address.",
+        env = "SLACK_WEBHOOK_URL"
     )]
     slack_webhook_url: Option<String>,
 
@@ -32,7 +36,7 @@ mod db;
 mod models;
 mod queue;
 use db::{Database, Token};
-use models::{Project, Projects};
+use models::{Project, Projects, SlackMessage};
 
 fn main() -> Result<()> {
     let args = Args::parse();
@@ -160,15 +164,32 @@ fn main() -> Result<()> {
         changed_projects.len().to_string().yellow()
     );
 
-    // Post to Slack if configured and there are updates (skip during initialization)
+
+    let slack_queue: Queue<SlackMessage> = Queue::new("slack_queue", &db);
+
+    if !new_projects.is_empty() && !is_initialization {
+        slack_queue.push(&db, create_slack_message(&new_projects))?;
+    }
+
+    // Post to Slack if configured
     if let Some(webhook_url) = args.slack_webhook_url {
-        if !new_projects.is_empty() && !is_initialization {
-            post_to_slack(&webhook_url, &new_projects)?;
-        } else if is_initialization {
-            println!(
-                "{}",
-                "Skipping Slack notification during initialization".yellow()
-            );
+        let mut failed = vec![];
+        while let Some(mut message) = slack_queue.pop(&mut db)? {
+            if let Err(e) = post_to_slack(&webhook_url, &message.payload) {
+                message.attempts += 1;
+                message.last_attempt = Some(Utc::now());
+                eprintln!("Error posting to Slack: {}", e);
+                if message.attempts < MAX_MESSAGE_PROCESSING_ATTEMPTS {
+                    failed.push(message);
+                } else {
+                    eprintln!("Message failed {} times; moving to dead letter queue", message.attempts);
+                    slack_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
+                }
+            }
+        }
+
+        for message in failed {
+            slack_queue.push_message(&db, &message)?;
         }
     }
 
@@ -311,12 +332,21 @@ fn fetch_all_projects(
     Ok(all_projects)
 }
 
-fn post_to_slack(webhook_url: &str, new_projects: &Vec<Project>) -> Result<()> {
+fn post_to_slack(webhook_url: &str, message: &SlackMessage) -> Result<()> {
     println!("{}", "Posting to Slack...".bold().cyan());
+    let client = reqwest::blocking::Client::new();
 
+    client.post(webhook_url)
+        .header("Content-Type", "application/json")
+        .body(message.json.clone())
+        .send()?;
+
+    println!("{}", "Posted message to Slack".green());
+    Ok(())
+}
+
+fn create_slack_message(new_projects: &Vec<Project>) -> SlackMessage {
     let mut message = String::new();
-
-    // Add new projects
     for proj in new_projects {
         message.push_str(&format!(
             "New item: *<{}|{}>*\n",
@@ -337,15 +367,11 @@ fn post_to_slack(webhook_url: &str, new_projects: &Vec<Project>) -> Result<()> {
         ));
     }
 
-    let client = reqwest::blocking::Client::new();
     let json = serde_json::json!({
         "text": message
     });
 
-    client.post(webhook_url).json(&json).send()?;
-
-    println!("{}", "Posted new+changed projects to Slack".green());
-    Ok(())
+    SlackMessage { json: json.to_string() }
 }
 
 fn capitalize(s: &str) -> String {
