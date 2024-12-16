@@ -1,6 +1,7 @@
 use anyhow::Result;
 use chrono::{DateTime, Utc};
 use rusqlite::{params, Connection};
+use std::ops::Deref;
 
 use crate::models::Project;
 
@@ -11,6 +12,14 @@ pub struct Token {
 
 pub struct Database {
     conn: Connection,
+}
+
+impl Deref for Database {
+    type Target = Connection;
+
+    fn deref(&self) -> &Self::Target {
+        &self.conn
+    }
 }
 
 impl Database {
