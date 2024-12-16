@@ -32,21 +32,12 @@ Options:
           Print version
 ```
 
-
-
 ## License
 
 Public domain. Do whatever you like with this code, no attribution needed.
 
 ## To Do
 
-- [ ] Figure out better error handling. Ideally we'd put messages on a queue to be processed.
-  - [ ] Have multiple queues; one for Slack things, one for Bluesky
-  - [ ] Would be cool to make this a library. Give it a SQLite DB and let it go wild. But maybe start small and pull it into a library later
-  - [ ] Need dead letter queues too
-  - [ ] Backed by a MessageQueue table and a DeadLetterQueue table
-  - [ ] What should API look like? I think give it a table name and make it generic over the types of messages expected
-    - [ ] dequeue<T>(table_name: string) -> Result<Option<T>>
-      - or similar (may want to return a Message<T> that provides extra data)
-- [ ] Hook up to Sentry for error reporting
+- [x] Figure out better error handling. Ideally we'd put messages on a queue to be processed.
+- [ ] Set up Datadog for error reporting. Just tail the logs for now? Or use https://github.com/DataDog/datadog-api-client-rust?tab=readme-ov-file
 - [ ] Add option to post to Bluesky
