@@ -209,7 +209,8 @@ fn initialize(conn: &Connection) -> Result<()> {
             attempts INTEGER NOT NULL,
             created_at INTEGER NOT NULL,
             last_attempt INTEGER,
-            moved_at INTEGER NOT NULL
+            moved_at INTEGER NOT NULL,
+            error_text TEXT NOT NULL
         )",
         [],
     )?;
