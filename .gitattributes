@@ -4,7 +4,7 @@
 * text=auto
 
 # exclude test html input from GitHub stats
-RezoningScraperTests/*.html linguist-vendored
+test_files/*.html linguist-vendored
 
 ###############################################################################
 # Set default behavior for command prompt diff.
