@@ -40,4 +40,4 @@ Public domain. Do whatever you like with this code, no attribution needed.
 
 - [x] Figure out better error handling. Ideally we'd put messages on a queue to be processed.
 - [ ] Set up Datadog for error reporting. Just tail the logs for now? Or use https://github.com/DataDog/datadog-api-client-rust?tab=readme-ov-file
-- [ ] Add option to post to Bluesky
+- [x] Add option to post to Bluesky
