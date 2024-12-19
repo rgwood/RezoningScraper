@@ -1,7 +1,46 @@
+use anyhow::{Context, Ok, Result};
+use genai::chat::{ChatMessage, ChatRequest};
+use html2md::{TagHandler, TagHandlerFactory};
 use std::collections::HashMap;
 
-use html2md::{TagHandler, TagHandlerFactory};
-use scraper::{Html, Selector};
+use crate::models::Project;
+
+const MODEL_ANTHROPIC: &str = "claude-3-5-haiku-20241022";
+
+/// Convert HTML to Markdown, ignoring images and not including URLs
+pub fn html_to_markdown(html: &str) -> String {
+    let mut handlers = HashMap::<String, Box<dyn TagHandlerFactory>>::new();
+    handlers.insert("img".to_string(), Box::new(IgnoreHandlerFactory));
+    handlers.insert("a".to_string(), Box::new(TextOnlyHandlerFactory));
+
+    html2md::parse_html_custom(html, &handlers)
+}
+
+// This currently expects an Anthropic API key to be set in the environment
+// TODO: make auth more flexible
+pub async fn project_to_tweet(proj: &Project) -> Result<String> {
+    let mut user_message = include_str!("tweet_prompt.txt").to_string();
+    user_message += &format!("{}\n", proj.attributes.name.replace('\n', ""));
+    let description_html = &proj.attributes.description.clone().unwrap_or_default();
+    let description_md = html_to_markdown(description_html);
+    user_message += &description_md;
+
+    let client = genai::Client::default();
+
+    let chat_req = ChatRequest::new(vec![
+        // ChatMessage::system(""),
+        ChatMessage::user(user_message),
+    ]);
+
+    let chat_res = client
+        .exec_chat(MODEL_ANTHROPIC, chat_req.clone(), None)
+        .await?;
+
+    let response = chat_res
+        .content_text_as_str()
+        .context("Failed to get chat response")?;
+    Ok(response.to_string())
+}
 
 struct IgnoreHandlerFactory;
 struct IgnoreHandler;
@@ -35,15 +74,6 @@ impl TagHandlerFactory for TextOnlyHandlerFactory {
     fn instantiate(&self) -> Box<dyn TagHandler> {
         Box::new(TextOnlyHandler)
     }
-}
-
-/// Convert HTML to Markdown, ignoring images and not including URLs
-pub fn html_to_markdown(html: &str) -> String {
-    let mut handlers = HashMap::<String, Box<dyn TagHandlerFactory>>::new();
-    handlers.insert("img".to_string(), Box::new(IgnoreHandlerFactory));
-    handlers.insert("a".to_string(), Box::new(TextOnlyHandlerFactory));
-
-    html2md::parse_html_custom(&html, &handlers)
 }
 
 #[cfg(test)]

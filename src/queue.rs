@@ -31,6 +31,15 @@ where
         }
     }
 
+    pub fn depth(&self, conn: &Connection) -> Result<i64> {
+        let count: i64 = conn.query_row(
+            "SELECT COUNT(*) FROM Queue WHERE queue_name = ?1",
+            params![self.name],
+            |row| row.get(0),
+        )?;
+        Ok(count)
+    }
+
     pub fn push(&self, conn: &Connection, item: T) -> Result<i64> {
         let msg = QueueMessage {
             id: 0, // Will be set by SQLite
@@ -64,23 +73,25 @@ where
 
     pub fn pop(&self, conn: &mut Connection) -> Result<Option<QueueMessage<T>>> {
         let transaction = conn.transaction()?;
-        let result = transaction.query_row(
-            "SELECT id, payload, attempts, created_at, last_attempt 
+        let result = transaction
+            .query_row(
+                "SELECT id, payload, attempts, created_at, last_attempt 
              FROM Queue 
              WHERE queue_name = ?1 
              ORDER BY id ASC 
              LIMIT 1",
-            params![self.name],
-            |row| {
-                Ok((
-                    row.get::<_, i64>(0)?,
-                    row.get::<_, String>(1)?,
-                    row.get::<_, i32>(2)?,
-                    row.get::<_, i64>(3)?,
-                    row.get::<_, Option<i64>>(4)?,
-                ))
-            },
-        ).optional()?;
+                params![self.name],
+                |row| {
+                    Ok((
+                        row.get::<_, i64>(0)?,
+                        row.get::<_, String>(1)?,
+                        row.get::<_, i32>(2)?,
+                        row.get::<_, i64>(3)?,
+                        row.get::<_, Option<i64>>(4)?,
+                    ))
+                },
+            )
+            .optional()?;
 
         match result {
             Some((id, payload_str, attempts, created_at, last_attempt)) => {
@@ -106,7 +117,12 @@ where
         }
     }
 
-    pub fn push_to_dead_letter(&self, conn: &Connection, msg: &QueueMessage<T>, error: &str) -> Result<i64> {
+    pub fn push_to_dead_letter(
+        &self,
+        conn: &Connection,
+        msg: &QueueMessage<T>,
+        error: &str,
+    ) -> Result<i64> {
         let payload = serde_json::to_string(&msg.payload)?;
         let now = Utc::now().timestamp();
         let created_at = msg.created_at.timestamp();
@@ -131,26 +147,31 @@ where
     }
 
     #[allow(dead_code)]
-    pub fn pop_from_dead_letter(&self, conn: &mut Connection) -> Result<Option<(QueueMessage<T>, String)>> {
+    pub fn pop_from_dead_letter(
+        &self,
+        conn: &mut Connection,
+    ) -> Result<Option<(QueueMessage<T>, String)>> {
         let transaction = conn.transaction()?;
-        let result = transaction.query_row(
-            "SELECT id, payload, attempts, created_at, last_attempt, error_text 
+        let result = transaction
+            .query_row(
+                "SELECT id, payload, attempts, created_at, last_attempt, error_text 
              FROM DeadLetterQueue 
              WHERE queue_name = ?1 
              ORDER BY id ASC 
              LIMIT 1",
-            params![self.name],
-            |row| {
-                Ok((
-                    row.get::<_, i64>(0)?,
-                    row.get::<_, String>(1)?,
-                    row.get::<_, i32>(2)?,
-                    row.get::<_, i64>(3)?,
-                    row.get::<_, Option<i64>>(4)?,
-                    row.get::<_, String>(5)?,
-                ))
-            },
-        ).optional()?;
+                params![self.name],
+                |row| {
+                    Ok((
+                        row.get::<_, i64>(0)?,
+                        row.get::<_, String>(1)?,
+                        row.get::<_, i32>(2)?,
+                        row.get::<_, i64>(3)?,
+                        row.get::<_, Option<i64>>(4)?,
+                        row.get::<_, String>(5)?,
+                    ))
+                },
+            )
+            .optional()?;
 
         match result {
             Some((id, payload_str, attempts, created_at, last_attempt, error_text)) => {
@@ -184,7 +205,6 @@ where
         )?;
         Ok(())
     }
-
 }
 
 fn initialize(conn: &Connection) -> Result<()> {
@@ -240,7 +260,7 @@ mod tests {
     #[test]
     fn test_queue_operations() -> Result<()> {
         let conn = Connection::open_in_memory()?;
-        let mut conn = conn;  // Make mutable for transactions
+        let mut conn = conn; // Make mutable for transactions
         let queue: Queue<TestMessage> = Queue::new("test_queue", &conn);
 
         // Test pushing and popping
@@ -253,7 +273,7 @@ mod tests {
         let popped = queue.pop(&mut conn)?.unwrap();
         assert_eq!(popped.payload.content, "test message");
         assert_eq!(popped.attempts, 0);
-        
+
         // Verify queue is empty
         assert!(queue.pop(&mut conn)?.is_none());
 
@@ -263,7 +283,7 @@ mod tests {
         };
         _ = queue.push(&conn, msg)?;
         let message = queue.pop(&mut conn)?.unwrap();
-        
+
         queue.push_to_dead_letter(&conn, &message, "processing failed")?;
 
         // Test popping from dead letter queue
@@ -281,13 +301,23 @@ mod tests {
     fn test_multiple_queues() -> Result<()> {
         let conn = Connection::open_in_memory()?;
         let mut conn = conn;
-        
+
         let queue1: Queue<TestMessage> = Queue::new("queue1", &conn);
         let queue2: Queue<TestMessage> = Queue::new("queue2", &conn);
 
         // Push to both queues
-        queue1.push(&conn, TestMessage { content: "msg1".to_string() })?;
-        queue2.push(&conn, TestMessage { content: "msg2".to_string() })?;
+        queue1.push(
+            &conn,
+            TestMessage {
+                content: "msg1".to_string(),
+            },
+        )?;
+        queue2.push(
+            &conn,
+            TestMessage {
+                content: "msg2".to_string(),
+            },
+        )?;
 
         // Verify messages go to correct queues
         let msg1 = queue1.pop(&mut conn)?.unwrap();
@@ -307,9 +337,12 @@ mod tests {
 
         // Push messages in order
         for i in 1..=3 {
-            queue.push(&conn, TestMessage { 
-                content: format!("msg{}", i) 
-            })?;
+            queue.push(
+                &conn,
+                TestMessage {
+                    content: format!("msg{}", i),
+                },
+            )?;
         }
 
         // Verify FIFO order

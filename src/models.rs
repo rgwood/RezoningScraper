@@ -6,6 +6,12 @@ pub struct SlackMessage {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct BskyTweet {
+    pub project: Project,
+    pub tweet: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Projects {
     pub data: Vec<Project>,
     pub links: Links,

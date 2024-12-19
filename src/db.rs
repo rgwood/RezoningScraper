@@ -86,6 +86,20 @@ impl Database {
         Ok(count > 0)
     }
 
+    #[allow(dead_code)]
+    pub fn get_projects(&self) -> Result<Vec<Project>> {
+        let mut stmt = self.conn.prepare("SELECT Serialized FROM Projects")?;
+        let rows = stmt.query_map([], |row| row.get(0))?;
+
+        let mut projects = Vec::new();
+        for json in rows {
+            let json: String = json?;
+            projects.push(serde_json::from_str(&json)?);
+        }
+
+        Ok(projects)
+    }
+
     pub fn get_project(&self, id: &str) -> Result<Project> {
         let json: String = self.conn.query_row(
             "SELECT Serialized FROM Projects WHERE Id = ?",
