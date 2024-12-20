@@ -19,7 +19,7 @@ pub fn html_to_markdown(html: &str) -> String {
 // This currently expects an Anthropic API key to be set in the environment
 // TODO: make auth more flexible
 pub async fn project_to_tweet(proj: &Project) -> Result<String> {
-    let mut user_message = include_str!("tweet_prompt.txt").to_string();
+    let mut user_message = "Summarize this:\n".to_string();
     user_message += &format!("{}\n", proj.attributes.name.replace('\n', ""));
     let description_html = &proj.attributes.description.clone().unwrap_or_default();
     let description_md = html_to_markdown(description_html);
@@ -28,7 +28,7 @@ pub async fn project_to_tweet(proj: &Project) -> Result<String> {
     let client = genai::Client::default();
 
     let chat_req = ChatRequest::new(vec![
-        // ChatMessage::system(""),
+        ChatMessage::system(include_str!("system_prompt.txt")),
         ChatMessage::user(user_message),
     ]);
 
