@@ -9,6 +9,7 @@ use indicatif::ProgressBar;
 use models::{BskyTweet, Project, Projects, SlackMessage};
 use queue::Queue;
 use scraper::{Html, Selector};
+use sentry::integrations::anyhow::capture_anyhow;
 use serde_json::Value;
 use std::time::Duration;
 use summarizer::project_to_tweet;
@@ -54,8 +55,28 @@ struct Args {
     skip_update_db: bool,
 }
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
+    // Sentry needs to initialized before the tokio runtime
+    let _guard = sentry::init((
+        "https://b9aa3a714ea10fe4c30c0905fbc8db11@sentry-intake.datadoghq.com/1",
+        sentry::ClientOptions {
+            release: sentry::release_name!(),
+            ..Default::default()
+        },
+    ));
+
+    if let Err(e) = tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()?
+        .block_on(async_main())
+    {
+        capture_anyhow(&e);
+    }
+
+    Ok(())
+}
+
+async fn async_main() -> Result<()> {
     let args = Args::parse();
 
     println!(
@@ -170,8 +191,8 @@ async fn main() -> Result<()> {
         start.elapsed().as_millis()
     ));
 
-    // Update database in a single transaction if not skipped
     if !args.skip_update_db {
+        // Update database in a single transaction
         let start = std::time::Instant::now();
         db.upsert_projects(&latest_projects)?;
         println!(
@@ -180,6 +201,7 @@ async fn main() -> Result<()> {
             format!("{}", start.elapsed().as_millis()).green()
         );
     }
+
     println!(
         "Found {} new projects and {} modified projects",
         new_projects.len().to_string().green(),
@@ -236,6 +258,9 @@ async fn main() -> Result<()> {
                                 message.attempts
                             );
                             bsky_llm_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
+                            capture_anyhow(&e.context(
+                                "Failed to summarize project, moving to dead letter queue",
+                            ));
                         }
                     }
                 }
@@ -271,6 +296,9 @@ async fn main() -> Result<()> {
                             message.attempts
                         );
                         bsky_post_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
+                        capture_anyhow(
+                            &e.context("Failed to post to Bluesky, moving to dead letter queue"),
+                        );
                     }
                 }
             }
@@ -299,8 +327,11 @@ async fn process_slack_queue(
                 if message.attempts < MAX_MESSAGE_PROCESSING_ATTEMPTS {
                     slack_queue.push_message(db, &message)?;
                 } else {
-                    eprintln!("Message failed,  moving to dead letter queue: {}", e);
+                    eprintln!("Message failed,  moving to dead letter queue: {}", &e);
                     slack_queue.push_to_dead_letter(db, &message, &e.to_string())?;
+                    capture_anyhow(
+                        &e.context("Failed to post to Slack, moving to dead letter queue"),
+                    );
                 }
             }
         }

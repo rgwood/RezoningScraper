@@ -21,6 +21,7 @@ atrium-api = "0.24.9"
 html2md = "0.2.14"
 genai = "=0.1.15"
 itertools = "0.13.0"
+sentry = { version =  "0.35.0", features = ["anyhow"] }
 
 # Force vendored OpenSSL on Linux to make building for musl easier
 [target.'cfg(target_os = "linux")'.dependencies]
