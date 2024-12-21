@@ -11,6 +11,7 @@ use queue::Queue;
 use scraper::{Html, Selector};
 use sentry::integrations::anyhow::capture_anyhow;
 use serde_json::Value;
+use tokio::time::sleep;
 use std::time::Duration;
 use summarizer::project_to_tweet;
 
@@ -301,6 +302,9 @@ async fn async_main() -> Result<()> {
                         );
                     }
                 }
+
+                // Rate limit to avoid hitting the API too hard
+                sleep(Duration::from_secs(1)).await;
             }
             processed += 1;
         }

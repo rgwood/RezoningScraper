@@ -1,7 +1,13 @@
-use std::vec;
+use std::{num::NonZero, vec};
 
-use anyhow::Result;
-use atrium_api::types::Union;
+use anyhow::{Context, Result};
+use atrium_api::{
+    app::bsky::{
+        embed::{defs::AspectRatioData, images::{self, ImageData}},
+        feed::post::RecordEmbedRefs,
+    },
+    types::Union,
+};
 use bsky_sdk::{rich_text::RichText, BskyAgent};
 
 use crate::models::Project;
@@ -22,26 +28,30 @@ pub async fn post_to_bluesky(
     if let Some(img_url) = &project.attributes.image_url {
         // sometimes they post generic images that we don't want to repost
         if !img_url.to_lowercase().contains("generic") {
-            let img = reqwest::get(img_url).await?.bytes().await?;
+            let img_bytes = reqwest::get(img_url).await?.bytes().await?;
             eprintln!("Downloaded image: {}", img_url);
 
-            let output = agent.api.com.atproto.repo.upload_blob(img.to_vec()).await?;
+            let img = image::load_from_memory(&img_bytes)?;
+            let height = NonZero::new(img.height() as u64).context("Image height is zero")?;
+            let width = NonZero::new(img.width() as u64).context("Image width is zero")?;
+            let aspect_ratio = AspectRatioData { height, width };
+            eprintln!("Calculated aspect ratio: {}x{}", width, height);
+
+            let output = agent.api.com.atproto.repo.upload_blob(img_bytes.to_vec()).await?;
             eprintln!("Uploaded image");
 
-            let image = atrium_api::app::bsky::embed::images::ImageData {
+            let image = ImageData {
                 alt: "Project image".to_string(),
-                aspect_ratio: None,
+                aspect_ratio: Some(aspect_ratio.into()),
                 image: output.data.blob,
             }
             .into();
 
             let images = vec![image];
 
-            embed = Some(Union::Refs(
-                atrium_api::app::bsky::feed::post::RecordEmbedRefs::AppBskyEmbedImagesMain(
-                    Box::new(atrium_api::app::bsky::embed::images::MainData { images }.into()),
-                ),
-            ));
+            embed = Some(Union::Refs(RecordEmbedRefs::AppBskyEmbedImagesMain(
+                Box::new(images::MainData { images }.into()),
+            )));
         }
     }
 
