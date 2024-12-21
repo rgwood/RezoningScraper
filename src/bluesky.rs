@@ -30,7 +30,7 @@ pub async fn post_to_bluesky(
 
     if let Some(img_url) = &project.attributes.image_url {
         // sometimes they post generic images that we don't want to repost
-        if !img_url.to_lowercase().contains("generic") {
+        if !img_url.trim().is_empty() && !img_url.to_lowercase().contains("generic") {
             let img_bytes = reqwest::get(img_url).await?.bytes().await?;
             eprintln!("Downloaded image: {}", img_url);
 

@@ -62,6 +62,7 @@ fn main() -> Result<()> {
         "https://b9aa3a714ea10fe4c30c0905fbc8db11@sentry-intake.datadoghq.com/1",
         sentry::ClientOptions {
             release: sentry::release_name!(),
+            attach_stacktrace: true,
             ..Default::default()
         },
     ));
