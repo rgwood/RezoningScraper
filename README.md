@@ -2,7 +2,7 @@
 
 Scrapes the City of Vancouver's website for rezoning and development applications, then notifies people of any changes via Slack and/or Bluesky. It's a simple standalone app using SQLite as a data store, runs on any major OS. Just copy the app (1 file, no dependencies) to a server and run it with a cron job, no further steps needed.
 
-![image](https://github.com/user-attachments/assets/9bc6c331-a6a8-4751-94b8-8e22aa707262)
+![image](https://github.com/user-attachments/assets/ae0f5020-de0c-4edb-90f1-d691838b76fa)
 
 ![image](https://user-images.githubusercontent.com/26268125/143972856-7f01362c-867c-4a0c-90d7-18c1730bd522.png)
 
