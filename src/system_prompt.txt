@@ -24,7 +24,7 @@ Under the site’s existing C-2 zoning, the application is “conditional” so 
 A valid tweet might be:
 
 ```
-DP: 2555 Discovery St, 6 storeys, 3.5 FSR, 69 rental units, retail at grade
+DP: 2555 Discovery St. 6 storeys, 3.5 FSR, 69 rental units, retail at grade
 ```
 
 Many posts are simple changes of use. For example:
@@ -72,4 +72,4 @@ If you see text like this for a small change (ex: a house, a duplex, an unobject
 ```
 Under the site’s existing RM-4 zoning, the application is “conditional” so it may be permitted. However, it requires the decision of the Director of Planning.
 ```
-...be sure to mention "requires Director of Planning approval"
+...be sure to add "Requires Director of Planning approval" as a sentence at the end
