@@ -3,7 +3,10 @@ use std::{num::NonZero, vec};
 use anyhow::{Context, Result};
 use atrium_api::{
     app::bsky::{
-        embed::{defs::AspectRatioData, images::{self, ImageData}},
+        embed::{
+            defs::AspectRatioData,
+            images::{self, ImageData},
+        },
         feed::post::RecordEmbedRefs,
     },
     types::Union,
@@ -37,11 +40,21 @@ pub async fn post_to_bluesky(
             let aspect_ratio = AspectRatioData { height, width };
             eprintln!("Calculated aspect ratio: {}x{}", width, height);
 
-            let output = agent.api.com.atproto.repo.upload_blob(img_bytes.to_vec()).await?;
+            let output = agent
+                .api
+                .com
+                .atproto
+                .repo
+                .upload_blob(img_bytes.to_vec())
+                .await?;
             eprintln!("Uploaded image");
 
             let image = ImageData {
-                alt: "Project image".to_string(),
+                alt: project
+                    .attributes
+                    .image_description
+                    .clone()
+                    .unwrap_or("Image from ShapeYourCity API".to_string()),
                 aspect_ratio: Some(aspect_ratio.into()),
                 image: output.data.blob,
             }

@@ -11,9 +11,9 @@ use queue::Queue;
 use scraper::{Html, Selector};
 use sentry::integrations::anyhow::capture_anyhow;
 use serde_json::Value;
-use tokio::time::sleep;
 use std::time::Duration;
 use summarizer::project_to_tweet;
+use tokio::time::sleep;
 
 mod bluesky;
 mod db;
