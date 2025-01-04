@@ -37,3 +37,5 @@ publish/*
 /target
 .aider*
 .env
+
+resized.jpg
