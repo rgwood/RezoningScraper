@@ -20,7 +20,7 @@ pub fn html_to_markdown(html: &str) -> String {
 // TODO: make auth more flexible
 pub async fn project_to_tweet(proj: &Project) -> Result<String> {
     let mut user_message = "Summarize this:\n".to_string();
-    user_message += &format!("{}\n", proj.attributes.name.replace('\n', ""));
+    user_message += &format!("# {}\n", proj.attributes.name.replace('\n', ""));
     let description_html = &proj.attributes.description.clone().unwrap_or_default();
     let description_md = html_to_markdown(description_html);
     user_message += &description_md;
@@ -39,7 +39,16 @@ pub async fn project_to_tweet(proj: &Project) -> Result<String> {
     let response = chat_res
         .content_text_as_str()
         .context("Failed to get chat response")?;
-    Ok(response.to_string())
+
+    let tags = &proj.attributes.project_tag_list;
+
+    if tags.iter().any(|tag| tag == "Development") {
+        Ok(format!("DP: {}", response))
+    } else if tags.iter().any(|tag| tag == "Rezoning") {
+        Ok(format!("Rezoning: {}", response))
+    } else {
+        Ok(response.to_string())
+    }
 }
 
 struct IgnoreHandlerFactory;

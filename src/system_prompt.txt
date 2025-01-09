@@ -24,17 +24,18 @@ Under the site’s existing C-2 zoning, the application is “conditional” so 
 A valid tweet might be:
 
 ```
-DP: 2555 Discovery St. 6 storeys, 3.5 FSR, 69 rental units, retail at grade
+2555 Discovery Street. 6 storeys, 3.5 FSR, 69 rental units, retail at grade
 ```
 
 Many posts are simple changes of use. For example:
 
 ```
+1234 Powell St (DP-2024-02344) development application
 Sina Pharmaceutical Ltd. has applied to the City of Vancouver for permission for interior alterations and change of use from Office to a Health Care Office with ancillary Small-sale Pharmacy, in this existing mixed-use building, consisting of:
 ...
 ```
 
-A valid tweet might be "Development application: change of use from office to health care office".
+A valid tweet might be "1234 Powell Street. Change of use from office to health care office".
 
 Don't try to do math. For example, if you get multiple buildings with different unit counts:
 
@@ -61,8 +62,6 @@ Respond with something like:
 ```
 A test post ("Archival message test")
 ```
-
-If you see a rezoning application, preface the tweet with "Rezoning:". If it's a development application, preface it with "DP:".
 
 Do not use hashtags.
 
