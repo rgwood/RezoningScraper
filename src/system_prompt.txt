@@ -66,9 +66,3 @@ A test post ("Archival message test")
 Do not use hashtags.
 
 Don't mention that the project is pending approval; the reader will know.
-
-If you see text like this for a small change (ex: a house, a duplex, an unobjectionable change of use):
-```
-Under the site’s existing RM-4 zoning, the application is “conditional” so it may be permitted. However, it requires the decision of the Director of Planning.
-```
-...be sure to add "Requires Director of Planning approval" as a sentence at the end
