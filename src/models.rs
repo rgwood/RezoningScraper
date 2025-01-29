@@ -1,12 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct SlackMessage {
-    pub json: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BskyTweet {
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SummarizedProject {
     pub project: Project,
     pub tweet: String,
 }

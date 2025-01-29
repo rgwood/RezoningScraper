@@ -40,15 +40,7 @@ pub async fn project_to_tweet(proj: &Project) -> Result<String> {
         .content_text_as_str()
         .context("Failed to get chat response")?;
 
-    let tags = &proj.attributes.project_tag_list;
-
-    if tags.iter().any(|tag| tag == "Development") {
-        Ok(format!("DP: {}", response))
-    } else if tags.iter().any(|tag| tag == "Rezoning") {
-        Ok(format!("Rezoning: {}", response))
-    } else {
-        Ok(response.to_string())
-    }
+    Ok(response.to_string())
 }
 
 struct IgnoreHandlerFactory;

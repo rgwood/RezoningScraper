@@ -6,7 +6,7 @@ use clap::Parser;
 use colored::Colorize;
 use db::{Database, Token};
 use indicatif::ProgressBar;
-use models::{BskyTweet, Project, Projects, SlackMessage};
+use models::{Project, Projects, SummarizedProject};
 use queue::Queue;
 use scraper::{Html, Selector};
 use sentry::integrations::anyhow::capture_anyhow;
@@ -212,54 +212,48 @@ async fn async_main() -> Result<()> {
 
     print_projects(&new_projects, &changed_projects);
 
-    let slack_queue: Queue<SlackMessage> = Queue::new("slack_queue", &db);
-    let bsky_llm_queue: Queue<Project> = Queue::new("bluesky_queue", &db);
-    let bsky_post_queue: Queue<BskyTweet> = Queue::new("bluesky_queue_tweet", &db);
+    let llm_queue: Queue<Project> = Queue::new("llm_queue", &db);
+    let slack_queue: Queue<SummarizedProject> = Queue::new("slack_post_queue", &db);
+    let bsky_queue: Queue<SummarizedProject> = Queue::new("bluesky_post_queue", &db);
 
-    if !new_projects.is_empty() && !is_initialization {
-        slack_queue.push(&db, create_slack_message(&new_projects))?;
-
+    if !is_initialization {
         for project in &new_projects {
-            bsky_llm_queue.push(&db, project.clone())?;
+            llm_queue.push(&db, project.clone())?;
         }
     }
 
-    // Post to Slack if configured
-    if let Some(webhook_url) = args.slack_webhook_url {
-        process_slack_queue(&slack_queue, &mut db, &webhook_url).await?;
-    }
-
-    // Process Bluesky queue
+    // Process LLM queue
     {
-        let depth = bsky_llm_queue.depth(&db)?;
+        let depth = llm_queue.depth(&db)?;
         let mut processed = 0;
 
-        println!("Processing {} projects in Bluesky queue", depth);
+        println!("Processing {} projects in LLM queue", depth);
         // process everything currently in the queue
         while processed < depth {
-            if let Some(mut message) = bsky_llm_queue.pop(&mut db)? {
+            if let Some(mut message) = llm_queue.pop(&mut db)? {
                 let project = &message.payload;
 
                 match project_to_tweet(project).await {
                     Ok(t) => {
                         eprintln!("Generated LLM tweet: {}", t);
-                        let tweet = BskyTweet {
+                        let summarized = SummarizedProject {
                             project: project.clone(),
                             tweet: t,
                         };
-                        bsky_post_queue.push(&db, tweet)?;
+                        slack_queue.push(&db, summarized.clone())?;
+                        bsky_queue.push(&db, summarized)?;
                     }
                     Err(e) => {
                         eprintln!("Error processing project: {}", e);
                         message.attempts += 1;
                         if message.attempts < MAX_MESSAGE_PROCESSING_ATTEMPTS {
-                            bsky_llm_queue.push_message(&db, &message)?;
+                            llm_queue.push_message(&db, &message)?;
                         } else {
                             eprintln!(
                                 "Message failed {} times; moving to dead letter queue",
                                 message.attempts
                             );
-                            bsky_llm_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
+                            llm_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
                             capture_anyhow(&e.context(
                                 "Failed to summarize project, moving to dead letter queue",
                             ));
@@ -271,15 +265,20 @@ async fn async_main() -> Result<()> {
         }
     }
 
+    // Post to Slack if configured
+    if let Some(webhook_url) = args.slack_webhook_url {
+        process_slack_queue(&slack_queue, &mut db, &webhook_url).await?;
+    }
+
     // Post to Bluesky if configured
     if let (Some(user), Some(pass)) = (args.bluesky_user, args.bluesky_password) {
-        let depth = bsky_post_queue.depth(&db)?;
+        let depth = bsky_queue.depth(&db)?;
         let mut processed = 0;
         println!("Processing {} tweets in Bluesky post queue", depth);
 
         // process everything currently in the queue
         while processed < depth {
-            if let Some(mut message) = bsky_post_queue.pop(&mut db)? {
+            if let Some(mut message) = bsky_queue.pop(&mut db)? {
                 if let Err(e) = bluesky::post_to_bluesky(
                     &message.payload.project,
                     &message.payload.tweet,
@@ -291,13 +290,13 @@ async fn async_main() -> Result<()> {
                     eprintln!("Error posting to Bluesky: {}", e);
                     message.attempts += 1;
                     if message.attempts < MAX_MESSAGE_PROCESSING_ATTEMPTS {
-                        bsky_post_queue.push_message(&db, &message)?;
+                        bsky_queue.push_message(&db, &message)?;
                     } else {
                         eprintln!(
                             "Message failed {} times; moving to dead letter queue",
                             message.attempts
                         );
-                        bsky_post_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
+                        bsky_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
                         capture_anyhow(
                             &e.context("Failed to post to Bluesky, moving to dead letter queue"),
                         );
@@ -315,7 +314,7 @@ async fn async_main() -> Result<()> {
 }
 
 async fn process_slack_queue(
-    slack_queue: &Queue<SlackMessage>,
+    slack_queue: &Queue<SummarizedProject>,
     db: &mut Database,
     webhook_url: &str,
 ) -> Result<()> {
@@ -325,7 +324,8 @@ async fn process_slack_queue(
     // process everything currently in the queue
     while processed < depth {
         if let Some(mut message) = slack_queue.pop(db)? {
-            if let Err(e) = post_to_slack(webhook_url, &message.payload).await {
+            let slack_message = create_slack_message(&message.payload);
+            if let Err(e) = post_to_slack(webhook_url, slack_message).await {
                 message.attempts += 1;
                 message.last_attempt = Some(Utc::now());
                 eprintln!("Error posting to Slack: {}", e);
@@ -493,14 +493,14 @@ async fn fetch_all_projects(
     Ok(all_projects)
 }
 
-async fn post_to_slack(webhook_url: &str, message: &SlackMessage) -> Result<()> {
+async fn post_to_slack(webhook_url: &str, message: String) -> Result<()> {
     println!("{}", "Posting to Slack...".bold().cyan());
     let client = reqwest::Client::new();
 
     client
         .post(webhook_url)
         .header("Content-Type", "application/json")
-        .body(message.json.clone())
+        .body(message)
         .send()
         .await?
         .error_for_status()?;
@@ -509,43 +509,24 @@ async fn post_to_slack(webhook_url: &str, message: &SlackMessage) -> Result<()> 
     Ok(())
 }
 
-fn create_slack_message(new_projects: &Vec<Project>) -> SlackMessage {
+fn create_slack_message(project: &SummarizedProject) -> String {
     let mut message = String::new();
-    for proj in new_projects {
-        message.push_str(&format!(
-            "New item: *<{}|{}>*\n",
-            proj.links.self_link,
-            proj.attributes.name.replace('\n', "")
-        ));
 
-        if !proj.attributes.project_tag_list.is_empty() {
-            message.push_str(&format!(
-                "• Tags: {}\n",
-                proj.attributes.project_tag_list.join(", ")
-            ));
-        }
+    let SummarizedProject { project, tweet } = project;
 
-        message.push_str(&format!(
-            "• State: {}\n\n",
-            capitalize(&proj.attributes.state)
-        ));
-    }
+    message.push_str(&format!(
+        "*<{}|{}>*\n",
+        project.links.self_link,
+        project.attributes.name.replace('\n', "")
+    ));
+
+    message.push_str(tweet);
 
     let json = serde_json::json!({
         "text": message
     });
 
-    SlackMessage {
-        json: json.to_string(),
-    }
-}
-
-fn capitalize(s: &str) -> String {
-    let mut chars = s.chars();
-    match chars.next() {
-        None => String::new(),
-        Some(first) => first.to_uppercase().chain(chars).collect(),
-    }
+    json.to_string()
 }
 
 #[allow(dead_code)]

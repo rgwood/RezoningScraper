@@ -74,7 +74,14 @@ pub async fn post_to_bluesky(
         }
     }
 
-    let tweet_with_link = format!("{} {}", tweet_text, project.links.self_link);
+    let tags = &project.attributes.project_tag_list;
+    let tweet_with_link = if tags.iter().any(|tag| tag == "Development") {
+        format!("DP: {} {}", tweet_text, project.links.self_link)
+    } else if tags.iter().any(|tag| tag == "Rezoning") {
+        format!("Rezoning: {} {}", tweet_text, project.links.self_link)
+    } else {
+        format!("{} {}", tweet_text, project.links.self_link)
+    };
 
     eprintln!("Tweeting: {}", tweet_with_link);
 
