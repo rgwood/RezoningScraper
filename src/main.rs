@@ -402,7 +402,7 @@ async fn get_token_from_db_or_website(db: &mut Database, pb: &ProgressBar) -> Re
         .build()?;
 
     let html = client
-        .get("https://shapeyourcity.ca/embeds/projectfinder")
+        .get("https://www.shapeyourcity.ca/embeds/projectfinder")
         .send()
         .await?
         .text()
@@ -432,7 +432,7 @@ async fn fetch_all_projects(
     const RESULTS_PER_PAGE: u32 = 200;
     let mut all_projects = Vec::new();
     let mut next_url = Some(format!(
-        "https://shapeyourcity.ca/api/v2/projects?per_page={}",
+        "https://www.shapeyourcity.ca/api/v2/projects?per_page={}",
         RESULTS_PER_PAGE
     ));
     let mut page_count = 0;
