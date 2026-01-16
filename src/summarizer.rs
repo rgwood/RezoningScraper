@@ -37,7 +37,7 @@ pub async fn project_to_tweet(proj: &Project) -> Result<String> {
         .await?;
 
     let response = chat_res
-        .content_text_as_str()
+        .first_text()
         .context("Failed to get chat response")?;
 
     Ok(response.to_string())

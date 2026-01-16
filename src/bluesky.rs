@@ -1,17 +1,20 @@
 use std::{num::NonZero, vec};
 
 use anyhow::{bail, Context, Result};
-use atrium_api::{
-    app::bsky::{
-        embed::{
-            defs::AspectRatioData,
-            images::{self, ImageData},
+use bsky_sdk::{
+    api::{
+        app::bsky::{
+            embed::{
+                defs::AspectRatioData,
+                images::{self, ImageData},
+            },
+            feed::post::RecordEmbedRefs,
         },
-        feed::post::RecordEmbedRefs,
+        types::Union,
     },
-    types::Union,
+    rich_text::RichText,
+    BskyAgent,
 };
-use bsky_sdk::{rich_text::RichText, BskyAgent};
 use image::codecs::jpeg::JpegEncoder;
 
 use crate::models::Project;
@@ -88,8 +91,8 @@ pub async fn post_to_bluesky(
     let rt = RichText::new_with_detect_facets(tweet_with_link).await?;
 
     agent
-        .create_record(atrium_api::app::bsky::feed::post::RecordData {
-            created_at: atrium_api::types::string::Datetime::now(),
+        .create_record(bsky_sdk::api::app::bsky::feed::post::RecordData {
+            created_at: bsky_sdk::api::types::string::Datetime::now(),
             embed,
             entities: None,
             facets: rt.facets,
