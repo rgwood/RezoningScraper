@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 use crate::models::Project;
 
-const MODEL_ANTHROPIC: &str = "claude-3-5-haiku-20241022";
+const MODEL_ANTHROPIC: &str = "claude-haiku-4-5-20251001";
 
 /// Convert HTML to Markdown, ignoring images and not including URLs
 pub fn html_to_markdown(html: &str) -> String {
