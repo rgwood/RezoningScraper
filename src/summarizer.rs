@@ -1,11 +1,11 @@
 use anyhow::{Context, Ok, Result};
-use genai::chat::{ChatMessage, ChatRequest};
+use genai::chat::{ChatMessage, ChatOptions, ChatRequest, ReasoningEffort};
 use html2md::{TagHandler, TagHandlerFactory};
 use std::collections::HashMap;
 
 use crate::models::Project;
 
-const MODEL_ANTHROPIC: &str = "claude-haiku-4-5-20251001";
+const MODEL: &str = "gpt-5.6-luna";
 
 /// Convert HTML to Markdown, ignoring images and not including URLs
 pub fn html_to_markdown(html: &str) -> String {
@@ -16,8 +16,6 @@ pub fn html_to_markdown(html: &str) -> String {
     html2md::parse_html_custom(html, &handlers)
 }
 
-// This currently expects an Anthropic API key to be set in the environment
-// TODO: make auth more flexible
 pub async fn project_to_tweet(proj: &Project) -> Result<String> {
     let mut user_message = "Summarize this:\n".to_string();
     user_message += &format!("# {}\n", proj.attributes.name.replace('\n', ""));
@@ -32,9 +30,8 @@ pub async fn project_to_tweet(proj: &Project) -> Result<String> {
         ChatMessage::user(user_message),
     ]);
 
-    let chat_res = client
-        .exec_chat(MODEL_ANTHROPIC, chat_req.clone(), None)
-        .await?;
+    let options = ChatOptions::default().with_reasoning_effort(ReasoningEffort::None);
+    let chat_res = client.exec_chat(MODEL, chat_req, Some(&options)).await?;
 
     let response = chat_res
         .first_text()
