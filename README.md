@@ -12,7 +12,7 @@ Download a binary from [the releases page](https://github.com/rgwood/RezoningScr
 
 Run it; on the first launch it will download all ShapeYourCity projects without posting any. On subsequent launches, it will post to Slack and/or Bluesky if credentials are set via argument or environment variable.
 
-Bluesky functionality uses Claude for summarizing projects; you will also need to specify an ANTHROPIC_API_KEY via environment variable.
+Bluesky functionality uses OpenAI for summarizing projects; you will also need to specify an `OPENAI_API_KEY` environment variable.
 
 ```
 
