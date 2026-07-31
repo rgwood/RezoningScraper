@@ -15,12 +15,12 @@ rusqlite = { version = "0.38.0", features = ["bundled"] }
 reqwest = { version = "0.13.1", features = ["json"] }
 indicatif = "0.18.3"
 colored = "3.0.0"
+dogstatsd = "0.12.4"
 tokio = { version = "1", features = ["full"] }
 bsky-sdk = "0.1.23"
 html2md = "0.2.15"
 genai = "0.5.0"
 itertools = "0.14.0"
-sentry = { version = "0.46.1", features = ["anyhow"] }
 image = "0.25.9"
 
 # Force vendored OpenSSL on Linux to make building for musl easier

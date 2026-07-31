@@ -240,7 +240,7 @@ mod tests {
             links: Default::default(),
         };
 
-        db.upsert_projects(&[project1.clone()])?;
+        db.upsert_projects(std::slice::from_ref(&project1))?;
         let retrieved = db.get_project("foo")?;
         assert_eq!(retrieved.project_type, "first");
 
@@ -249,7 +249,7 @@ mod tests {
             ..project1
         };
 
-        db.upsert_projects(&[project2.clone()])?;
+        db.upsert_projects(std::slice::from_ref(&project2))?;
         let retrieved = db.get_project("foo")?;
         assert_eq!(retrieved.project_type, "second");
 

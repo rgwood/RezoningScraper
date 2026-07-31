@@ -86,7 +86,7 @@ mod tests {
         handlers.insert("img".to_string(), Box::new(IgnoreHandlerFactory));
         handlers.insert("a".to_string(), Box::new(TextOnlyHandlerFactory));
 
-        let md = html2md::parse_html_custom(&description, &handlers);
+        let md = html2md::parse_html_custom(description, &handlers);
 
         let expected = "Matthew Cheng Architect Inc. has applied to the City of Vancouver for permission to develop the following on this site:
 

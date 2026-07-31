@@ -30,10 +30,22 @@ Options:
           Use cached API responses (up to 1 hour old) when available
       --skip-update-db
           Skip updating the local database (useful for testing)
+      --monitoring-test <MONITORING_TEST>
+          Send a test status to monitoring without running the scraper [possible values: ok, critical]
   -h, --help
           Print help
   -V, --version
           Print version
+```
+
+## Monitoring
+
+The scraper reports run status and queue depth to a local Datadog Agent. It
+also exits non-zero and writes a structured log when anything fails.
+
+```console
+rezoning-scraper --monitoring-test critical
+rezoning-scraper --monitoring-test ok
 ```
 
 ## License
