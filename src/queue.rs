@@ -40,6 +40,15 @@ where
         Ok(count)
     }
 
+    pub fn dead_letter_depth(&self, conn: &Connection) -> Result<i64> {
+        let count: i64 = conn.query_row(
+            "SELECT COUNT(*) FROM DeadLetterQueue WHERE queue_name = ?1",
+            params![self.name],
+            |row| row.get(0),
+        )?;
+        Ok(count)
+    }
+
     pub fn push(&self, conn: &Connection, item: T) -> Result<i64> {
         let msg = QueueMessage {
             id: 0, // Will be set by SQLite
@@ -285,6 +294,7 @@ mod tests {
         let message = queue.pop(&mut conn)?.unwrap();
 
         queue.push_to_dead_letter(&conn, &message, "processing failed")?;
+        assert_eq!(queue.dead_letter_depth(&conn)?, 1);
 
         // Test popping from dead letter queue
         let (dead_msg, error) = queue.pop_from_dead_letter(&mut conn)?.unwrap();
@@ -293,6 +303,7 @@ mod tests {
 
         // Verify dead letter queue is empty
         assert!(queue.pop_from_dead_letter(&mut conn)?.is_none());
+        assert_eq!(queue.dead_letter_depth(&conn)?, 0);
 
         Ok(())
     }

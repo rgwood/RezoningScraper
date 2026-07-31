@@ -2,14 +2,15 @@ use anyhow::{anyhow, Result};
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use base64::Engine;
 use chrono::{DateTime, TimeZone, Utc};
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use colored::Colorize;
 use db::{Database, Token};
 use indicatif::ProgressBar;
 use models::{Project, Projects, SummarizedProject};
+use monitoring::{Monitoring, ServiceCheckStatus};
 use queue::Queue;
 use scraper::{Html, Selector};
-use sentry::integrations::anyhow::capture_anyhow;
+use serde_json::json;
 use serde_json::Value;
 use std::time::Duration;
 use summarizer::project_to_tweet;
@@ -18,10 +19,17 @@ use tokio::time::sleep;
 mod bluesky;
 mod db;
 mod models;
+mod monitoring;
 mod queue;
 mod summarizer;
 
 const MAX_MESSAGE_PROCESSING_ATTEMPTS: i32 = 3;
+
+#[derive(Clone, Copy, Debug, ValueEnum)]
+enum MonitoringTestStatus {
+    Ok,
+    Critical,
+}
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -54,33 +62,72 @@ struct Args {
 
     #[arg(long, help = "Skip updating the local database (useful for testing)")]
     skip_update_db: bool,
+
+    #[arg(
+        long,
+        value_enum,
+        help = "Send a test status to monitoring without running the scraper"
+    )]
+    monitoring_test: Option<MonitoringTestStatus>,
 }
 
 fn main() -> Result<()> {
-    // Sentry needs to initialized before the tokio runtime
-    let _guard = sentry::init((
-        "https://b9aa3a714ea10fe4c30c0905fbc8db11@sentry-intake.datadoghq.com/1",
-        sentry::ClientOptions {
-            release: sentry::release_name!(),
-            attach_stacktrace: true,
-            ..Default::default()
-        },
-    ));
+    let args = Args::parse();
+    let monitoring = Monitoring::new()?;
 
-    if let Err(e) = tokio::runtime::Builder::new_multi_thread()
-        .enable_all()
-        .build()?
-        .block_on(async_main())
-    {
-        capture_anyhow(&e);
+    if let Some(status) = args.monitoring_test {
+        return test_monitoring(&monitoring, status);
     }
 
-    Ok(())
+    let result = tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()?
+        .block_on(async_main(args, &monitoring));
+
+    match result {
+        Ok(()) => monitoring.service_check(
+            ServiceCheckStatus::Ok,
+            "Rezoning scraper completed successfully",
+        ),
+        Err(error) => {
+            monitoring.error("Rezoning scraper run failed", &error, &[]);
+            if let Err(reporting_error) = monitoring.service_check(
+                ServiceCheckStatus::Critical,
+                &format!("Rezoning scraper failed: {error:#}"),
+            ) {
+                monitoring.error(
+                    "Failed to report scraper failure to DogStatsD",
+                    &reporting_error,
+                    &[],
+                );
+            }
+            Err(error)
+        }
+    }
 }
 
-async fn async_main() -> Result<()> {
-    let args = Args::parse();
+fn test_monitoring(monitoring: &Monitoring, status: MonitoringTestStatus) -> Result<()> {
+    match status {
+        MonitoringTestStatus::Ok => monitoring.service_check(
+            ServiceCheckStatus::Ok,
+            "Manual monitoring test: everything is OK",
+        ),
+        MonitoringTestStatus::Critical => {
+            let error = anyhow!("deliberate monitoring test failure");
+            monitoring.error(
+                "Manual monitoring test",
+                &error,
+                &[("monitoring_test", json!(true))],
+            );
+            monitoring.service_check(
+                ServiceCheckStatus::Critical,
+                "Manual monitoring test: deliberate failure",
+            )
+        }
+    }
+}
 
+async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
     println!(
         "{}",
         format!("Rezoning Scraper v{}", env!("CARGO_PKG_VERSION"))
@@ -222,6 +269,8 @@ async fn async_main() -> Result<()> {
         }
     }
 
+    let mut processing_failures = 0;
+
     // Process LLM queue
     {
         let depth = llm_queue.depth(&db)?;
@@ -244,8 +293,21 @@ async fn async_main() -> Result<()> {
                         bsky_queue.push(&db, summarized)?;
                     }
                     Err(e) => {
-                        eprintln!("Error processing project: {}", e);
                         message.attempts += 1;
+                        let dead_lettered = message.attempts >= MAX_MESSAGE_PROCESSING_ATTEMPTS;
+                        monitoring.error(
+                            "Failed to summarize project",
+                            &e,
+                            &[
+                                ("queue", json!("llm_queue")),
+                                ("attempt", json!(message.attempts)),
+                                ("max_attempts", json!(MAX_MESSAGE_PROCESSING_ATTEMPTS)),
+                                ("dead_lettered", json!(dead_lettered)),
+                                ("project_id", json!(project.id)),
+                            ],
+                        );
+                        processing_failures += 1;
+
                         if message.attempts < MAX_MESSAGE_PROCESSING_ATTEMPTS {
                             llm_queue.push_message(&db, &message)?;
                         } else {
@@ -254,9 +316,6 @@ async fn async_main() -> Result<()> {
                                 message.attempts
                             );
                             llm_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
-                            capture_anyhow(&e.context(
-                                "Failed to summarize project, moving to dead letter queue",
-                            ));
                         }
                     }
                 }
@@ -267,7 +326,8 @@ async fn async_main() -> Result<()> {
 
     // Post to Slack if configured
     if let Some(webhook_url) = args.slack_webhook_url {
-        process_slack_queue(&slack_queue, &mut db, &webhook_url).await?;
+        processing_failures +=
+            process_slack_queue(monitoring, &slack_queue, &mut db, &webhook_url).await?;
     }
 
     // Post to Bluesky if configured
@@ -287,8 +347,21 @@ async fn async_main() -> Result<()> {
                 )
                 .await
                 {
-                    eprintln!("Error posting to Bluesky: {}", e);
                     message.attempts += 1;
+                    let dead_lettered = message.attempts >= MAX_MESSAGE_PROCESSING_ATTEMPTS;
+                    monitoring.error(
+                        "Failed to post project to Bluesky",
+                        &e,
+                        &[
+                            ("queue", json!("bluesky_post_queue")),
+                            ("attempt", json!(message.attempts)),
+                            ("max_attempts", json!(MAX_MESSAGE_PROCESSING_ATTEMPTS)),
+                            ("dead_lettered", json!(dead_lettered)),
+                            ("project_id", json!(message.payload.project.id)),
+                        ],
+                    );
+                    processing_failures += 1;
+
                     if message.attempts < MAX_MESSAGE_PROCESSING_ATTEMPTS {
                         bsky_queue.push_message(&db, &message)?;
                     } else {
@@ -297,9 +370,6 @@ async fn async_main() -> Result<()> {
                             message.attempts
                         );
                         bsky_queue.push_to_dead_letter(&db, &message, &e.to_string())?;
-                        capture_anyhow(
-                            &e.context("Failed to post to Bluesky, moving to dead letter queue"),
-                        );
                     }
                 }
 
@@ -310,16 +380,26 @@ async fn async_main() -> Result<()> {
         }
     }
 
+    report_queue_depths(monitoring, &db, &llm_queue, &slack_queue, &bsky_queue)?;
+
+    if processing_failures > 0 {
+        return Err(anyhow!(
+            "run completed with {processing_failures} processing failure(s)"
+        ));
+    }
+
     Ok(())
 }
 
 async fn process_slack_queue(
+    monitoring: &Monitoring,
     slack_queue: &Queue<SummarizedProject>,
     db: &mut Database,
     webhook_url: &str,
-) -> Result<()> {
+) -> Result<usize> {
     let depth = slack_queue.depth(db)?;
     let mut processed = 0;
+    let mut failures = 0;
 
     // process everything currently in the queue
     while processed < depth {
@@ -328,19 +408,64 @@ async fn process_slack_queue(
             if let Err(e) = post_to_slack(webhook_url, slack_message).await {
                 message.attempts += 1;
                 message.last_attempt = Some(Utc::now());
-                eprintln!("Error posting to Slack: {}", e);
+                let dead_lettered = message.attempts >= MAX_MESSAGE_PROCESSING_ATTEMPTS;
+                monitoring.error(
+                    "Failed to post project to Slack",
+                    &e,
+                    &[
+                        ("queue", json!("slack_post_queue")),
+                        ("attempt", json!(message.attempts)),
+                        ("max_attempts", json!(MAX_MESSAGE_PROCESSING_ATTEMPTS)),
+                        ("dead_lettered", json!(dead_lettered)),
+                        ("project_id", json!(message.payload.project.id)),
+                    ],
+                );
+                failures += 1;
+
                 if message.attempts < MAX_MESSAGE_PROCESSING_ATTEMPTS {
                     slack_queue.push_message(db, &message)?;
                 } else {
-                    eprintln!("Message failed,  moving to dead letter queue: {}", &e);
+                    eprintln!("Message failed, moving to dead letter queue: {e}");
                     slack_queue.push_to_dead_letter(db, &message, &e.to_string())?;
-                    capture_anyhow(
-                        &e.context("Failed to post to Slack, moving to dead letter queue"),
-                    );
                 }
             }
         }
         processed += 1;
+    }
+
+    Ok(failures)
+}
+
+fn report_queue_depths(
+    monitoring: &Monitoring,
+    db: &Database,
+    llm_queue: &Queue<Project>,
+    slack_queue: &Queue<SummarizedProject>,
+    bsky_queue: &Queue<SummarizedProject>,
+) -> Result<()> {
+    for (name, depth, dead_letter_depth) in [
+        (
+            "llm_queue",
+            llm_queue.depth(db)?,
+            llm_queue.dead_letter_depth(db)?,
+        ),
+        (
+            "slack_post_queue",
+            slack_queue.depth(db)?,
+            slack_queue.dead_letter_depth(db)?,
+        ),
+        (
+            "bluesky_post_queue",
+            bsky_queue.depth(db)?,
+            bsky_queue.dead_letter_depth(db)?,
+        ),
+    ] {
+        monitoring.gauge("rezoning_scraper.queue.depth", depth, &[("queue", name)])?;
+        monitoring.gauge(
+            "rezoning_scraper.dead_letter.depth",
+            dead_letter_depth,
+            &[("queue", name)],
+        )?;
     }
 
     Ok(())

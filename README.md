@@ -30,11 +30,39 @@ Options:
           Use cached API responses (up to 1 hour old) when available
       --skip-update-db
           Skip updating the local database (useful for testing)
+      --monitoring-test <MONITORING_TEST>
+          Send a test status to monitoring without running the scraper [possible values: ok, critical]
   -h, --help
           Print help
   -V, --version
           Print version
 ```
+
+## Monitoring
+
+The scraper reports each run to a local Datadog Agent through DogStatsD. It
+sends:
+
+- the `rezoning_scraper.run` service check
+- `rezoning_scraper.queue.depth`, tagged by queue
+- `rezoning_scraper.dead_letter.depth`, tagged by queue
+- structured error logs with `service:rezoning-scraper` and `env:production`
+
+Set `DD_SERVICE`, `DD_ENV`, or `DOGSTATSD_ADDRESS` to override those defaults.
+
+Create a Datadog service check monitor for `rezoning_scraper.run`. Alert on one
+critical check and on 20 hours without data, then add an email address to the
+notification message. The no-data alert catches a timer or host failure as well
+as errors reported by the scraper.
+
+Test the whole path without scraping or posting anything:
+
+```console
+rezoning-scraper --monitoring-test critical
+rezoning-scraper --monitoring-test ok
+```
+
+Wait for the critical notification before sending the OK status.
 
 ## License
 
