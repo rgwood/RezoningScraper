@@ -627,7 +627,14 @@ async fn fetch_project_page_with_retry(
     max_attempts: u32,
     initial_retry_delay: Duration,
 ) -> Result<String> {
-    for attempt in 1..=max_attempts {
+    if max_attempts == 0 {
+        return Err(anyhow!(
+            "max project request attempts must be greater than zero"
+        ));
+    }
+
+    let mut attempt = 1;
+    loop {
         let result = async {
             client
                 .get(url)
@@ -649,6 +656,7 @@ async fn fetch_project_page_with_retry(
                     retry_delay.as_secs_f32()
                 );
                 sleep(retry_delay).await;
+                attempt += 1;
             }
             Err(error) => {
                 return Err(error).with_context(|| {
@@ -657,8 +665,6 @@ async fn fetch_project_page_with_retry(
             }
         }
     }
-
-    unreachable!("the request loop always returns on its final attempt")
 }
 
 fn is_retryable_project_request_error(error: &reqwest::Error) -> bool {
@@ -844,6 +850,26 @@ mod tests {
 
         assert!(error.to_string().contains("after 1 attempt"));
         assert_eq!(server.await.expect("server should finish"), 1);
+    }
+
+    #[tokio::test]
+    async fn rejects_zero_project_request_attempts() {
+        let client = reqwest::Client::new();
+
+        let error = fetch_project_page_with_retry(
+            &client,
+            "http://127.0.0.1/projects",
+            "token",
+            0,
+            Duration::ZERO,
+        )
+        .await
+        .expect_err("zero attempts should fail");
+
+        assert_eq!(
+            error.to_string(),
+            "max project request attempts must be greater than zero"
+        );
     }
 
     async fn spawn_http_server(statuses: Vec<u16>) -> (String, JoinHandle<usize>) {
