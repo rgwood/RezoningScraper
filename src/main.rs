@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, Context, Result};
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use base64::Engine;
 use chrono::{DateTime, TimeZone, Utc};
@@ -24,6 +24,9 @@ mod queue;
 mod summarizer;
 
 const MAX_MESSAGE_PROCESSING_ATTEMPTS: i32 = 3;
+const PROJECT_REQUEST_TIMEOUT: Duration = Duration::from_secs(60);
+const MAX_PROJECT_REQUEST_ATTEMPTS: u32 = 3;
+const PROJECT_REQUEST_RETRY_DELAY: Duration = Duration::from_secs(1);
 
 #[derive(Clone, Copy, Debug, ValueEnum)]
 enum MonitoringTestStatus {
@@ -156,7 +159,7 @@ async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
 
     println!("{}", "Querying API...".bold().cyan());
     let client = reqwest::Client::builder()
-        .timeout(Duration::from_secs(20))
+        .timeout(PROJECT_REQUEST_TIMEOUT)
         .build()?;
 
     // Fetch projects
@@ -571,25 +574,13 @@ async fn fetch_all_projects(
             if let Some(cached) = db.get_cached_response(&url)? {
                 (serde_json::from_str(&cached)?, true)
             } else {
-                let response = client
-                    .get(&url)
-                    .header("Authorization", format!("Bearer {}", jwt))
-                    .send()
-                    .await?
-                    .text()
-                    .await?;
+                let response = fetch_project_page(client, &url, jwt).await?;
 
                 db.cache_response(&url, &response)?;
                 (serde_json::from_str(&response)?, false)
             }
         } else {
-            let response = client
-                .get(&url)
-                .header("Authorization", format!("Bearer {}", jwt))
-                .send()
-                .await?
-                .text()
-                .await?;
+            let response = fetch_project_page(client, &url, jwt).await?;
 
             db.cache_response(&url, &response)?;
             (serde_json::from_str(&response)?, false)
@@ -616,6 +607,76 @@ async fn fetch_all_projects(
     }
 
     Ok(all_projects)
+}
+
+async fn fetch_project_page(client: &reqwest::Client, url: &str, jwt: &str) -> Result<String> {
+    fetch_project_page_with_retry(
+        client,
+        url,
+        jwt,
+        MAX_PROJECT_REQUEST_ATTEMPTS,
+        PROJECT_REQUEST_RETRY_DELAY,
+    )
+    .await
+}
+
+async fn fetch_project_page_with_retry(
+    client: &reqwest::Client,
+    url: &str,
+    jwt: &str,
+    max_attempts: u32,
+    initial_retry_delay: Duration,
+) -> Result<String> {
+    if max_attempts == 0 {
+        return Err(anyhow!(
+            "max project request attempts must be greater than zero"
+        ));
+    }
+
+    let mut attempt = 1;
+    loop {
+        let result = async {
+            client
+                .get(url)
+                .header("Authorization", format!("Bearer {jwt}"))
+                .send()
+                .await?
+                .error_for_status()?
+                .text()
+                .await
+        }
+        .await;
+
+        match result {
+            Ok(response) => return Ok(response),
+            Err(error) if attempt < max_attempts && is_retryable_project_request_error(&error) => {
+                let retry_delay = project_request_retry_delay(initial_retry_delay, attempt);
+                eprintln!(
+                    "Project API request attempt {attempt}/{max_attempts} failed: {error}; retrying in {}s",
+                    retry_delay.as_secs_f32()
+                );
+                sleep(retry_delay).await;
+                attempt += 1;
+            }
+            Err(error) => {
+                return Err(error).with_context(|| {
+                    format!("project API request failed after {attempt} attempt(s): {url}")
+                });
+            }
+        }
+    }
+}
+
+fn is_retryable_project_request_error(error: &reqwest::Error) -> bool {
+    error.is_timeout()
+        || error.is_connect()
+        || error.status().is_some_and(|status| {
+            status == reqwest::StatusCode::TOO_MANY_REQUESTS || status.is_server_error()
+        })
+}
+
+fn project_request_retry_delay(initial_delay: Duration, failed_attempt: u32) -> Duration {
+    initial_delay.saturating_mul(2_u32.saturating_pow(failed_attempt - 1))
 }
 
 async fn post_to_slack(webhook_url: &str, message: String) -> Result<()> {
@@ -709,6 +770,9 @@ fn get_expiration_from_encoded_jwt(jwt: &str) -> Result<DateTime<Utc>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+    use tokio::net::TcpListener;
+    use tokio::task::JoinHandle;
 
     #[test]
     fn can_deserialize() {
@@ -742,5 +806,111 @@ mod tests {
     fn test_extract_expiration_from_jwt() {
         let expiration = get_expiration_from_encoded_jwt(JWT).expect("Should parse expiration");
         assert_eq!(expiration.timestamp(), EXPIRATION_IN_UNIX_SECONDS);
+    }
+
+    #[test]
+    fn project_request_retries_use_exponential_backoff() {
+        assert_eq!(
+            project_request_retry_delay(Duration::from_secs(1), 1),
+            Duration::from_secs(1)
+        );
+        assert_eq!(
+            project_request_retry_delay(Duration::from_secs(1), 2),
+            Duration::from_secs(2)
+        );
+    }
+
+    #[tokio::test]
+    async fn retries_transient_project_api_errors() {
+        let (url, server) = spawn_http_server(vec![500, 200]).await;
+        let client = reqwest::Client::builder()
+            .timeout(Duration::from_secs(1))
+            .build()
+            .expect("client should build");
+
+        let response = fetch_project_page_with_retry(&client, &url, "token", 3, Duration::ZERO)
+            .await
+            .expect("the second request should succeed");
+
+        assert_eq!(response, "success");
+        assert_eq!(server.await.expect("server should finish"), 2);
+    }
+
+    #[tokio::test]
+    async fn does_not_retry_non_transient_project_api_errors() {
+        let (url, server) = spawn_http_server(vec![404]).await;
+        let client = reqwest::Client::builder()
+            .timeout(Duration::from_secs(1))
+            .build()
+            .expect("client should build");
+
+        let error = fetch_project_page_with_retry(&client, &url, "token", 3, Duration::ZERO)
+            .await
+            .expect_err("a 404 should fail");
+
+        assert!(error.to_string().contains("after 1 attempt"));
+        assert_eq!(server.await.expect("server should finish"), 1);
+    }
+
+    #[tokio::test]
+    async fn rejects_zero_project_request_attempts() {
+        let client = reqwest::Client::new();
+
+        let error = fetch_project_page_with_retry(
+            &client,
+            "http://127.0.0.1/projects",
+            "token",
+            0,
+            Duration::ZERO,
+        )
+        .await
+        .expect_err("zero attempts should fail");
+
+        assert_eq!(
+            error.to_string(),
+            "max project request attempts must be greater than zero"
+        );
+    }
+
+    async fn spawn_http_server(statuses: Vec<u16>) -> (String, JoinHandle<usize>) {
+        let listener = TcpListener::bind("127.0.0.1:0")
+            .await
+            .expect("test server should bind");
+        let address = listener
+            .local_addr()
+            .expect("server should have an address");
+
+        let server = tokio::spawn(async move {
+            let mut request_count = 0;
+            for status in statuses {
+                let (mut stream, _) = listener.accept().await.expect("server should accept");
+                let mut request = Vec::new();
+                let mut buffer = [0; 1024];
+                while !request.windows(4).any(|bytes| bytes == b"\r\n\r\n") {
+                    let bytes_read = stream.read(&mut buffer).await.expect("request should read");
+                    assert!(bytes_read > 0, "client closed before sending a request");
+                    request.extend_from_slice(&buffer[..bytes_read]);
+                }
+
+                let (reason, body) = match status {
+                    200 => ("OK", "success"),
+                    404 => ("Not Found", "not found"),
+                    500 => ("Internal Server Error", "temporary failure"),
+                    _ => panic!("unsupported test status: {status}"),
+                };
+                let response = format!(
+                    "HTTP/1.1 {status} {reason}\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                    body.len()
+                );
+                stream
+                    .write_all(response.as_bytes())
+                    .await
+                    .expect("response should write");
+                request_count += 1;
+            }
+            request_count
+        });
+
+        (format!("http://{address}/projects"), server)
     }
 }
