@@ -708,9 +708,52 @@ fn create_slack_message(project: &SummarizedProject) -> String {
 
     message.push_str(tweet);
 
-    let json = serde_json::json!({
+    let mut json = serde_json::json!({
         "text": message
     });
+
+    let image_url = project
+        .attributes
+        .image_url
+        .as_deref()
+        .map(str::trim)
+        .filter(|url| {
+            !url.is_empty()
+                && !url.to_lowercase().contains("generic")
+                && url.chars().count() <= 3000
+                && reqwest::Url::parse(url)
+                    .is_ok_and(|url| matches!(url.scheme(), "http" | "https"))
+        });
+
+    // Keep oversized messages text-only rather than exceeding Slack's section limit.
+    if let Some(image_url) = image_url.filter(|_| message.chars().count() <= 3000) {
+        let alt_text: String = project
+            .attributes
+            .image_description
+            .as_deref()
+            .map(str::trim)
+            .filter(|description| !description.is_empty())
+            .unwrap_or("Image from ShapeYourCity API")
+            .chars()
+            .take(2000)
+            .collect();
+
+        // Slack fetches the public image directly; no upload or additional hosting needed.
+        // Retain top-level text for notifications and screen readers.
+        json["blocks"] = json!([
+            {
+                "type": "section",
+                "text": { "type": "mrkdwn", "text": message }
+            },
+            {
+                "type": "image",
+                "image_url": image_url,
+                "alt_text": alt_text
+            }
+        ]);
+        json["unfurl_links"] = json!(false);
+        json["unfurl_media"] = json!(false);
+    }
 
     json.to_string()
 }
@@ -773,6 +816,93 @@ mod tests {
     use tokio::io::{AsyncReadExt, AsyncWriteExt};
     use tokio::net::TcpListener;
     use tokio::task::JoinHandle;
+
+    fn slack_project() -> SummarizedProject {
+        let projects: Projects =
+            serde_json::from_str(include_str!("../test_files/ExampleInput.json")).unwrap();
+        SummarizedProject {
+            project: projects.data.into_iter().nth(1).unwrap(),
+            tweet: "A five-storey apartment building is proposed.".to_string(),
+        }
+    }
+
+    #[test]
+    fn slack_includes_project_image_and_preserves_message_text() {
+        let project = slack_project();
+        let message: Value = serde_json::from_str(&create_slack_message(&project)).unwrap();
+        let expected_text = format!(
+            "*<{}|{}>*\n{}",
+            project.project.links.self_link, project.project.attributes.name, project.tweet
+        );
+
+        assert_eq!(message["text"], expected_text);
+        assert_eq!(message["blocks"][0]["text"]["text"], expected_text);
+        assert_eq!(message["blocks"][0]["text"]["type"], "mrkdwn");
+        assert_eq!(message["blocks"][1]["type"], "image");
+        assert_eq!(
+            message["blocks"][1]["image_url"],
+            project.project.attributes.image_url.unwrap()
+        );
+        assert_eq!(
+            message["blocks"][1]["alt_text"],
+            "Example of a 5 storey apartment building"
+        );
+        assert_eq!(message["unfurl_links"], false);
+        assert_eq!(message["unfurl_media"], false);
+    }
+
+    #[test]
+    fn slack_keeps_posts_without_suitable_images_text_only() {
+        let mut project = slack_project();
+        for url in [
+            None,
+            Some(""),
+            Some(" \n "),
+            Some("https://example.com/GeNeRiC.jpg"),
+            Some("not a URL"),
+            Some("file:///image.jpg"),
+        ] {
+            project.project.attributes.image_url = url.map(str::to_string);
+            let message: Value = serde_json::from_str(&create_slack_message(&project)).unwrap();
+            assert!(
+                message.get("blocks").is_none(),
+                "unexpected image for {url:?}"
+            );
+            assert!(message["text"].as_str().unwrap().contains(&project.tweet));
+        }
+    }
+
+    #[test]
+    fn slack_image_alt_text_is_nonempty_and_within_slack_limits() {
+        let mut project = slack_project();
+        for description in [None, Some(""), Some(" \n ")] {
+            project.project.attributes.image_description = description.map(str::to_string);
+            let message: Value = serde_json::from_str(&create_slack_message(&project)).unwrap();
+            assert_eq!(
+                message["blocks"][1]["alt_text"],
+                "Image from ShapeYourCity API"
+            );
+        }
+
+        project.project.attributes.image_description = Some("🏠".repeat(2001));
+        let message: Value = serde_json::from_str(&create_slack_message(&project)).unwrap();
+        assert_eq!(message["blocks"][1]["alt_text"], "🏠".repeat(2000));
+    }
+
+    #[test]
+    fn slack_keeps_oversized_messages_and_image_urls_text_only() {
+        let mut project = slack_project();
+        project.project.attributes.image_url =
+            Some(format!("https://example.com/{}.jpg", "a".repeat(3000)));
+        let message: Value = serde_json::from_str(&create_slack_message(&project)).unwrap();
+        assert!(message.get("blocks").is_none());
+
+        project.project.attributes.image_url = Some("https://example.com/image.jpg".to_string());
+        project.tweet = "a".repeat(3001);
+        let message: Value = serde_json::from_str(&create_slack_message(&project)).unwrap();
+        assert!(message.get("blocks").is_none());
+        assert!(message["text"].as_str().unwrap().ends_with(&project.tweet));
+    }
 
     #[test]
     fn can_deserialize() {
