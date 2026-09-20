@@ -63,7 +63,50 @@ Options:
 
 Approval notices and their conditions can appear months after the original
 application. Approval tracking keeps those notices and copies of the linked PDFs
-in SQLite, independently of the posting queues. It is opt-in.
+in SQLite. Normal runs now collect and post new conditions automatically when
+Slack or Bluesky credentials are configured. Both generation and source review
+use GLM through the official Z.ai provider.
+
+Set `POST_CONDITIONS=false` or pass `--post-conditions=false` to disable automatic
+conditions collection, generation and delivery. Regular application posts keep
+working. Add `--track-approvals` if you want collection to continue while posting
+is disabled. `--skip-update-db` also bypasses the automatic conditions pipeline.
+
+The first successful scan of each project is a baseline: existing letters are
+archived without generating or posting summaries. Previously tracked history is
+also baselined when automatic posting is first enabled. Failed initial downloads
+remain unbaselined until a scan succeeds. A project first seen while awaiting
+approval can post its conditions when they later appear; an already-approved
+project first discovered later is conservatively baselined.
+
+After that, distinct PDF contents become eligible for a post with the source
+link. A repeated download, another URL for the same bytes on that project, or
+a return to an already-seen version never creates another post. A newer version
+supersedes an unsent draft; posts already sent to one destination keep their
+original text for delivery to the other. Notices without a linked conditions
+PDF are recorded but do not generate an automatic post.
+
+Disabling cancels queued conditions work. Re-enabling, or changing the set of
+enabled destination types (Slack/Bluesky), establishes a fresh baseline rather
+than posting updates accumulated while disabled. Changing only a webhook URL
+or Bluesky account does not reset the baseline. No destination credentials means
+no automatic conditions work. Existing cached summaries remain available.
+
+Each run generates at most three conditions summaries and attempts at most three
+deliveries per destination. Set `CONDITIONS_POST_LIMIT` or
+`--conditions-post-limit` to change that limit (1–20). Each summary has a
+five-minute overall timeout and the existing three-attempt failure budget.
+The conditions pipeline runs after regular application posts, so a failed PDF
+download or summary does not block them. Failures still appear in the run's
+monitoring status.
+
+Deliveries use a durable outbox with separate Slack and Bluesky status. Bluesky
+retries use the same stored post identity and verify an existing record before
+accepting it as delivered. Slack incoming webhooks cannot reconcile an ambiguous
+send: timeouts, server errors and crashes during delivery are held as `uncertain`
+for inspection, rather than automatically risking duplicate posts. Connection
+failures and rate limits retry on a later run, up to three attempts. This policy
+applies to conditions posts; the ordinary application queues are unchanged.
 
 To collect approvals without summarizing or posting anything:
 
@@ -76,10 +119,11 @@ credentials are configured or messages are already queued. It does not update
 the ordinary `Projects` snapshots, so it won't consume new-project notifications
 from a later normal run. The separate database above keeps testing isolated.
 
-`--track-approvals` adds collection to a normal run, which still processes its
-existing posting queues. Neither option posts approval updates. Both conflict
-with `--skip-update-db`. Collection failures make the run fail before entering
-the posting pipeline; successfully collected evidence is kept for the next run.
+`--track-approvals --post-conditions=false` adds passive collection to a normal
+run, which still processes its ordinary posting queues. `--tracking-only` always
+stays passive, even with the default posting flag enabled. Both tracking options
+conflict with `--skip-update-db`. Successfully collected evidence survives failed
+downloads and is available on later runs.
 
 The tracker distinguishes rezoning approval, development approval, development
 approval subject to conditions, and permit issuance. It reads explicit notices
@@ -98,10 +142,30 @@ decisions. Missing notices never delete earlier evidence.
 For projects with a recognized decision, it checks the project description and
 document library for links labelled “Prior-to letter” or “Conditions of approval”.
 It follows Shape Your City's download pages and stores distinct PDF contents as
-SQLite BLOBs, keeping older versions when a URL's contents change. Repeated bytes
-do not create another copy. Downloads are limited to 20 MiB each; failed downloads
+SQLite BLOBs, keeping older versions when a URL's contents change. A SHA-256
+content store shares identical bytes across URLs and projects; document/version
+records retain their own history. Downloads are limited to 20 MiB each; failed downloads
 retain the link and error and are retried on a later run. The database will grow
-as documents accumulate.
+as documents accumulate. There is no global storage cap or automatic deletion.
+Byte changes, including PDF metadata changes, count as new versions.
+
+Existing archives migrate transactionally on open, preserving version IDs and
+summary references. The legacy `ApprovalDocumentVersions.Content` column becomes
+empty; read bytes by joining `ApprovalPdfContent` as shown below. Freed SQLite
+pages are reused but the file does not automatically shrink. Keep a database
+backup when deploying schema changes; older conditions tools expect the old
+inline PDF column.
+
+Inspect archive size and outbox counts without network calls:
+
+```console
+rezoning-scraper --approval-storage-stats --database approvals.db
+```
+
+This opens/migrates the database, then reports unique PDF bytes, bytes without
+deduplication, analysis text/trace bytes, allocated/reusable SQLite pages, and
+conditions delivery states. Normal collection runs also print these figures and
+report `rezoning_scraper.approval_pdf_bytes` to monitoring.
 
 Unchanged projects with known decisions are checked for documents again after
 24 hours, including projects whose documents were initially missing. Changed
@@ -110,7 +174,8 @@ run the scraper; the option does not install a schedule.
 
 This is a conservative first pass. Unfamiliar approval wording may be missed,
 and generic council-report links are not treated as conditions documents. It
-archives PDFs; the separate summary command below analyzes them. It cannot
+archives PDFs; normal runs analyze new eligible versions, and the separate
+summary command below can analyze history without posting. It cannot
 reconstruct conditional-approval dates or documents removed before tracking began.
 
 Inspect the history and linked documents with SQLite:
@@ -123,18 +188,32 @@ FROM ApprovalEvents
 ORDER BY FirstSeen DESC, Id DESC;
 
 SELECT d.ProjectId, d.Title, d.SourceUrl, d.LastError,
-       v.Id AS VersionId, length(v.Content) AS PdfBytes
+       v.Id AS VersionId, length(b.Content) AS PdfBytes
 FROM ApprovalDocuments d
 LEFT JOIN ApprovalDocumentVersions v ON v.DocumentId = d.Id
+LEFT JOIN ApprovalPdfContent b ON b.Hash = v.ContentHash
 ORDER BY d.Id, v.Id;
 ```
 
 In the SQLite CLI, export a version using its `VersionId`:
 
 ```sql
-SELECT writefile('conditions.pdf', Content)
-FROM ApprovalDocumentVersions WHERE Id = 1;
+SELECT writefile('conditions.pdf', b.Content)
+FROM ApprovalDocumentVersions v
+JOIN ApprovalPdfContent b ON b.Hash = v.ContentHash WHERE v.Id = 1;
+
+SELECT p.Id, p.ProjectId, p.VersionId, p.State, p.LastError,
+       d.Channel, d.Status, d.Attempts, d.LastError AS DeliveryError
+FROM ApprovalPosts p LEFT JOIN ApprovalPostDeliveries d ON d.PostId = p.Id
+WHERE p.State = 'failed' OR d.Status IN ('failed', 'uncertain');
 ```
+
+For an uncertain Slack delivery, check the destination before changing its
+status. If the post exists, mark that delivery `sent`. If it definitely did not
+arrive, an operator can reset that delivery to `pending` with `Attempts=0` and
+`LastAttempt=NULL`. Never reset a successful destination when retrying the other.
+Failed or uncertain work remains visible in monitoring until resolved or
+automatic posting is disabled.
 
 For a limited test, `--tracking-only --projects-file response.json --database test.db`
 reads a saved projects API response instead of querying the API. Document pages

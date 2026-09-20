@@ -1,4 +1,5 @@
-//! Passive approval history. Nothing in this module enqueues or publishes posts.
+//! Approval history and PDF collection. Normal runs also observe new versions for
+//! the conditions outbox; explicit tracking-only runs remain passive.
 use anyhow::{bail, Context, Result};
 use chrono::{NaiveDate, Utc};
 use regex::Regex;
@@ -59,6 +60,7 @@ pub fn initialize_schema(db: &Connection) -> Result<()> {
         CREATE INDEX IF NOT EXISTS ApprovalDocumentVersionsByDocument
             ON ApprovalDocumentVersions(DocumentId);",
     )?;
+    crate::approval_storage::initialize(db)?;
     Ok(())
 }
 
@@ -342,27 +344,34 @@ fn record_document(
 
 fn record_pdf(db: &mut Database, id: i64, url: &Url, bytes: &[u8], now: i64) -> Result<()> {
     let tx = db.transaction()?;
+    let hash = crate::approval_storage::content_hash(bytes);
+    tx.execute(
+        "INSERT OR IGNORE INTO ApprovalPdfContent VALUES (?1, ?2)",
+        params![hash, bytes],
+    )?;
     let existing: Option<i64> = tx
         .query_row(
-            "SELECT Id FROM ApprovalDocumentVersions WHERE DocumentId = ?1 AND Content = ?2",
-            params![id, bytes],
+            "SELECT Id FROM ApprovalDocumentVersions WHERE DocumentId = ?1 AND (ContentHash = ?2 OR Content = ?3)",
+            params![id, hash, bytes],
             |row| row.get(0),
         )
         .optional()?;
-    if let Some(version) = existing {
+    let version = if let Some(version) = existing {
         tx.execute(
             "UPDATE ApprovalDocumentVersions SET LastSeen = ?2 WHERE Id = ?1",
             params![version, now],
         )?;
+        version
     } else {
         tx.execute(
-            "INSERT INTO ApprovalDocumentVersions(DocumentId, DownloadUrl, FirstSeen, LastSeen, Content)
-             VALUES (?1, ?2, ?3, ?3, ?4)", params![id, url.as_str(), now, bytes],
+            "INSERT INTO ApprovalDocumentVersions(DocumentId, DownloadUrl, FirstSeen, LastSeen, Content, ContentHash)
+             VALUES (?1, ?2, ?3, ?3, X'', ?4)", params![id, url.as_str(), now, hash],
         )?;
-    }
+        tx.last_insert_rowid()
+    };
     tx.execute(
-        "UPDATE ApprovalDocuments SET LastChecked = ?2, LastError = NULL WHERE Id = ?1",
-        params![id, now],
+        "UPDATE ApprovalDocuments SET LastChecked = ?2, LastError = NULL, CurrentVersionId = ?3 WHERE Id = ?1",
+        params![id, now, version],
     )?;
     tx.commit()?;
     Ok(())
@@ -375,11 +384,26 @@ pub async fn track_approvals(db: &mut Database, projects: &[Project]) -> Result<
     track_with_client(db, projects, &client, Utc::now().timestamp()).await
 }
 
+pub async fn track_for_posting(db: &mut Database, projects: &[Project]) -> Result<()> {
+    let client = Client::builder().timeout(Duration::from_secs(45)).build()?;
+    track_with_observations(db, projects, &client, Utc::now().timestamp(), true).await
+}
+
 async fn track_with_client(
     db: &mut Database,
     projects: &[Project],
     client: &Client,
     now: i64,
+) -> Result<()> {
+    track_with_observations(db, projects, client, now, false).await
+}
+
+async fn track_with_observations(
+    db: &mut Database,
+    projects: &[Project],
+    client: &Client,
+    now: i64,
+    observe_posts: bool,
 ) -> Result<()> {
     let mut failures = Vec::new();
     for project in projects {
@@ -394,6 +418,9 @@ async fn track_with_client(
             |row| row.get(0),
         )?;
         if found.is_empty() && !known {
+            if observe_posts {
+                crate::approval_posts::observe_project(db, &project.id, now)?;
+            }
             continue;
         }
         let source = serde_json::to_string(&(
@@ -405,13 +432,24 @@ async fn track_with_client(
             [&project.id],
             |row| Ok((row.get(0)?, row.get(1)?)),
         )?;
-        if previous == source && last_success.is_some_and(|last| now - last < RECHECK_SECONDS) {
+        let needs_baseline =
+            observe_posts && !crate::approval_posts::has_baseline(db, &project.id)?;
+        if !needs_baseline
+            && previous == source
+            && last_success.is_some_and(|last| now - last < RECHECK_SECONDS)
+        {
+            if observe_posts {
+                crate::approval_posts::observe_project(db, &project.id, now)?;
+            }
             continue;
         }
         match collect_documents(db, project, client, now).await {
             Ok(()) => {
                 db.execute("UPDATE ApprovalScans SET SourceText = ?2, LastSuccess = ?3 WHERE ProjectId = ?1",
                     params![project.id, source, now])?;
+                if observe_posts {
+                    crate::approval_posts::observe_project(db, &project.id, now)?;
+                }
             }
             Err(error) => {
                 let message = format!("{}: {error:#}", project.attributes.name);
@@ -440,8 +478,8 @@ async fn collect_documents(
     let (url, page) = get_bytes(client, &url, MAX_PAGE_BYTES).await?;
     let links = document_links(std::str::from_utf8(&page)?, &url);
     let mut failures = Vec::new();
-    for link in links {
-        let id = record_document(db, &project.id, &link, now)?;
+    for link in &links {
+        let id = record_document(db, &project.id, link, now)?;
         match download_pdf(client, &link.url).await {
             Ok((url, bytes)) => record_pdf(db, id, &url, &bytes, now)?,
             Err(error) => {
@@ -456,6 +494,21 @@ async fn collect_documents(
     }
     if !failures.is_empty() {
         bail!("{}", failures.join("; "));
+    }
+    // Keep historical bytes, but do not publish a queued letter whose link disappeared.
+    let documents = db
+        .prepare("SELECT Id,SourceUrl FROM ApprovalDocuments WHERE ProjectId=?1")?
+        .query_map([&project.id], |r| {
+            Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?))
+        })?
+        .collect::<rusqlite::Result<Vec<_>>>()?;
+    for (id, url) in documents {
+        if !links.iter().any(|link| link.url.as_str() == url) {
+            db.execute(
+                "UPDATE ApprovalDocuments SET CurrentVersionId=NULL WHERE Id=?1",
+                [id],
+            )?;
+        }
     }
     Ok(())
 }
@@ -695,7 +748,7 @@ mod tests {
         record_pdf(&mut db, id, &url, b"%PDF-original", 400).unwrap();
         assert_eq!(count(&db, "ApprovalDocumentVersions"), 2);
         let row: (i64, i64, Vec<u8>) = db.query_row(
-            "SELECT FirstSeen, LastSeen, Content FROM ApprovalDocumentVersions ORDER BY Id LIMIT 1", [],
+            "SELECT v.FirstSeen, v.LastSeen, b.Content FROM ApprovalDocumentVersions v JOIN ApprovalPdfContent b ON b.Hash=v.ContentHash ORDER BY v.Id LIMIT 1", [],
             |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
         ).unwrap();
         assert_eq!(row, (100, 400, b"%PDF-original".to_vec()));
@@ -787,6 +840,104 @@ mod tests {
             );
         }
         task.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn failed_initial_download_is_baselined_on_recovery_then_only_changes_queue() {
+        let page =
+            "<div class='widget_document_library'><a href='/letter'>Prior-to letter</a></div>";
+        let (base, task) = server(vec![
+            ("/project", 200, page),
+            ("/letter", 503, "later"),
+            ("/project", 200, page),
+            ("/letter", 200, "%PDF-original"),
+            ("/project", 200, page),
+            ("/letter", 200, "%PDF-revision"),
+        ])
+        .await;
+        let mut db = Database::new_in_memory().unwrap();
+        crate::approval_posts::configure(&db, true, true, true).unwrap();
+        let mut p = project(CONDITIONAL);
+        p.links.self_link = format!("{base}/project");
+        assert!(
+            track_with_observations(&mut db, &[p.clone()], &client(), 100, true)
+                .await
+                .is_err()
+        );
+        assert!(!crate::approval_posts::has_baseline(&db, &p.id).unwrap());
+        track_with_observations(&mut db, &[p.clone()], &client(), 200, true)
+            .await
+            .unwrap();
+        assert_eq!(count(&db, "ApprovalPostDeliveries"), 0);
+        // Same-day unchanged scan needs no HTTP and cannot enqueue duplicates.
+        track_with_observations(&mut db, &[p.clone()], &client(), 201, true)
+            .await
+            .unwrap();
+        p.attributes.description = Some("The conditions letter was revised.".into());
+        track_with_observations(&mut db, &[p], &client(), 202, true)
+            .await
+            .unwrap();
+        assert_eq!(count(&db, "ApprovalPostDeliveries"), 2);
+        assert_eq!(count(&db, "ApprovalPdfContent"), 2);
+        task.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn passive_tracking_history_is_freshly_fetched_before_posting_is_enabled() {
+        let page =
+            "<div class='widget_document_library'><a href='/letter'>Prior-to letter</a></div>";
+        let (base, task) = server(vec![
+            ("/project", 200, page),
+            ("/letter", 200, "%PDF-old"),
+            ("/project", 200, page),
+            ("/letter", 200, "%PDF-at-activation"),
+        ])
+        .await;
+        let mut db = Database::new_in_memory().unwrap();
+        let mut p = project(CONDITIONAL);
+        p.links.self_link = format!("{base}/project");
+        track_with_client(&mut db, &[p.clone()], &client(), 100)
+            .await
+            .unwrap();
+        crate::approval_posts::configure(&db, true, true, true).unwrap();
+        // Activation bypasses the normal 24-hour recheck interval to avoid stale baselines.
+        track_with_observations(&mut db, &[p], &client(), 101, true)
+            .await
+            .unwrap();
+        assert_eq!(count(&db, "ApprovalDocumentVersions"), 2);
+        assert_eq!(count(&db, "ApprovalPosts"), 2);
+        assert_eq!(count(&db, "ApprovalPostDeliveries"), 0);
+        task.await.unwrap();
+    }
+
+    #[test]
+    fn same_pdf_at_different_urls_uses_one_blob_and_preserves_each_history() {
+        let mut db = Database::new_in_memory().unwrap();
+        for (n, project) in [(1, "p"), (2, "p"), (3, "another-project")] {
+            let url = Url::parse(&format!("https://example.com/{n}")).unwrap();
+            let id = record_document(
+                &db,
+                project,
+                &DocumentLink {
+                    title: "Prior-to letter".into(),
+                    url: url.clone(),
+                },
+                100,
+            )
+            .unwrap();
+            record_pdf(&mut db, id, &url, b"%PDF-same", 100).unwrap();
+        }
+        assert_eq!(count(&db, "ApprovalDocumentVersions"), 3);
+        assert_eq!(count(&db, "ApprovalPdfContent"), 1);
+        let stats = crate::approval_storage::stats(&db).unwrap();
+        assert_eq!(stats.pdf_bytes, 9);
+        assert_eq!(stats.version_pdf_bytes, 27);
+        for id in 1..=3 {
+            assert_eq!(
+                crate::approval_storage::read_pdf(&db, id).unwrap(),
+                b"%PDF-same"
+            );
+        }
     }
 
     #[tokio::test]

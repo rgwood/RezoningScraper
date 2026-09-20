@@ -500,11 +500,7 @@ async fn summarize_one(
         validate_pages(&pages)?;
         pages
     } else {
-        let bytes: Vec<u8> = db.query_row(
-            "SELECT Content FROM ApprovalDocumentVersions WHERE Id = ?1",
-            [id],
-            |r| r.get(0),
-        )?;
+        let bytes = crate::approval_storage::read_pdf(db, id)?;
         let pages = extract_pages(bytes).await?;
         db.execute("UPDATE ConditionsSummaries SET PagesJson = ?5
             WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",

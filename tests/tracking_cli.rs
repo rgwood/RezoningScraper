@@ -224,3 +224,102 @@ fn missing_key_does_not_consume_summary_attempts() {
         .unwrap();
     assert_eq!(count, 0);
 }
+
+#[test]
+fn storage_report_migrates_legacy_bytes_without_processing_any_queues() {
+    let scratch = Scratch::new();
+    let path = scratch.0.join("archive.db");
+    let db = Database::new_from_file(path.to_str().unwrap()).unwrap();
+    seed_archived_document(&db);
+    let before: Vec<u8> = db
+        .query_row(
+            "SELECT Content FROM ApprovalDocumentVersions WHERE Id=1",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap();
+    for name in ["llm_queue", "slack_post_queue", "bluesky_post_queue"] {
+        Queue::<String>::new(name, &db)
+            .push(&db, "must not process".into())
+            .unwrap();
+    }
+    let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
+        .env_clear()
+        .env("POST_CONDITIONS", "true")
+        .env("SLACK_WEBHOOK_URL", "http://127.0.0.1:1/must-not-post")
+        .env("BLUESKY_USER", "fake-test-user")
+        .env("BLUESKY_PASSWORD", "fake-test-password")
+        .env(
+            "DOGSTATSD_ADDRESS",
+            "invalid:must-not-initialize-monitoring",
+        )
+        .args(["--approval-storage-stats", "--database"])
+        .arg(&path)
+        .current_dir(&scratch.0)
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(report["storage"]["unique_pdfs"], 1);
+    assert_eq!(report["storage"]["pdf_bytes"], before.len());
+    assert_eq!(
+        rezoning_scraper::approval_storage::read_pdf(&db, 1).unwrap(),
+        before
+    );
+    for name in ["llm_queue", "slack_post_queue", "bluesky_post_queue"] {
+        assert_eq!(Queue::<String>::new(name, &db).depth(&db).unwrap(), 1);
+    }
+    assert_eq!(
+        db.query_row("SELECT count(*) FROM ApprovalPosts", [], |r| r
+            .get::<_, i64>(0))
+            .unwrap(),
+        0
+    );
+}
+
+#[test]
+fn condition_posting_environment_and_limits_are_validated_before_running() {
+    let scratch = Scratch::new();
+    for arguments in [
+        vec!["--post-conditions=invalid"],
+        vec!["--conditions-post-limit=0"],
+        vec!["--conditions-post-limit=21"],
+        vec!["--approval-storage-stats", "--summarize-conditions"],
+    ] {
+        let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
+            .env_clear()
+            .args(arguments)
+            .current_dir(&scratch.0)
+            .output()
+            .unwrap();
+        assert!(!output.status.success());
+        assert!(!scratch.0.join("rezoning_scraper.db").exists());
+    }
+    let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
+        .env_clear()
+        .env("POST_CONDITIONS", "invalid")
+        .arg("--approval-storage-stats")
+        .current_dir(&scratch.0)
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(!scratch.0.join("rezoning_scraper.db").exists());
+    for value in ["true", "false"] {
+        let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
+            .env_clear()
+            .env("POST_CONDITIONS", value)
+            .arg("--approval-storage-stats")
+            .current_dir(&scratch.0)
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+}
