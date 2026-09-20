@@ -19,10 +19,11 @@ dogstatsd = "0.12.4"
 tokio = { version = "1", features = ["full"] }
 bsky-sdk = "0.1.23"
 html2md = "0.2.15"
-genai = "0.5.0"
+genai = "0.6.5"
 itertools = "0.14.0"
 image = "0.25.9"
 regex = "1.12.2"
+pdf-extract = "0.12.1"
 
 # Force vendored OpenSSL on Linux to make building for musl easier
 [target.'cfg(target_os = "linux")'.dependencies]

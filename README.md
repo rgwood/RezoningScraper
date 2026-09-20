@@ -89,7 +89,7 @@ run the scraper; the option does not install a schedule.
 
 This is a conservative first pass. Unfamiliar approval wording may be missed,
 and generic council-report links are not treated as conditions documents. It
-archives PDFs without extracting or summarizing their contents. It cannot
+archives PDFs; the separate summary command below analyzes them. It cannot
 reconstruct conditional-approval dates or documents removed before tracking began.
 
 Inspect the history and linked documents with SQLite:
@@ -123,6 +123,86 @@ in-memory databases, localhost fixture servers, and isolated CLI databases:
 ```console
 cargo test --locked
 cargo clippy --locked --all-targets -- -D warnings
+```
+
+## Conditions summaries
+
+Conditions letters can be long, and approval does not mean the applicant can
+start building. The summary command explains the main requirements in the PDFs
+already collected by approval tracking:
+
+```console
+rezoning-scraper --summarize-conditions --database approvals.db --summary-limit 3
+```
+
+This uses `OPENAI_API_KEY` and the same `gpt-5.6-luna` model as application
+summaries. It prints a readable Markdown summary and saves structured JSON in
+SQLite. It does not crawl, post, consume posting queues, or send monitoring
+events. Run approval tracking separately to collect new documents.
+
+The SDK is `genai` 0.6.5, which routes this model through OpenAI's Responses API.
+Conditions requests have a 5,000-token output limit and a 90-second timeout;
+incomplete responses are rejected.
+
+Each summary includes a short overview, the main requirements, PDF page
+references, and limitations. The prompt distinguishes conditions before permit
+issuance from permit terms, occupancy requirements, and advisory comments. It
+preserves alternatives and qualifications, highlights explicit fees and
+deadlines, and avoids guessing costs or describing requirements as onerous.
+
+Each requirement also has a supporting quote in the saved JSON. The app checks
+that the quote occurs on the cited page before saving the summary. This catches
+invented citations, but does not prove the paraphrase is correct. These are
+AI-generated, selective summaries, not complete compliance checklists.
+The last raw model response is retained in `RawResponse` for reviewing rejected
+citations; only validated responses populate `SummaryJson`.
+
+PDF text extraction is built into the binary; no external PDF tools are needed.
+The app keeps page boundaries and saves the text used for the summary. It rejects
+malformed PDFs, pages with very little readable text, documents over 100 pages,
+and extracted text over 120,000 bytes rather than silently truncating the letter.
+There is no OCR yet, so scanned documents may need manual review.
+
+By default a run processes up to 10 PDFs, newest archived versions first. Set
+`--summary-limit` from 1 to 100 to change that. Completed summaries are cached by
+PDF version, model, prompt version, and extractor version. New PDF versions get
+their own summaries; older summaries remain available. No model call is made
+when displaying a cached result:
+
+```console
+rezoning-scraper --summarize-conditions --database approvals.db --document-version 1
+```
+
+Failures are saved and retried on later runs, up to three attempts. One failed
+document does not stop the rest of the batch, but the command exits non-zero if
+any document in that batch failed. Use `--retry-failed-summaries` to explicitly
+retry documents that have exhausted their attempts. Missing API credentials fail
+before consuming any attempts. Cached summaries can be viewed without a key.
+
+Inspect results and failures with SQLite:
+
+```sql
+SELECT DocumentVersionId, Model, PromptVersion,
+       json_extract(SummaryJson, '$.overview') AS Overview,
+       Attempts, LastError
+FROM ConditionsSummaries
+ORDER BY DocumentVersionId DESC;
+
+SELECT s.DocumentVersionId,
+       json_extract(r.value, '$.requirement') AS Requirement,
+       json_extract(r.value, '$.page') AS Page,
+       json_extract(r.value, '$.evidence') AS Evidence
+FROM ConditionsSummaries s, json_each(s.SummaryJson, '$.requirements') r;
+```
+
+Tests include a real six-page childcare conditions letter, quote/page validation,
+retry limits, PDF and prompt version changes, a local mock OpenAI server, and CLI
+checks that existing posting queues remain untouched. The default test suite
+never uses a real API key. An opt-in smoke test checks the existing application
+summarizer against the live API without posting:
+
+```console
+cargo test --lib live_application_summary -- --ignored --nocapture
 ```
 
 ## Monitoring

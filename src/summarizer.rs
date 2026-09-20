@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 use crate::models::Project;
 
-const MODEL: &str = "gpt-5.6-luna";
+pub(crate) const MODEL: &str = "gpt-5.6-luna";
 
 /// Convert HTML to Markdown, ignoring images and not including URLs
 pub fn html_to_markdown(html: &str) -> String {
@@ -77,6 +77,25 @@ impl TagHandlerFactory for TextOnlyHandlerFactory {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[tokio::test]
+    #[ignore = "Makes one real OpenAI request; requires OPENAI_API_KEY"]
+    async fn live_application_summary() {
+        let projects: crate::models::Projects =
+            serde_json::from_str(include_str!("../test_files/ExampleInput.json")).unwrap();
+        let project = projects
+            .data
+            .iter()
+            .find(|p| p.attributes.name.contains("development application"))
+            .unwrap();
+        let summary = project_to_tweet(project).await.unwrap();
+        assert!(!summary.trim().is_empty());
+        assert!(
+            summary.chars().count() <= 140,
+            "Summary exceeded the requested length: {summary}"
+        );
+        println!("{summary}");
+    }
 
     #[test]
     fn test_html_to_markdown() {

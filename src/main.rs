@@ -18,6 +18,7 @@ use tokio::time::sleep;
 
 mod approvals;
 mod bluesky;
+mod conditions;
 mod db;
 mod models;
 mod monitoring;
@@ -77,6 +78,22 @@ struct Args {
     #[arg(long, help = "Only collect approvals; bypass all summarizing and posting queues", conflicts_with_all = ["skip_update_db", "monitoring_test"])]
     tracking_only: bool,
 
+    #[arg(long, help = "Summarize archived conditions PDFs locally; do not crawl or post", conflicts_with_all = ["tracking_only", "track_approvals", "projects_file", "skip_update_db", "monitoring_test", "api_cache"])]
+    summarize_conditions: bool,
+
+    #[arg(long, default_value_t = 10, requires = "summarize_conditions", value_parser = clap::value_parser!(u32).range(1..=100), help = "Maximum PDFs to summarize in one run")]
+    summary_limit: u32,
+
+    #[arg(long, requires = "summarize_conditions", value_parser = clap::value_parser!(i64).range(1..), help = "Summarize one archived PDF version, or show its cached summary")]
+    document_version: Option<i64>,
+
+    #[arg(
+        long,
+        requires = "summarize_conditions",
+        help = "Retry summaries that have already failed three times"
+    )]
+    retry_failed_summaries: bool,
+
     #[arg(
         long,
         default_value = "rezoning_scraper.db",
@@ -104,6 +121,14 @@ fn main() -> Result<()> {
     let runtime = tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()?;
+    if args.summarize_conditions {
+        return runtime.block_on(conditions::run_command(
+            &args.database,
+            args.summary_limit as usize,
+            args.document_version,
+            args.retry_failed_summaries,
+        ));
+    }
     if args.tracking_only {
         return runtime.block_on(async_main(args, None));
     }
