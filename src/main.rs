@@ -84,6 +84,14 @@ struct Args {
     #[arg(long, default_value_t = 10, requires = "summarize_conditions", value_parser = clap::value_parser!(u32).range(1..=100), help = "Maximum PDFs to summarize in one run")]
     summary_limit: u32,
 
+    #[arg(
+        long,
+        requires = "summarize_conditions",
+        default_value = conditions::analysis::DEFAULT_MODEL,
+        help = "Model used for every conditions-analysis stage"
+    )]
+    conditions_model: String,
+
     #[arg(long, requires = "summarize_conditions", value_parser = clap::value_parser!(i64).range(1..), help = "Summarize one archived PDF version, or show its cached summary")]
     document_version: Option<i64>,
 
@@ -127,6 +135,7 @@ fn main() -> Result<()> {
             args.summary_limit as usize,
             args.document_version,
             args.retry_failed_summaries,
+            &args.conditions_model,
         ));
     }
     if args.tracking_only {

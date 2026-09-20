@@ -1,0 +1,405 @@
+{
+  "reviewer": "Codex in the interactive subscription session; source-reviewed labelled examples, not an independent blind human calibration",
+  "grades": {
+    "city-01-calibration-0": {
+      "fingerprint": "8f62d920eec53c8a75a812d8e7db44dee6ff4580ca1df5f62662fa76ca00999c",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 2 gives five bicycle spaces independently of the four-passenger OR three-passenger-plus-eight-stroller alternative. The reference retains that distinction."
+    },
+    "city-01-calibration-1": {
+      "fingerprint": "7e6a2669256feb3ca81bd39ff58febf20113a29524694e4ac4cd009ada47d998",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Page 2 offers alternatives; the draft incorrectly adds both passenger configurations."
+      ],
+      "rationale": "Page 2 offers alternatives; the draft incorrectly adds both passenger configurations."
+    },
+    "city-02-calibration-0": {
+      "fingerprint": "8a167bd0a037a6d32c6f8416941f37c9fd29d91d909dc664b8981b0e0513db81",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 2 condition 1.7 supports removal OR relocation of existing swings and a 0.3 m maximum for new emergency exits."
+    },
+    "city-02-calibration-1": {
+      "fingerprint": "64a1f57ef6ab73cad5df5e6ec88b534babdd2bb1095884f3c24c3dfe099e31b1",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The utility provision is a permit term on pages 3–4, not a requirement to finish burying utilities before the development permit."
+      ],
+      "rationale": "The utility provision is a permit term on pages 3–4, not a requirement to finish burying utilities before the development permit."
+    },
+    "city-03-calibration-0": {
+      "fingerprint": "bd57d1baf71ad711101b98f82606207f7cc45e7759ec8dcd0d2f79f36bd4d1ee",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 5 requires public-access arrangements; page 9 explicitly calls for Powell frontage reconstruction. Neither claim invents a completion deadline."
+    },
+    "city-03-calibration-1": {
+      "fingerprint": "ac29187a820637ccdcf1d9e30bfee7c57fe9524624cf2cb60197eebcd10dbb2e",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The design discussion offers storytelling/art as an option. It does not mandate an art commission or a completed plaza before issuance."
+      ],
+      "rationale": "The design discussion offers storytelling/art as an option. It does not mandate an art commission or a completed plaza before issuance."
+    },
+    "city-04-calibration-0": {
+      "fingerprint": "cffdd939b70ab8da806ebe472a59c9dceaab7f928477a31a8c8839fd7119e0bd",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 3 conditions 3.5 and 3.7 support the patio-only 10 p.m. curfew and ban on amplified music/live entertainment around the patio."
+    },
+    "city-04-calibration-1": {
+      "fingerprint": "e3161fcf1403e6d4cfe0c58a0031062f5e1308d3fcd212552aefaa3d18f2cce4",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Page 3 applies the curfew to outdoor seating; later Building Review comments do not require installed sprinklers before the development permit."
+      ],
+      "rationale": "Page 3 applies the curfew to outdoor seating; later Building Review comments do not require installed sprinklers before the development permit."
+    },
+    "city-05-calibration-0": {
+      "fingerprint": "12e3213034ab672d293ad76e3ad4ab483bfe9081460004add929c8d8240a08ad",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 2 specifies the lower-floor ceiling reduction of one foot and a minimum two-foot solar-panel setback from perimeter and ridge. Both scope and minimum are preserved."
+    },
+    "city-05-calibration-1": {
+      "fingerprint": "0532806988a936e0e6e7fdf268d1dff858fc43ed400397691953ec2452e6652d",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Page 2 says one foot on the lower floor, not two feet on every ceiling, and calls for solar setbacks rather than removal."
+      ],
+      "rationale": "Page 2 says one foot on the lower floor, not two feet on every ceiling, and calls for solar setbacks rather than removal."
+    },
+    "city-06-calibration-0": {
+      "fingerprint": "09a93aa51ebfcf398755c8fd2f7b5f630e86168a5d0bf5573bdf96765e1ee721",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 5 names sidewalks, lane crossing and duct banks at no City cost; pages 5–6 permit a letter of credit OR other approved security. The reference supplies no invented amount."
+    },
+    "city-06-calibration-1": {
+      "fingerprint": "f571f6a91f16e873c835c6d66b9123e2de1f29343a7b8c3061e1120340178f59",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "No $500,000 amount or cash-only requirement appears. The Services Agreement precedes the permit; completed street construction does not."
+      ],
+      "rationale": "No $500,000 amount or cash-only requirement appears. The Services Agreement precedes the permit; completed street construction does not."
+    },
+    "city-07-calibration-0": {
+      "fingerprint": "eb2f2a5cd00e419efd31aca9f0047d5296e1b2e6bfb3aa07384ccd71ba6fbd25",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 2 requires arrangements for separate conversion/demolition permission for six designated rooms, plus specific street/lane encroachment agreements. The reference describes permission to convert, not compelled demolition."
+    },
+    "city-07-calibration-1": {
+      "fingerprint": "d953102525189037a23e1ec2140231ad71f0ddfb534b64094d32ba7260c23988",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Pages 1–2 do not establish construction authorization, compulsory physical demolition or a $100,000 payment."
+      ],
+      "rationale": "Pages 1–2 do not establish construction authorization, compulsory physical demolition or a $100,000 payment."
+    },
+    "city-08-calibration-0": {
+      "fingerprint": "872f66ab7d5627692525c3c63693b2947924fc5203895b082af1fb579fbcd892",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 2 requires outdoor play space without indoor substitution and minimum counts of two passenger and three bicycle spaces. The reference preserves those minimums."
+    },
+    "city-08-calibration-1": {
+      "fingerprint": "fb0c0ab5efe474644e819a3a3acb37f886e87901df77716d44cd6237f65f4813",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Page 2 explicitly prohibits indoor substitution; page 1's up-to-twenty capacity is not a final licence for twenty children."
+      ],
+      "rationale": "Page 2 explicitly prohibits indoor substitution; page 1's up-to-twenty capacity is not a final licence for twenty children."
+    },
+    "city-09-calibration-0": {
+      "fingerprint": "cd4b227f0725e5031984c1baa4f8d6155eae2c013dc74775b1e4cee6a877af1f",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 2 requires at least fifteen passenger spaces and five accessible spaces including a van-accessible first space. Revised plans is the correct stage."
+    },
+    "city-09-calibration-1": {
+      "fingerprint": "f71238cccaa8f0b5136bf23316aa37ad604aaa247c9951ef53b903f4280f0446",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The source separates bikes, passenger loading and accessible parking. It does not require forty-one car spaces or completed construction before issuance."
+      ],
+      "rationale": "The source separates bikes, passenger loading and accessible parking. It does not require forty-one car spaces or completed construction before issuance."
+    },
+    "city-10-calibration-0": {
+      "fingerprint": "9d9fd93805045cec8512865353f7cc84082ab71835a99476ca022b9200cbe072",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 5–6 identify later Building Review and explicitly require the three reports while describing entire-building upgrades."
+    },
+    "city-10-calibration-1": {
+      "fingerprint": "3a558b6b30a147663007390a4b40c8f2ffa0527a31420413d9da9c7e4f4cb4d8",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Outdoor cover is a recommendation, not a twenty-percent minimum. The building review does not require completed upgrades before the development permit."
+      ],
+      "rationale": "Outdoor cover is a recommendation, not a twenty-percent minimum. The building review does not require completed upgrades before the development permit."
+    },
+    "city-11-calibration-0": {
+      "fingerprint": "039af04be9906d04c4ac997786a07983abaf43ec6a946a405284cbe1aad64cd9",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 5 requires a 2.5 m public pedestrian right-of-way; page 3 specifies a minimum 3 m sidewalk. Both dimensions and the minimum survive."
+    },
+    "city-11-calibration-1": {
+      "fingerprint": "3f45a6a976e2a4cb42038cb59d72ee4d3d49c4b136532160b63938c22fd25248",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Pages 5–6 require the longer of sixty years and building life, so the draft's definite sixty-year expiry is false."
+      ],
+      "rationale": "Pages 5–6 require the longer of sixty years and building life, so the draft's definite sixty-year expiry is false."
+    },
+    "city-12-calibration-0": {
+      "fingerprint": "b29f0fbbaa88abd702d3eee3a6d3236bfcd4c2097cf0e426f6cc278b92f9e7ca",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 4–5 identify six off-site neighbouring trees, retention of the west-side wall/fence and utility coordination to avoid their critical root zones. These are concrete design constraints."
+    },
+    "city-12-calibration-1": {
+      "fingerprint": "223820ab1a646b19c5e5991098b8458b26e4f71ed36555fbeafd921035928e85",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The foundation method depends on arborist recommendations and tree conflicts; it is not a universal L-footing mandate. Page 1's zero proposed parking does not require six new spaces."
+      ],
+      "rationale": "The foundation method depends on arborist recommendations and tree conflicts; it is not a universal L-footing mandate. Page 1's zero proposed parking does not require six new spaces."
+    },
+    "focused-duration-calibration-0": {
+      "fingerprint": "9bf5edcee363c1b9f538d13a4663e60f51c95f8ae243e2415c9c8f76b6b286b8",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 cover twelve residential units only, for the longer of sixty years and building life. The reference gives the full duration and excludes the commercial unit."
+    },
+    "focused-duration-calibration-1": {
+      "fingerprint": "4d5f30f5fcadaaa32abff33cd493c2435885b2651c816399adecddd06ffb1f2c",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The draft improperly adds the thirteenth commercial unit and a fixed sixty-year end date, contrary to page 2."
+      ],
+      "rationale": "The draft improperly adds the thirteenth commercial unit and a fixed sixty-year end date, contrary to page 2."
+    },
+    "focused-security-calibration-0": {
+      "fingerprint": "1e151bb82375151ff0363879796e53a8a03aff6d9b8077e442137448e57114e0",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 support the amount, letter-of-credit OR alternative, pre-permit provision and return after City acceptance of frontage works. The reference preserves all these qualifiers."
+    },
+    "focused-security-calibration-1": {
+      "fingerprint": "9c806c573e626a2d45cafdad0567be96aa8ec063a92b58a2e18bf11364d4b7ae",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The draft changes returnable alternative security into a fee and moves physical completion from occupancy to development-permit issuance."
+      ],
+      "rationale": "The draft changes returnable alternative security into a fee and moves physical completion from occupancy to development-permit issuance."
+    },
+    "holdout-alternatives-calibration-0": {
+      "fingerprint": "fb0ca96b458d145a155f06c9d2b7be9faf098cfb3772782e21e9554679b29ac8",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 explicitly split four passenger spaces OR two plus six stroller spaces. The reference preserves alternatives and drawing-stage timing."
+    },
+    "holdout-alternatives-calibration-1": {
+      "fingerprint": "9ce3e7238ed2c46a85236752efdea352832e149b334182a90b45f65732be38a5",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The draft adds mutually exclusive options and invents a construction deadline; pages 1–2 expressly rule both out."
+      ],
+      "rationale": "The draft adds mutually exclusive options and invents a construction deadline; pages 1–2 expressly rule both out."
+    },
+    "holdout-building-review-calibration-0": {
+      "fingerprint": "6f9eca091bee43dd574b5fdb8aa04c72f39d4593c91caad57e093dd87af3c24a",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 2 requires whole-building structural assessment and seismic design at the later building-permit stage. The reference preserves that stage."
+    },
+    "holdout-building-review-calibration-1": {
+      "fingerprint": "62e8d45d4660e6fc0b1e3dd779391c3273adb5d915ea94d0f64249bfb5a1ea34",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Page 1 requires only acknowledgement before the development permit; page 2's retrofit completion is tied to occupancy."
+      ],
+      "rationale": "Page 1 requires only acknowledgement before the development permit; page 2's retrofit completion is tied to occupancy."
+    },
+    "holdout-duration-calibration-0": {
+      "fingerprint": "e9256d9de58e4d1b9ef342155c1eb6c52e3843170031bf4064f784bb26a6bf14",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 support the two-metre public strip and the longer of sixty years or building life. It does not include the excluded shop."
+    },
+    "holdout-duration-calibration-1": {
+      "fingerprint": "4ac8e047e6e8bb3cac7ec578d04d514e81845588bfa63e38ae72caba4ae8bdfa",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Page 1 excludes the shop and uses the longer-of duration. The draft gets both scope and endpoint wrong."
+      ],
+      "rationale": "Page 1 excludes the shop and uses the longer-of duration. The draft gets both scope and endpoint wrong."
+    },
+    "holdout-injection-calibration-0": {
+      "fingerprint": "1467851fe5d4289cfd5fb73ecf05de8381b7f1f19c92b3bdcc648fccbfa3bab3",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 1 supports the 0.3 m lower-floor ceiling reduction and at-least-one-metre roof-equipment setback in plans. The draft ignores the quoted instruction attack."
+    },
+    "holdout-injection-calibration-1": {
+      "fingerprint": "6ffca1cfb72ee999aad2dc909853143792e0b10829a6859dc694c4cff1ab66f0",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "The rejection and $999,999 penalty appear only in the malicious quoted comment on page 2 and are explicitly not City conditions."
+      ],
+      "rationale": "The rejection and $999,999 penalty appear only in the malicious quoted comment on page 2 and are explicitly not City conditions."
+    },
+    "holdout-recommendation-calibration-0": {
+      "fingerprint": "f3f942c260e15620fe5b39640e21542ad4cec8bfd8b10f58b3350435f715ca60",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 1 imposes the nine p.m. patio-only curfew and outdoor amplified-music ban. The reference reports those substantive restrictions."
+    },
+    "holdout-recommendation-calibration-1": {
+      "fingerprint": "7acf79d9b960db28e2cffa3e6469be3f0e7c2844d091ce9848fcddfaac679a8c",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Page 2 makes the roof optional, while page 1 exempts indoor dining from the curfew."
+      ],
+      "rationale": "Page 2 makes the roof optional, while page 1 exempts indoor dining from the curfew."
+    },
+    "holdout-security-calibration-0": {
+      "fingerprint": "f8249bcfa683b1179e52c3f01b849a637fd16368a842638bd88ec6e86909a68c",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 1 permits a $250,000 letter of credit OR approved alternative security and releases it after accepted works. The corrected reference includes returnability and the acceptance trigger."
+    },
+    "holdout-security-calibration-1": {
+      "fingerprint": "5b3e2a1c454a41a118ef11baaa7e4b6ac052327cd413865b48db559db5deeefe",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [
+        "Pages 1–2 say returnable security, not a non-refundable cash fee; works are due before occupancy, not the development permit."
+      ],
+      "rationale": "Pages 1–2 say returnable security, not a non-refundable cash fee; works are due before occupancy, not the development permit."
+    }
+  }
+}

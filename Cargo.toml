@@ -24,6 +24,8 @@ itertools = "0.14.0"
 image = "0.25.9"
 regex = "1.12.2"
 pdf-extract = "0.12.1"
+lopdf = { version = "0.42.0", default-features = false }
+sha2 = "0.10.9"
 
 # Force vendored OpenSSL on Linux to make building for musl easier
 [target.'cfg(target_os = "linux")'.dependencies]

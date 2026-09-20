@@ -1,0 +1,341 @@
+{
+  "metrics": {
+    "pass_rate": 0.6666666666666666,
+    "total": 9,
+    "editorial_evaluation": true,
+    "generation": {
+      "api_calls": 30,
+      "usage": {
+        "prompt_tokens": 150714,
+        "completion_tokens": 28733,
+        "total_tokens": 179447
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.03059152,
+      "reported_cost_subtotal_usd": 0.03059152,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 1,
+      "median_seconds": 31.66,
+      "p95_seconds": 77.39
+    }
+  },
+  "success": false,
+  "reviewer": "Codex in the interactive subscription session; reviewed against original source pages, no paid grader calls",
+  "review_dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4",
+  "rubric_sha256": "31bf5d3844af2849c26fd5d6dc2cf1db5238bb5a6dcf275c4791d9d27ffb04ad",
+  "results": [
+    {
+      "id": "city-03-1",
+      "case_id": "city-03",
+      "text": "Approval conditions: 80 Powell St 13-storey hotel/retail. A legal right of way must secure public life use of the privately owned public space on site.",
+      "source_url": "https://www.shapeyourcity.ca/50249/widgets/224583/documents/171340",
+      "post_characters": 218,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch July 09, 2026 Rositch Hemphill Architects #10 - 120 Powell Street Vancouver, BC V6A 1G1 RE: 80 Powell Street Vancouver, BC Development permit application number DP-2025-00672 Your application was considered by the Development Permit Board at its meeting of June 22, 2026, THAT the Board APPROVE Development Application No. DP-2025-00672, submitted, the plans and information forming a part thereof, thereby permitting the development a 13- storey mixed-use commercial building, consisting of Hotel use on the ground to 12th floor, and retail use at grade and Restaurant use on the 13th floor, over one level of underground parking and having vehicular access from the lane, subject to the following conditions: 1.0 Prior to issuance of the development permit, revised drawings and information shall be submitted to the satisfaction of the Director of Planning, clearly indicating: 1.1 design development to enhance the overall public realm, further strengthen the pedestrian activity and reinforce legibility of the former CPR right-of-way by the following: i. at the proposed Privately Owned Public Space (POPS): a. improve the expression of the prominent column and the soffit; Note to Applicant: Given the high visibility from the public realm, the expression and the treatment of the round column and the soffit should be high-quality and contribute to a cohesive and legible pedestrian realm as a significant former CPR right-of-way. Refer also to Recommended condition 1.1 i.d. for visually appealing architecturally integral light fixtures at the covered plaza. b. relocate the main entrance of the retail/service from the east toward the north with exploration of high-quality operable glazing system that allow for improved direct visual and physical connection between the retail uses and the adjacent covered plaza fronting on Powell Street;",
+          "page": 1,
+          "requirement": "A legal right of way must secure public life use of the privately owned public space on site."
+        },
+        {
+          "evidence": "Page 5 of 14 APPENDIX A DEVELOPMENT PERMIT STAFF COMMITTEE RECOMMENDATIONS The following is a list of conditions that must also be met prior to issuance of the Development Permit. Standard Conditions Urban Design Conditions A.1.1 arrangements are to be made to the satisfaction of the Director of Planning and the Director of Legal Services for a Statutory Right of Way (SRW) for public life use over the proposed Privately Owned Public Space (POPs); Note to Applicant: Refer also to Recommended Condition 1.1. A.1.2 provision of updated site plan and landscape plans as follows: i. include the proposed POPS signage location(s); ii. clearly note the following notations: “Contractor to contact City of Vancouver Sign Shop at nysignshop@vancouver.ca to coordinate an order for standard POPS sign. Include billing address, contact name and phone number, number of POPS signs required and planned pickup date at National Yard for the signs. Once this information is received, a unique job number will be created for the Contractor. Accounts Receivable Clerk will then process the invoice and bill out the final amount accordingly.”; Note to Applicant: Standardized Privately Owned Public Space (POPS) signage should be installed in a highly visible location(s) within the POPS SRW area, at the applicant’s expense. A.1.3 provision of a typical enlarged architectural details with dimensions indicating the following: i. soffit at the covered plaza; ii. façade of the Terra Cotta panels with vertical textured finish and red metal accents; iii. interface of the prominent column and the ground level public realm; Note to Applicant: The detailing of these building elements should contribute to the long term performance of the building as an importance place in the city. Architectural design details, rather than building envelope or construction details, are required for development permit review. Details should generally be in section, at a large scale such as 1:20 or equivalent, and include notes and dimensions. Review of these drawings may result in additional Urban Design comments or conditions. Refer also to Recommended Condition 1.2.",
+          "page": 5,
+          "requirement": "A legal right of way must secure public life use of the privately owned public space on site."
+        }
+      ],
+      "passed": false,
+      "errors": [],
+      "grade": {
+        "fingerprint": "09cc80623448cc028f35e7b57d359d8708ca26f278a3dca18c2476128e5d9053",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 3,
+        "blocking_issues": [
+          "Public life use is unexplained legal wording."
+        ],
+        "rationale": "Pages 1 and 5 support public-access rights over the private plaza, but copying public life use obscures that straightforward meaning."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-03-2",
+      "case_id": "city-03",
+      "text": "Approval conditions: 80 Powell St mixed-use hotel. Conditions call for a statutory right of way giving the public legal access to the private plaza space.",
+      "source_url": "https://www.shapeyourcity.ca/50249/widgets/224583/documents/171340",
+      "post_characters": 221,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 14 APPENDIX A DEVELOPMENT PERMIT STAFF COMMITTEE RECOMMENDATIONS The following is a list of conditions that must also be met prior to issuance of the Development Permit. Standard Conditions Urban Design Conditions A.1.1 arrangements are to be made to the satisfaction of the Director of Planning and the Director of Legal Services for a Statutory Right of Way (SRW) for public life use over the proposed Privately Owned Public Space (POPs); Note to Applicant: Refer also to Recommended Condition 1.1. A.1.2 provision of updated site plan and landscape plans as follows: i. include the proposed POPS signage location(s); ii. clearly note the following notations: “Contractor to contact City of Vancouver Sign Shop at nysignshop@vancouver.ca to coordinate an order for standard POPS sign. Include billing address, contact name and phone number, number of POPS signs required and planned pickup date at National Yard for the signs. Once this information is received, a unique job number will be created for the Contractor. Accounts Receivable Clerk will then process the invoice and bill out the final amount accordingly.”; Note to Applicant: Standardized Privately Owned Public Space (POPS) signage should be installed in a highly visible location(s) within the POPS SRW area, at the applicant’s expense. A.1.3 provision of a typical enlarged architectural details with dimensions indicating the following: i. soffit at the covered plaza; ii. façade of the Terra Cotta panels with vertical textured finish and red metal accents; iii. interface of the prominent column and the ground level public realm; Note to Applicant: The detailing of these building elements should contribute to the long term performance of the building as an importance place in the city. Architectural design details, rather than building envelope or construction details, are required for development permit review. Details should generally be in section, at a large scale such as 1:20 or equivalent, and include notes and dimensions. Review of these drawings may result in additional Urban Design comments or conditions. Refer also to Recommended Condition 1.2.",
+          "page": 5,
+          "requirement": "Conditions call for a statutory right of way giving the public legal access to the private plaza space."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch July 09, 2026 Rositch Hemphill Architects #10 - 120 Powell Street Vancouver, BC V6A 1G1 RE: 80 Powell Street Vancouver, BC Development permit application number DP-2025-00672 Your application was considered by the Development Permit Board at its meeting of June 22, 2026, THAT the Board APPROVE Development Application No. DP-2025-00672, submitted, the plans and information forming a part thereof, thereby permitting the development a 13- storey mixed-use commercial building, consisting of Hotel use on the ground to 12th floor, and retail use at grade and Restaurant use on the 13th floor, over one level of underground parking and having vehicular access from the lane, subject to the following conditions: 1.0 Prior to issuance of the development permit, revised drawings and information shall be submitted to the satisfaction of the Director of Planning, clearly indicating: 1.1 design development to enhance the overall public realm, further strengthen the pedestrian activity and reinforce legibility of the former CPR right-of-way by the following: i. at the proposed Privately Owned Public Space (POPS): a. improve the expression of the prominent column and the soffit; Note to Applicant: Given the high visibility from the public realm, the expression and the treatment of the round column and the soffit should be high-quality and contribute to a cohesive and legible pedestrian realm as a significant former CPR right-of-way. Refer also to Recommended condition 1.1 i.d. for visually appealing architecturally integral light fixtures at the covered plaza. b. relocate the main entrance of the retail/service from the east toward the north with exploration of high-quality operable glazing system that allow for improved direct visual and physical connection between the retail uses and the adjacent covered plaza fronting on Powell Street;",
+          "page": 1,
+          "requirement": "Conditions call for a statutory right of way giving the public legal access to the private plaza space."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "a813cca33b90361d7c0675766ad3430ac6bf72933ee6e2694a52748c7a0e2b4c",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 1 and 5 require arrangements for public access rights over the privately owned plaza. The post identifies what the legal right permits and invents no registration deadline."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-03-3",
+      "case_id": "city-03",
+      "text": "Approval conditions: 80 Powell St hotel. The permit can't be issued until the applicant enters the legal agreements set out in section 2.3.1 of the Developments in Proximity to Rail Facilities Bulletin.",
+      "source_url": "https://www.shapeyourcity.ca/50249/widgets/224583/documents/171340",
+      "post_characters": 269,
+      "evidence": [
+        {
+          "evidence": "Page 6 of 14 A.1.4 design development to consider the servicing requirements of the hotel operations; Note to Applicant: Drawings should demonstrate detailed resolution of building services, including waste, back-of-house and electrical/mechanical spaces, and locate these functions away from the ground floor as much as possible to ensure performance of the POPS is not compromised. Refer also to Urban Design Panel #2 consensus recommendations, dated April 22, 2026 and Engineering Condition A. 2.9. A.1.5 consideration to meaningfully integrate the site history into the proposal as an important former CPR right-of-way; Note to Applicant: This may be achieved through the incorporation of culturally appropriate public art, storytelling elements, site furnishings, materials and landscape treatments that reference the historic rail corridor. Refer also to Gastown Public Spaces Plan and Urban Design Panel #2 consensus recommendations, dated April 22, 2026. A.1.6 demonstration to the satisfaction of the Director of Planning that noise from adjacent rail operations have been appropriately addressed by providing the following: i. provision of a letter of assurance from a Qualified Professional confirming that interior and exterior noise standards as outlined in the Appendix C of the Guidelines for New Development in Proximity to Railway Operations have been met; or ii. requirements of section 2.1.3 of the Developments in Proximity to Rail Facilities Bulletin have been met; A.1.7 entry into legal agreements identified in section 2.3.1 Developments in Proximity to Rail Facilities Bulletin of the satisfaction of the General Manager of Engineering Services, Legal Services and Planning Urban Design & Sustainability; A.1.8 provision of written acknowledgment(s) from all relevant rail authorities confirming receipt of the complete application and reports from the applicant; Note to Applicant: Refer to section 2.4 of the Developments in Proximity to Rail Facilities Bulletin. Written acknowledgment in the form of an email from an authorized representative of the Rail Authority will be accepted in place of written acknowledgment on company letterhead. Development Review Branch Conditions A.1.9 make arrangements (legal agreements) to the satisfaction of the General Manager of Engineering Services & Director of Legal Services for the registration of an indemnity agreement for the portions of the building that encroach on to the site to the West of the application site; Note to Applicant: Confirmation of registration of an Easement agreement with the adjoining property owner(s) is recommended. Please note that the City is not a party to this agreement between adjacent landowners.",
+          "page": 6,
+          "requirement": "The permit can't be issued until the applicant enters the legal agreements set out in section 2.3.1 of the Developments in Proximity to Rail Facilities Bulletin."
+        },
+        {
+          "evidence": "Page 5 of 14 APPENDIX A DEVELOPMENT PERMIT STAFF COMMITTEE RECOMMENDATIONS The following is a list of conditions that must also be met prior to issuance of the Development Permit. Standard Conditions Urban Design Conditions A.1.1 arrangements are to be made to the satisfaction of the Director of Planning and the Director of Legal Services for a Statutory Right of Way (SRW) for public life use over the proposed Privately Owned Public Space (POPs); Note to Applicant: Refer also to Recommended Condition 1.1. A.1.2 provision of updated site plan and landscape plans as follows: i. include the proposed POPS signage location(s); ii. clearly note the following notations: “Contractor to contact City of Vancouver Sign Shop at nysignshop@vancouver.ca to coordinate an order for standard POPS sign. Include billing address, contact name and phone number, number of POPS signs required and planned pickup date at National Yard for the signs. Once this information is received, a unique job number will be created for the Contractor. Accounts Receivable Clerk will then process the invoice and bill out the final amount accordingly.”; Note to Applicant: Standardized Privately Owned Public Space (POPS) signage should be installed in a highly visible location(s) within the POPS SRW area, at the applicant’s expense. A.1.3 provision of a typical enlarged architectural details with dimensions indicating the following: i. soffit at the covered plaza; ii. façade of the Terra Cotta panels with vertical textured finish and red metal accents; iii. interface of the prominent column and the ground level public realm; Note to Applicant: The detailing of these building elements should contribute to the long term performance of the building as an importance place in the city. Architectural design details, rather than building envelope or construction details, are required for development permit review. Details should generally be in section, at a large scale such as 1:20 or equivalent, and include notes and dimensions. Review of these drawings may result in additional Urban Design comments or conditions. Refer also to Recommended Condition 1.2.",
+          "page": 5,
+          "requirement": "The permit can't be issued until the applicant enters the legal agreements set out in section 2.3.1 of the Developments in Proximity to Rail Facilities Bulletin."
+        }
+      ],
+      "passed": false,
+      "errors": [],
+      "grade": {
+        "fingerprint": "af3f132f46574860e4e468a9fb51663e924fac2d8f33f3eb419da2eb98a737a4",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 2,
+        "clarity": 3,
+        "blocking_issues": [
+          "A numbered external bulletin reference does not explain the substantive demand."
+        ],
+        "rationale": "Pages 5–6 support the agreement requirement, but this wording tells readers nothing about its practical effect despite the public plaza and loading redesign elsewhere in the letter."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-05-1",
+      "case_id": "city-05",
+      "text": "Approval conditions: 3631 Point Grey Rd house conversion. Building review requires the entire house to be sprinklered, since the renovation is classified as a reconstruction.",
+      "source_url": "https://www.shapeyourcity.ca/52163/widgets/220738/documents/172131",
+      "post_characters": 241,
+      "evidence": [
+        {
+          "evidence": "Page 6 of 9 3.4 This Development Permit is valid for a period of 12 months from the date of issuance - unless otherwise validated by a Building Permit. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before October 30, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no development permit shall be issued for the demolition unless and until a development permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch: The following comments are based on the preliminary drawings prepared by Quinkatla Development Planning dated Mar 12, 2026, for the proposed development permit application. This is a preliminary review only, to identify issues to be addressed to comply with Vancouver Building By-law #14343 as amended (VBBL 2025). * Please note that building permit applications must conform to Vancouver Building By-law #14343 (2025) as may be amended from time to time. Please see the following page: http://vancouver.ca/your- government/vancouver-building-bylaw.aspx. “To alter and convert this existing single detached house to a Multiple Conversion Dwelling containing three dwelling units providing two parking spaces in a detached carport having vehicular access from Point Grey Road.” Scope of work includes raising and relocating building within the site on a new foundation, and vertical addition at 3rd storey. This is considered a Reconstruction of the existing dwelling. The following information is to be included at Building Permit Application Stage: As of September 14, 2025, all submissions are to be in accordance with the VBBL 2025.",
+          "page": 6,
+          "requirement": "Building review requires the entire house to be sprinklered, since the renovation is classified as a reconstruction."
+        },
+        {
+          "evidence": "Page 7 of 9 i. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. ii. Provide BC Housing registration for reconstruction project or confirm not required. iii. This address consists of two parcels; parcels are to be consolidated prior to issuance of building permit to relocate building. Provide updated property survey showing single parcel prior to issuance. iv. Per VBBL 1.3.3.2 (2) this building requires Part 4 Structural design. v. A geotechnical report is required; ensure the report number, bearing and design values are referenced in the Part 4 design sheets. vi. Provide a Provincial site disclosure statement form (required with ground disturbance). vii. Per VBBL 1.3.3.2 (3), Part 5 design applies. Provide building envelope drawings, Schedule B (Arch), and Schedule D for building envelope review. viii. Alterations in the Reconstruction category shall comply with 11.3.2.4 (3). Provide energy checklist to confirm compliance with either the Prescriptive or Performance paths of 10.2.1.4. ix. A CRP Schedule A is required. x. *This renovation is considered a Reconstruction under VBBL 11.5.2, with upgrade triggers of F4, S4, N4, and A4 to the entire building. Provide a code review to clarify existing conditions, and what upgrades are proposed. xi. Spatial separation and construction of exposing building faces is to be upgraded to conform to 9.10.14, or as permitted by acceptable alternatives of Part 11. All new work affecting limiting distance, including addition of exterior insulation, is to conform to VBBL 2025. Review all eaves and projections required to be non-combustible per 9.10.14.5 (6). xii. This building is required to be sprinklered per 11.5.4.2, in conformance to 9.10.1.3 (8). See also bulletin 2025-003-BU if applicable. xiii. Per VBBL 9.10.20.3, Indicate the Fire department access and Path of Travel for firefighters from the street curb to the primary entry of each dwelling unit, to comply with 3.2.5.5 and 3.2.5.6. xiv. Confirm if building is being stratified.",
+          "page": 7,
+          "requirement": "Building review requires the entire house to be sprinklered, since the renovation is classified as a reconstruction."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "49f1ecb535d3c2d57974c8394f6155ab2aff3437d17587be35ea1fd95871bd31",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 6–7 classify the project as reconstruction and require sprinklering throughout. Building review preserves the later stage."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-05-2",
+      "case_id": "city-05",
+      "text": "Approval conditions: 3631 Point Grey Rd house conversion. The conversion must be sprinklered throughout: at the building permit stage, fire sprinklers are required for the entire building, not just the new units.",
+      "source_url": "https://www.shapeyourcity.ca/52163/widgets/220738/documents/172131",
+      "post_characters": 279,
+      "evidence": [
+        {
+          "evidence": "Page 7 of 9 i. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. ii. Provide BC Housing registration for reconstruction project or confirm not required. iii. This address consists of two parcels; parcels are to be consolidated prior to issuance of building permit to relocate building. Provide updated property survey showing single parcel prior to issuance. iv. Per VBBL 1.3.3.2 (2) this building requires Part 4 Structural design. v. A geotechnical report is required; ensure the report number, bearing and design values are referenced in the Part 4 design sheets. vi. Provide a Provincial site disclosure statement form (required with ground disturbance). vii. Per VBBL 1.3.3.2 (3), Part 5 design applies. Provide building envelope drawings, Schedule B (Arch), and Schedule D for building envelope review. viii. Alterations in the Reconstruction category shall comply with 11.3.2.4 (3). Provide energy checklist to confirm compliance with either the Prescriptive or Performance paths of 10.2.1.4. ix. A CRP Schedule A is required. x. *This renovation is considered a Reconstruction under VBBL 11.5.2, with upgrade triggers of F4, S4, N4, and A4 to the entire building. Provide a code review to clarify existing conditions, and what upgrades are proposed. xi. Spatial separation and construction of exposing building faces is to be upgraded to conform to 9.10.14, or as permitted by acceptable alternatives of Part 11. All new work affecting limiting distance, including addition of exterior insulation, is to conform to VBBL 2025. Review all eaves and projections required to be non-combustible per 9.10.14.5 (6). xii. This building is required to be sprinklered per 11.5.4.2, in conformance to 9.10.1.3 (8). See also bulletin 2025-003-BU if applicable. xiii. Per VBBL 9.10.20.3, Indicate the Fire department access and Path of Travel for firefighters from the street curb to the primary entry of each dwelling unit, to comply with 3.2.5.5 and 3.2.5.6. xiv. Confirm if building is being stratified.",
+          "page": 7,
+          "requirement": "The conversion must be sprinklered throughout: at the building permit stage, fire sprinklers are required for the entire building, not just the new units."
+        },
+        {
+          "evidence": "Page 6 of 9 3.4 This Development Permit is valid for a period of 12 months from the date of issuance - unless otherwise validated by a Building Permit. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before October 30, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no development permit shall be issued for the demolition unless and until a development permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch: The following comments are based on the preliminary drawings prepared by Quinkatla Development Planning dated Mar 12, 2026, for the proposed development permit application. This is a preliminary review only, to identify issues to be addressed to comply with Vancouver Building By-law #14343 as amended (VBBL 2025). * Please note that building permit applications must conform to Vancouver Building By-law #14343 (2025) as may be amended from time to time. Please see the following page: http://vancouver.ca/your- government/vancouver-building-bylaw.aspx. “To alter and convert this existing single detached house to a Multiple Conversion Dwelling containing three dwelling units providing two parking spaces in a detached carport having vehicular access from Point Grey Road.” Scope of work includes raising and relocating building within the site on a new foundation, and vertical addition at 3rd storey. This is considered a Reconstruction of the existing dwelling. The following information is to be included at Building Permit Application Stage: As of September 14, 2025, all submissions are to be in accordance with the VBBL 2025.",
+          "page": 6,
+          "requirement": "The conversion must be sprinklered throughout: at the building permit stage, fire sprinklers are required for the entire building, not just the new units."
+        }
+      ],
+      "passed": false,
+      "errors": [],
+      "grade": {
+        "fingerprint": "d4de73509e80dcee73f197e55b79a1528afce901851c031e4321e77f3a456d79",
+        "accurate": true,
+        "qualifications_preserved": false,
+        "salience": 4,
+        "clarity": 3,
+        "blocking_issues": [
+          "At the building permit stage, fire sprinklers are required blurs design review with completed installation."
+        ],
+        "rationale": "Pages 6–7 describe building-review requirements; the post should say building review calls for sprinklering, rather than imply installed sprinklers are needed at the permit stage."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-05-3",
+      "case_id": "city-05",
+      "text": "Approval conditions: 3631 Point Grey Rd house conversion. The two lots must be consolidated into a single parcel before the permit to relocate the house is issued.",
+      "source_url": "https://www.shapeyourcity.ca/52163/widgets/220738/documents/172131",
+      "post_characters": 230,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 9 ii. clearly show and dimension the line of excavation for the proposed garage to demonstrate the safe retention of Tree #75; iii. indicate whether crown clearance pruning is required to accommodate the proposed garage and, if required, specify the extent of pruning and assess the potential impacts to tree health and canopy structure; and iv. include any new low impact construction methods and pruning recommendations identified in the updated Arborist Report on the TMP. Engineering Services conditions: 2.7 Provision of a copy of a current title search for each parcel of land involved in the development site. The title search must be dated within one week of the intake date. Note to Applicant: The title for Lot 17 is missing. Please provide this title also. 2.8 Provision of copies of all non-financial charges (Statutory Right of Way, Right of Way, Covenant, Easement, Option to Purchase, and Easement and Indemnity) and legal notations listed on each title search for the development site. 2.9 Make arrangements to the satisfaction of the General Manager of Engineering Services and the Director of Legal Services for the consolidation of Lot 17, and The East ½ of Lot 18; All of Block 2, District Lot 540, Plan 229 to create a single parcel. 3.0 Development Permit Terms: 3.1 All approved off-street vehicle parking, loading, and unloading spaces, and bicycle parking spaces shall be provided in accordance with the relevant requirements of the Parking By-law prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition. 3.2 All landscaping and treatment of the open portions of the site shall be completed in accordance with the approved drawings prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition. Note to Applicant: In cases where it is not practical, due to adverse weather conditions or other mitigating factors, to complete the landscaping prior to occupancy of a building, the City will accept an Irrevocable Letter of Credit (amount to be determined by the City) as a guarantee for completion of the work by an agreed upon date. 3.3 In accordance with Protection of Trees By-law Number 9958, the removal and replacement of trees is permitted only as indicated on the approved Development Permit drawings.",
+          "page": 5,
+          "requirement": "The two lots must be consolidated into a single parcel before the permit to relocate the house is issued."
+        },
+        {
+          "evidence": "Page 7 of 9 i. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. ii. Provide BC Housing registration for reconstruction project or confirm not required. iii. This address consists of two parcels; parcels are to be consolidated prior to issuance of building permit to relocate building. Provide updated property survey showing single parcel prior to issuance. iv. Per VBBL 1.3.3.2 (2) this building requires Part 4 Structural design. v. A geotechnical report is required; ensure the report number, bearing and design values are referenced in the Part 4 design sheets. vi. Provide a Provincial site disclosure statement form (required with ground disturbance). vii. Per VBBL 1.3.3.2 (3), Part 5 design applies. Provide building envelope drawings, Schedule B (Arch), and Schedule D for building envelope review. viii. Alterations in the Reconstruction category shall comply with 11.3.2.4 (3). Provide energy checklist to confirm compliance with either the Prescriptive or Performance paths of 10.2.1.4. ix. A CRP Schedule A is required. x. *This renovation is considered a Reconstruction under VBBL 11.5.2, with upgrade triggers of F4, S4, N4, and A4 to the entire building. Provide a code review to clarify existing conditions, and what upgrades are proposed. xi. Spatial separation and construction of exposing building faces is to be upgraded to conform to 9.10.14, or as permitted by acceptable alternatives of Part 11. All new work affecting limiting distance, including addition of exterior insulation, is to conform to VBBL 2025. Review all eaves and projections required to be non-combustible per 9.10.14.5 (6). xii. This building is required to be sprinklered per 11.5.4.2, in conformance to 9.10.1.3 (8). See also bulletin 2025-003-BU if applicable. xiii. Per VBBL 9.10.20.3, Indicate the Fire department access and Path of Travel for firefighters from the street curb to the primary entry of each dwelling unit, to comply with 3.2.5.5 and 3.2.5.6. xiv. Confirm if building is being stratified.",
+          "page": 7,
+          "requirement": "The two lots must be consolidated into a single parcel before the permit to relocate the house is issued."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "6f3a4e362eae28f07855b23d0feb26f1d748d285ee94a6803f92e0cff8bfb49e",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 5 requires consolidation arrangements and page 7 explicitly requires the parcels consolidated before the building permit to relocate the house. This is a concrete land-title constraint with supported timing."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-12-1",
+      "case_id": "city-12",
+      "text": "Approval conditions: 2421 E 41st Ave duplex with secondary suites. Conditions include revised plans showing safe retention of six off-site neighbour trees, whose root zones conflict with the planned demolition and site work.",
+      "source_url": "https://www.shapeyourcity.ca/52063/widgets/220211/documents/170521",
+      "post_characters": 291,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch June 18, 2026 Dilpreet Parmar 65 East 61st Avenue Vancouver, BC V5X 2B3 RE: 2421 E 41st Avenue, Vancouver, BC V5R 2W2 Development permit application number DP-2025-01047 On behalf of the Director of Planning, your application has been approved to develop a Duplex with two Secondary Suites in the front building, along with a Duplex in the rear, providing zero parking spaces. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.1 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact your kiana.alizadeh@vancouver.ca (details at end of letter).",
+          "page": 1,
+          "requirement": "Conditions include revised plans showing safe retention of six off-site neighbour trees, whose root zones conflict with the planned demolition and site work."
+        },
+        {
+          "evidence": "Page 4 of 8 Landscape Review conditions: 1.8 design development to improve the overall landscape design strategy and site biodiversity by enhancing landscape elements, providing diverse planting, and integrating bird-friendly features; Note to Applicant: Refer to s. 7 – Landscaping - RT-11 Guidelines, Bird- Friendly Design Guidelines, Urban Design condition(s) 1.1,1.2 and 1.4, and DRB condition(s) 1.7. This can be achieved by: i. A well-designed landscape that enhances private open space, outdoor space, and the lane and street interfaces with diverse coniferous and deciduous trees, and seasonal variation of understory planting with shrubs, larger perennials, and groundcovers. ii. Front yard and City boulevard landscaped as a green visual amenity for the street while limiting the use of sod. Layered landscape screening from streetscape to private patios and landscape elements such as arbours or trellis to assist unit wayfinding and fences combined with soft landscaping are also supported. iii. Rear yard landscape design that provides adequate layered planting, larger caliper trees and landscape elements balanced with hardscaped areas and circulation. iv. Lanescape with continuous and varied planting and vertical greening on landscape elements to support privacy. v. Locating Heat Pump/Pads (HPPs) within maximum building setbacks and providing landscape screening. https://guidelines.vancouver.ca/guidelines-rt-11.pdf https://guidelines.vancouver.ca/B021.pdf https://bylaws.vancouver.ca/tree/schedd.pdf 1.9 provision of information and details that demonstrate safe retention and protection of off-site neighbour trees #OS1 through #OS6, as follows: Note to Applicant: Proposed hardscape demolition and site development conflicts with tree protection and critical root zones for off-site neighbour trees. Clearly defined and illustrated site-specific mitigation such as, alternative construction methods, modified foundation, shoring, tunnelling versus trenching of site services, relocation of site services, low impact permeable paving, arboricultural care throughout site excavation and construction, and interim or phased tree protection are supported. Provide updated LOA, Tree Management, Architectural/Site and Landscape Plans as required.",
+          "page": 4,
+          "requirement": "Conditions include revised plans showing safe retention of six off-site neighbour trees, whose root zones conflict with the planned demolition and site work."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "f71d11532b01395715e1f82141aa95040907f2c735fc51b3b0a7c7c827b9a526",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 1 and 4 identify six off-site trees and conflicts between their root zones and demolition/site work. Revised plans showing retention is the supported stage."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-12-2",
+      "case_id": "city-12",
+      "text": "Approval conditions: 2421 E 41st Ave duplex. Plans must cut the rear building's height by 2.2 ft to meet the 25.26 ft (7.7 m) height limit.",
+      "source_url": "https://www.shapeyourcity.ca/52063/widgets/220211/documents/170521",
+      "post_characters": 206,
+      "evidence": [
+        {
+          "evidence": "Page 3 of 8 improving solar access and daylight penetration to the secondary suite via the north-facing windows beneath the deck. 1.4 design development to improve wayfinding for each unit including the secondary suites; Note to Applicant: Refer to Sec 5.3.4(c) and (e) – Doors and Entrances, of the RT-11 Guideline. The presence and location of unit entries should be announced through architectural or landscape gateway elements or by providing contrasting colours at the entry doors where entries to units are not clearly visible from the street. Refer to Landscape Review condition 1.8. 1.5 consideration to improve the expression of both buildings side elevation composition; Note to Applicant: Refer to Section 5.6 – Exterior Walls and Finishing, of the RT-11 Guideline. This can be achieved by breaking down the two-storey massing as seen from the side while avoiding large blank walls while carrying materials around the corners and terminate at a logical point to avoid appearing as a thin veneer or ‘false front’. Development Review Branch conditions: 1.6 compliance with Section 3.1.2.3(ii) of the RT-11 District schedule; Note to Applicant: Maximum permitted height for the rear building is 25.26 ft (7.7 m). Calculation shows the 2.2 ft overage on the rear building height. 1.7 provision of updated Architectural drawing: i. locate all Heat pumps/pads within the maximum permitted projection area (4 ft [1.22 m] from the building) and provide the Landscape screening in accordance with the Landscape Condition 1.8; Refer to the Heat pump Bulletin: https://guidelines.vancouver.ca/bulletins/bulletin-heat-pumps-for- ground-oriented-dwellings.pdf ii. correct site coverage proposed on statistic chart as it shows two different number for site coverage; iii. correct the rear building label on north elevation on page 9; iv. ensure the Site plan, Floor plan and Elevations are match. Ex: the number of stairs and the landing dimensions at the rear of the front building is not match with site plan;",
+          "page": 3,
+          "requirement": "Plans must cut the rear building's height by 2.2 ft to meet the 25.26 ft (7.7 m) height limit."
+        },
+        {
+          "evidence": "Page 2 of 8 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating: Urban Design conditions: 1.1 design development to improve the overall site functionality and the provision of enhanced usable outdoor space for family-oriented units; Note to Applicant: Refer to Section 2.2.2(b) – Use Specific Regulations, and 3.1.1.4 – Density and Floor Area, of the RT-11 District Schedule and respond to the intent of the RT-11 By-law. This may be achieved by: i. replacing at least one of the outdoor spaces at the lane interface to accommodate on-site parking; ii. reducing the rear building massing and revising unit layout; and iii. providing 2 shared open spaces within the courtyard in accordance with Section 6.2 - Semi-private or shared open space, of the RT-11 Guidelines with enhanced landscaping and appropriate screening for all usable open areas. Refer to Landscape Review condition 1.8. 1.2 design development to encourage pedestrian activity and transition between public and private space adjacent to the lane while proposing outdoor space suitable for children to accommodate families where parking is not proposed; Note to Applicant: Refer to Section 5.3.4(f)– Doors and Entrances and Section 6.1 – Private Open Space of the RT-11 Guidelines. Remove asphalt apron where parking is not proposed; and propose landscaping between rear building and rear property line. The landscape should be visually interesting as the lane will become a focus of development, and in effect, an exposure that is as important as the streetscape. Refer to Landscape Review condition 1.8. 1.3 design development to improve livability at secondary suites located in the basement at the front building; Note to Applicant: This can be achieved by: i. revising the internal layout of the secondary suite by reducing the bedroom width from 11 ft. 5 in.to approximately 9 ft., and shifting the laundry and cooking appliances southward to optimize and expand the usable living area; ii. enhancing the size of side-facing kitchen and living room windows for better access to natural light and ventilation, particularly for the living space; and iii. reducing the depth of the rear deck and reorienting the stair configuration to provide a compliant and functional landing at the base, while also",
+          "page": 2,
+          "requirement": "Plans must cut the rear building's height by 2.2 ft to meet the 25.26 ft (7.7 m) height limit."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch June 18, 2026 Dilpreet Parmar 65 East 61st Avenue Vancouver, BC V5X 2B3 RE: 2421 E 41st Avenue, Vancouver, BC V5R 2W2 Development permit application number DP-2025-01047 On behalf of the Director of Planning, your application has been approved to develop a Duplex with two Secondary Suites in the front building, along with a Duplex in the rear, providing zero parking spaces. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.1 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact your kiana.alizadeh@vancouver.ca (details at end of letter).",
+          "page": 1,
+          "requirement": "Plans must cut the rear building's height by 2.2 ft to meet the 25.26 ft (7.7 m) height limit."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "d72182cdeaab3d6175a87177027ed86a5d0af179c70f4b9e02632d63935d80a6",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 3 identifies the rear building's 2.2 ft excess over the 25.26 ft/7.7 m maximum. The post describes a quantified drawing-stage redesign."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-12-3",
+      "case_id": "city-12",
+      "text": "Approval conditions: 2421 E 41st Ave duplex with suites. The rear duplex is 2.2 ft over the 25.26 ft height limit, so revised drawings must fix the excess.",
+      "source_url": "https://www.shapeyourcity.ca/52063/widgets/220211/documents/170521",
+      "post_characters": 222,
+      "evidence": [
+        {
+          "evidence": "Page 3 of 8 improving solar access and daylight penetration to the secondary suite via the north-facing windows beneath the deck. 1.4 design development to improve wayfinding for each unit including the secondary suites; Note to Applicant: Refer to Sec 5.3.4(c) and (e) – Doors and Entrances, of the RT-11 Guideline. The presence and location of unit entries should be announced through architectural or landscape gateway elements or by providing contrasting colours at the entry doors where entries to units are not clearly visible from the street. Refer to Landscape Review condition 1.8. 1.5 consideration to improve the expression of both buildings side elevation composition; Note to Applicant: Refer to Section 5.6 – Exterior Walls and Finishing, of the RT-11 Guideline. This can be achieved by breaking down the two-storey massing as seen from the side while avoiding large blank walls while carrying materials around the corners and terminate at a logical point to avoid appearing as a thin veneer or ‘false front’. Development Review Branch conditions: 1.6 compliance with Section 3.1.2.3(ii) of the RT-11 District schedule; Note to Applicant: Maximum permitted height for the rear building is 25.26 ft (7.7 m). Calculation shows the 2.2 ft overage on the rear building height. 1.7 provision of updated Architectural drawing: i. locate all Heat pumps/pads within the maximum permitted projection area (4 ft [1.22 m] from the building) and provide the Landscape screening in accordance with the Landscape Condition 1.8; Refer to the Heat pump Bulletin: https://guidelines.vancouver.ca/bulletins/bulletin-heat-pumps-for- ground-oriented-dwellings.pdf ii. correct site coverage proposed on statistic chart as it shows two different number for site coverage; iii. correct the rear building label on north elevation on page 9; iv. ensure the Site plan, Floor plan and Elevations are match. Ex: the number of stairs and the landing dimensions at the rear of the front building is not match with site plan;",
+          "page": 3,
+          "requirement": "The rear duplex is 2.2 ft over the 25.26 ft height limit, so revised drawings must fix the excess."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "24bf5b01897da6957c81c359995d482439a617004c7a76813e0d228651fcb7fb",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 3 gives both the 2.2 ft excess and 25.26 ft maximum, with revised drawings required. The post is concise and specific."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "38d928707d7e7ddf9916ed92d5b062da7a79278f27ad64920a7ead4d14473f9d",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    }
+  ]
+}

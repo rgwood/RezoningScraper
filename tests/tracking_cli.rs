@@ -108,6 +108,7 @@ fn rejects_conflicting_or_unsafe_cli_combinations_before_running() {
         vec!["--summarize-conditions", "--document-version", "-1"],
         vec!["--document-version", "1"],
         vec!["--summary-limit", "2"],
+        vec!["--conditions-model", "another-model"],
         vec!["--retry-failed-summaries"],
     ] {
         let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
@@ -150,7 +151,7 @@ fn displaying_cached_conditions_summary_never_processes_posting_queues() {
         "requirement":"Provide five Class B bicycle spaces.", "page":2,
         "evidence":"Provide the required five (5) Class B bicycle spaces"}], "limitations":[]});
     db.execute("INSERT INTO ConditionsSummaries(DocumentVersionId, Model, PromptVersion, ExtractorVersion, SummaryJson, Attempts, CompletedAt)
-        VALUES (1, 'gpt-5.6-luna', 2, 'pdf-extract-0.12.1-v1', ?1, 1, 1)", [summary.to_string()]).unwrap();
+        VALUES (1, 'open_router::z-ai/glm-5.3-flash', 3, 'pdf-extract-0.12.1-v2', ?1, 1, 1)", [summary.to_string()]).unwrap();
     let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
         .env_clear()
         .env("SLACK_WEBHOOK_URL", "http://127.0.0.1:1/must-not-post")
@@ -195,13 +196,14 @@ fn missing_key_does_not_consume_summary_attempts() {
     seed_archived_document(&db);
     let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
         .env_clear()
+        .env("OPENAI_API_KEY", "must-not-use-another-provider-key")
         .args(["--summarize-conditions", "--database"])
         .arg(&path)
         .current_dir(&scratch.0)
         .output()
         .unwrap();
     assert!(!output.status.success());
-    assert!(String::from_utf8_lossy(&output.stderr).contains("OPENAI_API_KEY is required"));
+    assert!(String::from_utf8_lossy(&output.stderr).contains("OPEN_ROUTER_API_KEY is required"));
     let count: i64 = db
         .query_row("SELECT COUNT(*) FROM ConditionsSummaries", [], |r| r.get(0))
         .unwrap();

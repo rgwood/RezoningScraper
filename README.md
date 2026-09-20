@@ -135,14 +135,47 @@ already collected by approval tracking:
 rezoning-scraper --summarize-conditions --database approvals.db --summary-limit 3
 ```
 
-This uses `OPENAI_API_KEY` and the same `gpt-5.6-luna` model as application
-summaries. It prints one short paragraph and the source URL, and saves structured JSON in
+This uses `OPEN_ROUTER_API_KEY` with `open_router::z-ai/glm-5.3-flash`.
+It prints one short paragraph and the source URL, and saves structured JSON in
 SQLite. It does not crawl, post, consume posting queues, or send monitoring
 events. Run approval tracking separately to collect new documents.
 
-The SDK is `genai` 0.6.5, which routes this model through OpenAI's Responses API.
-Conditions requests use low reasoning effort, a 5,000-token output limit and a 90-second timeout;
-incomplete responses are rejected.
+The model first selects and explains one lead condition, writes three short versions of
+that angle, then reviews the drafts against the original letter. The reviewer
+checks facts, qualifications, usefulness and readability. A separate final audit
+compares the chosen post with its cited pages and the letter's first page, without
+seeing the earlier verdict. It must quote the source for each substantive claim;
+the app checks those quotations and rejects omitted clauses or unsupported inferences.
+Whether a quotation actually supports a claim still depends on model judgment.
+If the final audit rejects a draft, the editor reviews the remaining alternatives
+and the selected replacement receives a fresh audit. Only after those fail does
+feedback start another round. The writer gets one extra attempt with measured length
+feedback when every draft fails local checks. There are at most four rounds
+(normally four calls; at most 72 calls including all alternatives and format repairs).
+Every stage uses the same configured model; the app never silently substitutes
+a larger one. Requests use `genai` 0.6.5, medium
+reasoning for selection and writing, and high reasoning for
+the full-letter review and final verification, with output limits of 6,000 tokens (10,000 for the two review stages),
+and a 120-second timeout per call.
+GLM uses Chat Completions with JSON mode and local validation, pinned to the official
+Z.ai provider (`z-ai/fp8`) with provider fallback disabled. Price caps are
+at most $0.15 per million input tokens and $0.50 per million output tokens, with
+no per-request fee. Every stage records the returned model, provider, generation
+ID and raw usage including the reported charge. Other configured providers use
+their SDK adapter and corresponding key environment variable; the existing
+application-summary model is unchanged.
+Incomplete responses are rejected.
+The official endpoint uses JSON mode rather than constrained JSON-schema decoding.
+Extra metadata is tolerated, but missing verdicts, qualifications or citations fail.
+Malformed output gets one format retry within that stage. Leads containing only
+code levels, weekday daycare hours or routine capacity confirmation fall back to the next eligible ranked fact,
+with the decision recorded. A code-level paragraph that also names a concrete
+physical requirement can stay, but the post must report that requirement.
+Recognized conflicts between conditions cannot be selected as the lead. Both
+source-reading stages identify suggested methods separately from required
+outcomes; when either identifies advice, the app requires explicit suggestion
+wording. Those classifications still depend on the model reading the source
+correctly, so they do not replace editorial evaluation.
 
 The post identifies the project and highlights one or two concrete conditions,
 with a bias toward potentially burdensome or distinctive demands: off-site work,
@@ -151,7 +184,8 @@ It states the requirements rather than making unsupported claims that they are
 unusual or unnecessary. Routine requirements rank lower when more consequential
 conditions are available.
 It omits the checklist, page references, and routine administrative steps.
-The prompt aims for 160–180 characters of prose. The hard limit applies to
+The app adds a compact project introduction and gives the writer the remaining
+character budget. The hard limit applies to
 the entire draft: the full source URL, separator, and prose must fit within
 300 characters. Length is validated after generation rather than constrained by
 the JSON schema, which produced cut-off sentences in live testing. Longer
@@ -165,19 +199,25 @@ issuance from permit terms, occupancy requirements, and advisory comments. It
 preserves alternatives and qualifications, highlights explicit fees and
 deadlines, and avoids guessing costs or describing requirements as onerous.
 
-Each supporting requirement has a quote in the saved JSON. The app checks
-that the quote occurs on the cited page before saving the summary. This catches
-invented citations, but does not prove the paraphrase is correct. These are
+Each supporting requirement has original page text in the saved JSON. The model
+selects passage IDs; the app retains the complete cited pages so a chunk boundary
+cannot cut off the actual subclause or a neighbouring qualification. The final
+reviewer can correct the selector's citation IDs. This prevents invented quotations, but does not
+prove the paraphrase is correct. These are
 AI-generated, selective summaries, not complete compliance checklists.
-The last raw model response is retained in `RawResponse` for reviewing rejected
-citations or overlong drafts; only validated responses populate `SummaryJson`.
-Prompt version 2 generates compact posts; earlier detailed summaries remain
+`TraceJson` retains every selection, draft and review, with errors, token usage
+and timings, including failed rounds. Only accepted posts populate `SummaryJson`;
+`RawResponse` holds the assembled candidate summary. Prompt version 3 uses this
+workflow; earlier summaries remain
 stored under their original version.
 
 PDF text extraction is built into the binary; no external PDF tools are needed.
 The app keeps page boundaries and saves the text used for the summary. It rejects
 malformed PDFs, pages with very little readable text, documents over 100 pages,
 and extracted text over 120,000 bytes rather than silently truncating the letter.
+One narrow exception allows a final page containing only staff initials and a
+page footer after the letter's sign-off. PDF graphics checks reject images,
+forms or substantial drawing content on that page; page numbers stay intact.
 There is no OCR yet, so scanned documents may need manual review.
 
 By default a run processes up to 10 PDFs, newest archived versions first. Set
@@ -189,6 +229,12 @@ when displaying a cached result:
 ```console
 rezoning-scraper --summarize-conditions --database approvals.db --document-version 1
 ```
+
+Use `--conditions-model MODEL` to try another model. Its summaries and retry
+budget are stored separately. The [conditions eval suite](evals/conditions/README.md)
+runs the exact production workflow against frozen letters, tests repeated
+generations, and grades editorial quality independently. Run it before switching
+models; a valid JSON response is not enough.
 
 Failures are saved and retried on later runs, up to three attempts. One failed
 document does not stop the rest of the batch, but the command exits non-zero if

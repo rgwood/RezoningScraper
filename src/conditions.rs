@@ -1,22 +1,21 @@
 //! Local analysis of immutable archived PDFs. This module never touches posting queues.
 use anyhow::{bail, ensure, Context, Result};
 use chrono::Utc;
-use genai::chat::{ChatMessage, ChatOptions, ChatRequest, JsonSpec, ReasoningEffort, StopReason};
 use rusqlite::{params, Connection, OptionalExtension};
 use serde::{Deserialize, Serialize};
+#[cfg(test)]
 use serde_json::json;
-use std::time::Duration;
 
 use crate::{db::Database, summarizer::MODEL};
 
 // Bump when changing the prompt/schema or extraction/validation behaviour.
-const PROMPT_VERSION: i64 = 2;
+pub const PROMPT_VERSION: i64 = 3;
 const MAX_POST_CHARS: usize = 300;
-const EXTRACTOR_VERSION: &str = "pdf-extract-0.12.1-v1";
+pub const EXTRACTOR_VERSION: &str = "pdf-extract-0.12.1-v2";
 const MAX_ATTEMPTS: i64 = 3;
 const MAX_TEXT_BYTES: usize = 120_000;
 const MAX_PAGES: usize = 100;
-const PROMPT: &str = include_str!("conditions_prompt.txt");
+pub mod analysis;
 
 pub fn initialize_schema(db: &Connection) -> Result<()> {
     db.execute_batch(
@@ -35,6 +34,18 @@ pub fn initialize_schema(db: &Connection) -> Result<()> {
             PRIMARY KEY(DocumentVersionId, Model, PromptVersion, ExtractorVersion)
         );",
     )?;
+    let has_trace = db
+        .prepare("PRAGMA table_info(ConditionsSummaries)")?
+        .query_map([], |row| row.get::<_, String>(1))?
+        .collect::<rusqlite::Result<Vec<_>>>()?
+        .iter()
+        .any(|name| name == "TraceJson");
+    if !has_trace {
+        db.execute(
+            "ALTER TABLE ConditionsSummaries ADD COLUMN TraceJson TEXT",
+            [],
+        )?;
+    }
     Ok(())
 }
 
@@ -99,72 +110,58 @@ struct SummaryInput {
     pages: Vec<String>,
 }
 
-fn response_schema() -> serde_json::Value {
-    json!({
-        "type": "object", "additionalProperties": false,
-        "properties": {
-            // Validate length after generation. Constrained decoding with maxLength
-            // can force a string to end mid-sentence instead of rewriting it.
-            "overview": {"type": "string"},
-            "requirements": {"type": "array", "maxItems": 12, "items": {
-                "type": "object", "additionalProperties": false,
-                "properties": {
-                    "requirement": {"type": "string", "maxLength": 1500},
-                    "page": {"type": "integer", "minimum": 1, "maximum": 100},
-                    "evidence": {"type": "string", "maxLength": 1500}
-                }, "required": ["requirement", "page", "evidence"]
-            }},
-            "limitations": {"type": "array", "maxItems": 8, "items": {"type": "string", "maxLength": 1000}}
-        }, "required": ["overview", "requirements", "limitations"]
-    })
+struct ModelOutput {
+    text: String,
+    trace: Vec<analysis::Step>,
+    failure: Option<String>,
 }
 
-fn request(input: &SummaryInput) -> ChatRequest {
-    let pages: Vec<_> = input
-        .pages
-        .iter()
-        .enumerate()
-        .map(|(index, text)| json!({"page": index + 1, "text": text}))
-        .collect();
-    ChatRequest::new(vec![ChatMessage::user(
-        json!({
-            "project_name": input.project_name,
-            "source_url": input.source_url,
-            "overview_character_limit": overview_budget(&input.source_url),
-            "pages": pages,
-        })
-        .to_string(),
-    )])
-    .with_system(PROMPT)
+impl From<String> for ModelOutput {
+    fn from(text: String) -> Self {
+        Self {
+            text,
+            trace: vec![],
+            failure: None,
+        }
+    }
 }
 
 trait SummaryModel {
-    async fn summarize(&self, input: &SummaryInput) -> Result<String>;
+    fn model_name(&self) -> &str {
+        MODEL
+    }
+    async fn summarize(&self, input: &SummaryInput) -> Result<ModelOutput>;
 }
 
-struct OpenAiSummarizer(genai::Client);
+struct ConfiguredSummarizer {
+    client: genai::Client,
+    model: String,
+}
 
-impl SummaryModel for OpenAiSummarizer {
-    async fn summarize(&self, input: &SummaryInput) -> Result<String> {
-        let options = ChatOptions::default()
-            .with_reasoning_effort(ReasoningEffort::Low)
-            .with_max_tokens(5000)
-            .with_response_format(JsonSpec::new("conditions_summary", response_schema()));
-        let response = tokio::time::timeout(
-            Duration::from_secs(90),
-            self.0.exec_chat(MODEL, request(input), Some(&options)),
+impl SummaryModel for ConfiguredSummarizer {
+    fn model_name(&self) -> &str {
+        &self.model
+    }
+
+    async fn summarize(&self, input: &SummaryInput) -> Result<ModelOutput> {
+        let result = analysis::analyze_pages(
+            &self.client,
+            &self.model,
+            &input.project_name,
+            &input.source_url,
+            &input.pages,
         )
-        .await
-        .context("Conditions summary request timed out")??;
-        ensure!(
-            matches!(response.stop_reason, Some(StopReason::Completed(_))),
-            "Conditions summary was not completed: {:?}",
-            response.stop_reason
-        );
-        Ok(response
-            .first_text()
-            .context("Model returned no summary text")?
-            .to_string())
+        .await;
+        Ok(ModelOutput {
+            text: result
+                .summary
+                .as_ref()
+                .map(serde_json::to_string)
+                .transpose()?
+                .unwrap_or_default(),
+            trace: result.trace,
+            failure: result.error,
+        })
     }
 }
 
@@ -183,7 +180,8 @@ fn validate_pages(pages: &[String]) -> Result<()> {
     );
     for (index, page) in pages.iter().enumerate() {
         ensure!(
-            page.chars().filter(|c| c.is_alphanumeric()).count() >= 40,
+            page.chars().filter(|c| c.is_alphanumeric()).count() >= 40
+                || trailing_footer(pages, index),
             "PDF page {} has too little readable text; may need OCR or manual review",
             index + 1
         );
@@ -191,16 +189,93 @@ fn validate_pages(pages: &[String]) -> Result<()> {
     Ok(())
 }
 
-async fn extract_pages(bytes: Vec<u8>) -> Result<Vec<String>> {
+fn trailing_footer(pages: &[String], index: usize) -> bool {
+    if pages.len() < 2 || index + 1 != pages.len() || !pages[index - 1].contains("Yours truly") {
+        return false;
+    }
+    let expected = format!("Page {} of {}", index + 1, pages.len());
+    let text = normalized(&pages[index]);
+    let Some(initials) = text
+        .strip_suffix(&expected)
+        .or_else(|| text.strip_prefix(&expected))
+    else {
+        return false;
+    };
+    regex::Regex::new(r"^[A-Za-z]{1,4}/[A-Za-z]{1,4}$")
+        .unwrap()
+        .is_match(initials.trim())
+}
+
+fn verify_footer_has_no_hidden_content(bytes: &[u8], pages: &[String]) -> Result<()> {
+    let index = pages.len() - 1;
+    if !trailing_footer(pages, index) {
+        return Ok(());
+    }
+    let document = lopdf::Document::load_mem(bytes)?;
+    let page_id = *document
+        .get_pages()
+        .get(&(pages.len() as u32))
+        .context("Missing footer page")?;
+    let content = lopdf::content::Content::decode(&document.get_page_content(page_id)?)?;
+    // A staff-initials/footer page may contain a single horizontal rule. Never
+    // waive extraction checks for images, forms, filled shapes or complex paths.
+    let mut lines = 0;
+    let mut thin_footer_rectangle = false;
+    for operation in content.operations {
+        if operation.operator == "re" {
+            let values = operation
+                .operands
+                .iter()
+                .map(|v| v.as_float())
+                .collect::<lopdf::Result<Vec<_>>>()?;
+            ensure!(values.len() == 4, "Invalid footer rectangle");
+            thin_footer_rectangle =
+                values[1] < 100.0 && (values[2].abs() <= 1.0 || values[3].abs() <= 1.0);
+        }
+        if matches!(
+            operation.operator.as_str(),
+            "f" | "F" | "f*" | "B" | "B*" | "b" | "b*"
+        ) {
+            ensure!(
+                thin_footer_rectangle,
+                "Low-text footer page contains filled graphics"
+            );
+            thin_footer_rectangle = false;
+        }
+        if operation.operator == "n" {
+            thin_footer_rectangle = false;
+        }
+        ensure!(
+            !matches!(
+                operation.operator.as_str(),
+                "Do" | "BI" | "ID" | "sh" | "c" | "v" | "y"
+            ),
+            "Low-text footer page contains graphics requiring manual review: {} {:?}",
+            operation.operator,
+            operation.operands
+        );
+        if matches!(operation.operator.as_str(), "m" | "l" | "S") {
+            lines += 1;
+        }
+    }
+    ensure!(lines <= 3, "Low-text footer page contains complex graphics");
+    Ok(())
+}
+
+pub async fn extract_pages(bytes: Vec<u8>) -> Result<Vec<String>> {
     ensure!(
         bytes.len() <= 20 * 1024 * 1024,
         "PDF exceeds 20 MiB extraction limit"
     );
-    let pages =
-        tokio::task::spawn_blocking(move || pdf_extract::extract_text_from_mem_by_pages(&bytes))
-            .await
-            .context("PDF extractor failed")?
-            .context("Cannot extract PDF text")?;
+    let pages = tokio::task::spawn_blocking(move || -> Result<Vec<String>> {
+        let pages = pdf_extract::extract_text_from_mem_by_pages(&bytes)?;
+        validate_pages(&pages)?;
+        verify_footer_has_no_hidden_content(&bytes, &pages)?;
+        Ok(pages)
+    })
+    .await
+    .context("PDF extractor failed")?
+    .context("Cannot extract PDF text")?;
     validate_pages(&pages)?;
     Ok(pages)
 }
@@ -219,8 +294,8 @@ fn parse_summary(text: &str, pages: &[String]) -> Result<ConditionsSummary> {
         "Conditions post must end with a complete sentence"
     );
     ensure!(
-        summary.requirements.len() <= 12,
-        "Summary has more than 12 requirements"
+        summary.requirements.len() <= 24,
+        "Summary has more than 24 supporting passages"
     );
     ensure!(
         !summary.requirements.is_empty() || !summary.limitations.is_empty(),
@@ -246,7 +321,7 @@ fn parse_summary(text: &str, pages: &[String]) -> Result<ConditionsSummary> {
             .context("Summary cites a nonexistent PDF page")?;
         let quote = normalized(&item.evidence);
         ensure!(
-            (20..=1500).contains(&quote.len()),
+            (20..=MAX_TEXT_BYTES).contains(&quote.len()),
             "Evidence excerpt is too short or too long"
         );
         ensure!(
@@ -258,11 +333,12 @@ fn parse_summary(text: &str, pages: &[String]) -> Result<ConditionsSummary> {
     Ok(summary)
 }
 
-fn selected_versions(
+fn selected_versions_for_model(
     db: &Connection,
     limit: usize,
     version: Option<i64>,
     retry_failed: bool,
+    model: &str,
 ) -> Result<Vec<i64>> {
     ensure!(
         (1..=100).contains(&limit),
@@ -289,7 +365,7 @@ fn selected_versions(
     )?;
     let rows = stmt.query_map(
         params![
-            MODEL,
+            model,
             PROMPT_VERSION,
             EXTRACTOR_VERSION,
             version,
@@ -302,32 +378,47 @@ fn selected_versions(
     Ok(rows.collect::<rusqlite::Result<Vec<_>>>()?)
 }
 
-pub async fn summarize_conditions(
+#[cfg(test)]
+fn selected_versions(
+    db: &Connection,
+    limit: usize,
+    version: Option<i64>,
+    retry_failed: bool,
+) -> Result<Vec<i64>> {
+    selected_versions_for_model(db, limit, version, retry_failed, MODEL)
+}
+
+pub async fn summarize_conditions_with_model(
     db: &Database,
     limit: usize,
     version: Option<i64>,
     retry_failed: bool,
+    model: &str,
 ) -> Result<SummaryRun> {
-    let ids = selected_versions(db, limit, version, retry_failed)?;
-    // Fail before consuming per-document attempts if the whole run lacks credentials.
+    let ids = selected_versions_for_model(db, limit, version, retry_failed, model)?;
     for id in &ids {
-        if cached_summary(db, *id)?.is_none() {
-            ensure!(
-                std::env::var("OPENAI_API_KEY").is_ok_and(|key| !key.trim().is_empty()),
-                "OPENAI_API_KEY is required to summarize conditions"
-            );
+        if cached_summary(db, *id, model)?.is_none() {
+            analysis::require_api_key(model)?;
             break;
         }
     }
-    summarize_versions(db, &ids, &OpenAiSummarizer(genai::Client::default())).await
+    summarize_versions(
+        db,
+        &ids,
+        &ConfiguredSummarizer {
+            client: genai::Client::default(),
+            model: model.into(),
+        },
+    )
+    .await
 }
 
-fn cached_summary(db: &Connection, id: i64) -> Result<Option<String>> {
+fn cached_summary(db: &Connection, id: i64, model: &str) -> Result<Option<String>> {
     Ok(db
         .query_row(
             "SELECT SummaryJson FROM ConditionsSummaries WHERE DocumentVersionId = ?1
          AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
-            params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION],
+            params![id, model, PROMPT_VERSION, EXTRACTOR_VERSION],
             |r| r.get::<_, Option<String>>(0),
         )
         .optional()?
@@ -346,7 +437,7 @@ async fn summarize_versions(
              FROM ApprovalDocumentVersions v JOIN ApprovalDocuments d ON d.Id = v.DocumentId WHERE v.Id = ?1",
             [id], |r| Ok((r.get(0)?, r.get(1)?)),
         )?;
-        if let Some(cached) = cached_summary(db, id)? {
+        if let Some(cached) = cached_summary(db, id, model.model_name())? {
             run.summaries.push(SummaryRecord {
                 document_version_id: id,
                 project_name,
@@ -360,15 +451,15 @@ async fn summarize_versions(
             "INSERT INTO ConditionsSummaries(DocumentVersionId, Model, PromptVersion, ExtractorVersion, Attempts, LastAttempt)
              VALUES (?1, ?2, ?3, ?4, 1, ?5)
              ON CONFLICT(DocumentVersionId, Model, PromptVersion, ExtractorVersion)
-             DO UPDATE SET Attempts = Attempts + 1, LastAttempt = excluded.LastAttempt, RawResponse = NULL",
-            params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION, now],
+             DO UPDATE SET Attempts = Attempts + 1, LastAttempt = excluded.LastAttempt, RawResponse = NULL, TraceJson = NULL",
+            params![id, model.model_name(), PROMPT_VERSION, EXTRACTOR_VERSION, now],
         )?;
         let result = summarize_one(db, id, &project_name, &source_url, model).await;
         match result {
             Ok(summary) => {
                 db.execute("UPDATE ConditionsSummaries SET SummaryJson = ?5, CompletedAt = ?6, LastError = NULL
                     WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
-                    params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION, serde_json::to_string(&summary)?, Utc::now().timestamp()])?;
+                    params![id, model.model_name(), PROMPT_VERSION, EXTRACTOR_VERSION, serde_json::to_string(&summary)?, Utc::now().timestamp()])?;
                 run.summaries.push(SummaryRecord {
                     document_version_id: id,
                     project_name,
@@ -380,7 +471,7 @@ async fn summarize_versions(
                 let message = format!("{error:#}");
                 db.execute("UPDATE ConditionsSummaries SET LastError = ?5
                     WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
-                    params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION, message])?;
+                    params![id, model.model_name(), PROMPT_VERSION, EXTRACTOR_VERSION, message])?;
                 run.failures
                     .push(format!("PDF version {id} ({project_name}): {message}"));
             }
@@ -402,7 +493,7 @@ async fn summarize_one(
     );
     let saved: Option<String> = db.query_row("SELECT PagesJson FROM ConditionsSummaries
         WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
-        params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION], |r| r.get(0))?;
+        params![id, model.model_name(), PROMPT_VERSION, EXTRACTOR_VERSION], |r| r.get(0))?;
     let pages = if let Some(saved) = saved {
         let pages: Vec<String> = serde_json::from_str(&saved)?;
         validate_pages(&pages)?;
@@ -416,7 +507,7 @@ async fn summarize_one(
         let pages = extract_pages(bytes).await?;
         db.execute("UPDATE ConditionsSummaries SET PagesJson = ?5
             WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
-            params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION, serde_json::to_string(&pages)?])?;
+            params![id, model.model_name(), PROMPT_VERSION, EXTRACTOR_VERSION, serde_json::to_string(&pages)?])?;
         pages
     };
     let input = SummaryInput {
@@ -424,11 +515,15 @@ async fn summarize_one(
         source_url: source_url.into(),
         pages,
     };
-    let response = model.summarize(&input).await?;
+    let output = model.summarize(&input).await?;
+    let response = output.text;
     // Keep the model's last response for review even when citation validation fails.
-    db.execute("UPDATE ConditionsSummaries SET RawResponse = ?5
+    db.execute("UPDATE ConditionsSummaries SET RawResponse = ?5, TraceJson = ?6
         WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
-        params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION, response])?;
+        params![id, model.model_name(), PROMPT_VERSION, EXTRACTOR_VERSION, response, serde_json::to_string(&output.trace)?])?;
+    if let Some(error) = output.failure {
+        bail!(error);
+    }
     let summary = parse_summary(&response, &input.pages)?;
     format_post(&summary, source_url)?;
     Ok(summary)
@@ -439,9 +534,10 @@ pub async fn run_command(
     limit: usize,
     version: Option<i64>,
     retry_failed: bool,
+    model: &str,
 ) -> Result<()> {
     let db = Database::new_from_file(database)?;
-    let run = summarize_conditions(&db, limit, version, retry_failed).await?;
+    let run = summarize_conditions_with_model(&db, limit, version, retry_failed, model).await?;
     for record in &run.summaries {
         println!("{}\n", record.post_text()?);
     }
@@ -492,12 +588,12 @@ mod tests {
         }
     }
     impl SummaryModel for FakeModel {
-        async fn summarize(&self, input: &SummaryInput) -> Result<String> {
+        async fn summarize(&self, input: &SummaryInput) -> Result<ModelOutput> {
             self.calls.set(self.calls.get() + 1);
             if self.fail.get() {
                 bail!("simulated model failure");
             }
-            Ok(answer(&input.pages))
+            Ok(answer(&input.pages).into())
         }
     }
 
@@ -506,6 +602,147 @@ mod tests {
             VALUES (1, '52161', 'https://www.shapeyourcity.ca/52161/widgets/220724/documents/172212', 'Renfrew conditions', 1, 1)", []).unwrap();
         db.execute("INSERT INTO ApprovalDocumentVersions(Id, DocumentId, DownloadUrl, FirstSeen, LastSeen, Content)
             VALUES (?1, 1, 'https://example.com/letter.pdf', 1, 1, ?2)", params![id, bytes]).unwrap();
+    }
+
+    #[tokio::test]
+    async fn extracts_letter_with_administrative_footer_page() {
+        let bytes = include_bytes!("../evals/conditions/pdfs/05.pdf");
+        let raw = pdf_extract::extract_text_from_mem_by_pages(bytes).unwrap();
+        assert!(trailing_footer(&raw, 8));
+        let pages = extract_pages(bytes.to_vec()).await.unwrap();
+        assert_eq!(pages.len(), 9);
+    }
+
+    #[test]
+    fn footer_exception_rejects_images_forms_and_substantial_graphics() {
+        use lopdf::content::{Content, Operation};
+        let bytes = include_bytes!("../evals/conditions/pdfs/05.pdf");
+        let pages = pdf_extract::extract_text_from_mem_by_pages(bytes).unwrap();
+        for operations in [
+            vec![Operation::new(
+                "Do",
+                vec![lopdf::Object::Name(b"Scan".to_vec())],
+            )],
+            vec![Operation::new("BI", vec![])],
+            vec![
+                Operation::new("re", vec![0.into(), 200.into(), 400.into(), 400.into()]),
+                Operation::new("f", vec![]),
+            ],
+            vec![Operation::new("m", vec![0.into(), 0.into()]); 4],
+        ] {
+            let mut doc = lopdf::Document::load_mem(bytes).unwrap();
+            let page_id = doc.get_pages()[&9];
+            let content_id = doc.add_object(lopdf::Stream::new(
+                lopdf::Dictionary::new(),
+                Content { operations }.encode().unwrap(),
+            ));
+            doc.get_object_mut(page_id)
+                .unwrap()
+                .as_dict_mut()
+                .unwrap()
+                .set("Contents", content_id);
+            let mut modified = Vec::new();
+            doc.save_to(&mut modified).unwrap();
+            assert!(verify_footer_has_no_hidden_content(&modified, &pages).is_err());
+        }
+        // The textual exemption applies only after a signed letter, at its end.
+        assert!(!trailing_footer(
+            &["Unsigned letter".into(), "MM/cg Page 2 of 2".into()],
+            1
+        ));
+        assert!(!trailing_footer(
+            &[
+                "Yours truly".into(),
+                "MM/cg Page 2 of 3".into(),
+                "More content".into()
+            ],
+            1
+        ));
+    }
+
+    #[tokio::test]
+    async fn model_caches_are_separate_and_failed_workflows_keep_their_traces() {
+        struct NamedModel<'a> {
+            name: &'a str,
+            fail: bool,
+        }
+        impl SummaryModel for NamedModel<'_> {
+            fn model_name(&self) -> &str {
+                self.name
+            }
+            async fn summarize(&self, input: &SummaryInput) -> Result<ModelOutput> {
+                Ok(ModelOutput {
+                    text: answer(&input.pages),
+                    trace: vec![analysis::Step {
+                        stage: "review_conditions".into(),
+                        round: 1,
+                        elapsed_ms: 0,
+                        usage: serde_json::Value::Null,
+                        response: "test trace".into(),
+                        error: None,
+                        decision: None,
+                    }],
+                    failure: self.fail.then(|| "Reviewer rejected draft".into()),
+                })
+            }
+        }
+        let db = Database::new_in_memory().unwrap();
+        seed(&db, 1, PDF);
+        let good = NamedModel {
+            name: "model-a",
+            fail: false,
+        };
+        assert_eq!(
+            summarize_versions(&db, &[1], &good)
+                .await
+                .unwrap()
+                .summaries
+                .len(),
+            1
+        );
+        assert!(selected_versions_for_model(&db, 10, None, false, "model-a")
+            .unwrap()
+            .is_empty());
+        assert_eq!(
+            selected_versions_for_model(&db, 10, None, false, "model-b").unwrap(),
+            vec![1]
+        );
+        let bad = NamedModel {
+            name: "model-b",
+            fail: true,
+        };
+        assert_eq!(
+            summarize_versions(&db, &[1], &bad)
+                .await
+                .unwrap()
+                .failures
+                .len(),
+            1
+        );
+        let saved: (String, Option<String>, String) = db.query_row("SELECT TraceJson, SummaryJson, LastError FROM ConditionsSummaries WHERE Model = 'model-b'", [], |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?))).unwrap();
+        assert!(saved.0.contains("review_conditions"));
+        assert!(saved.1.is_none());
+        assert!(saved.2.contains("Reviewer rejected draft"));
+        assert!(cached_summary(&db, 1, "model-a").unwrap().is_some());
+    }
+
+    #[test]
+    fn migrates_old_summary_table_without_losing_rows() {
+        let db = Database::new_in_memory().unwrap();
+        seed(&db, 1, PDF);
+        db.execute("ALTER TABLE ConditionsSummaries DROP COLUMN TraceJson", [])
+            .unwrap();
+        db.execute("INSERT INTO ConditionsSummaries(DocumentVersionId, Model, PromptVersion, ExtractorVersion, RawResponse) VALUES (1, 'old-model', 2, 'old-extractor', 'preserve me')", []).unwrap();
+        initialize_schema(&db).unwrap();
+        initialize_schema(&db).unwrap();
+        let row: (String, Option<String>) = db
+            .query_row(
+                "SELECT RawResponse, TraceJson FROM ConditionsSummaries",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .unwrap();
+        assert_eq!(row, ("preserve me".into(), None));
     }
 
     #[tokio::test]
@@ -642,8 +879,8 @@ mod tests {
     async fn rejected_evidence_is_saved_for_review_but_never_cached_as_a_summary() {
         struct FabricatedQuote;
         impl SummaryModel for FabricatedQuote {
-            async fn summarize(&self, _input: &SummaryInput) -> Result<String> {
-                Ok(answer(&pages()))
+            async fn summarize(&self, _input: &SummaryInput) -> Result<ModelOutput> {
+                Ok(answer(&pages()).into())
             }
         }
         let db = Database::new_in_memory().unwrap();
@@ -748,107 +985,5 @@ mod tests {
             })
             .unwrap();
         assert_eq!(bytes, PDF);
-    }
-
-    #[tokio::test]
-    async fn openai_adapter_sends_schema_and_page_labels_and_parses_response() {
-        check_openai_adapter("completed").await;
-    }
-
-    #[tokio::test]
-    async fn openai_adapter_rejects_incomplete_response_even_with_valid_json() {
-        check_openai_adapter("incomplete").await;
-    }
-
-    async fn check_openai_adapter(status: &'static str) {
-        use genai::resolver::{AuthData, AuthResolver, Endpoint, ServiceTargetResolver};
-        use tokio::{
-            io::{AsyncReadExt, AsyncWriteExt},
-            net::TcpListener,
-        };
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let endpoint = format!("http://{}/v1/", listener.local_addr().unwrap());
-        let server = tokio::spawn(async move {
-            let (mut socket, _) = listener.accept().await.unwrap();
-            let mut request = Vec::new();
-            let (headers_len, content_len) = loop {
-                let mut chunk = [0; 4096];
-                let read = socket.read(&mut chunk).await.unwrap();
-                assert!(read > 0);
-                request.extend_from_slice(&chunk[..read]);
-                if let Some(index) = request.windows(4).position(|w| w == b"\r\n\r\n") {
-                    let headers = String::from_utf8_lossy(&request[..index]);
-                    assert!(headers.starts_with("POST /v1/responses"));
-                    let len: usize = headers
-                        .lines()
-                        .find_map(|line| {
-                            line.to_lowercase()
-                                .strip_prefix("content-length: ")
-                                .map(str::to_string)
-                        })
-                        .unwrap()
-                        .parse()
-                        .unwrap();
-                    break (index + 4, len);
-                }
-            };
-            while request.len() < headers_len + content_len {
-                let mut chunk = [0; 4096];
-                let read = socket.read(&mut chunk).await.unwrap();
-                assert!(read > 0);
-                request.extend_from_slice(&chunk[..read]);
-            }
-            let body: serde_json::Value =
-                serde_json::from_slice(&request[headers_len..headers_len + content_len]).unwrap();
-            assert_eq!(body["model"], MODEL);
-            assert!(body.get("max_tokens").is_none());
-            assert_eq!(body["max_output_tokens"], 5000);
-            assert_eq!(body["reasoning"]["effort"], "low");
-            assert_eq!(body["store"], false);
-            assert_eq!(body["text"]["format"]["strict"], true);
-            assert_eq!(body["text"]["format"]["schema"], response_schema());
-            assert_eq!(body["instructions"], PROMPT);
-            let source: serde_json::Value =
-                serde_json::from_str(body["input"][0]["content"].as_str().unwrap()).unwrap();
-            assert_eq!(source["pages"][0]["page"], 1);
-            assert_eq!(source["pages"][0]["text"], pages()[0]);
-            assert_eq!(source["overview_character_limit"], 273);
-            let response = json!({"id":"local-test", "status":status, "model":MODEL,
-                "incomplete_details": {"reason":"max_output_tokens"},
-                "output":[{"type":"message","role":"assistant","content":[{"type":"output_text","text":answer(&pages())}]}]}).to_string();
-            socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{response}", response.len()).as_bytes()).await.unwrap();
-        });
-        let client = genai::Client::builder()
-            .with_auth_resolver(AuthResolver::from_resolver_fn(|_| {
-                Ok(Some(AuthData::from_single("fake-local-test-key")))
-            }))
-            .with_service_target_resolver(ServiceTargetResolver::from_resolver_fn(
-                move |mut target: genai::ServiceTarget| {
-                    target.endpoint = Endpoint::from_owned(endpoint.clone());
-                    Ok(target)
-                },
-            ))
-            .build();
-        let input = SummaryInput {
-            project_name: "Renfrew childcare".into(),
-            source_url: "https://example.com/letter".into(),
-            pages: pages(),
-        };
-        let result = OpenAiSummarizer(client).summarize(&input).await;
-        if status == "completed" {
-            assert_eq!(
-                parse_summary(&result.unwrap(), &input.pages)
-                    .unwrap()
-                    .requirements
-                    .len(),
-                1
-            );
-        } else {
-            assert!(result
-                .unwrap_err()
-                .to_string()
-                .contains("was not completed"));
-        }
-        server.await.unwrap();
     }
 }

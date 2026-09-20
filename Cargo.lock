@@ -3119,6 +3119,7 @@ dependencies = [
  "image",
  "indicatif",
  "itertools",
+ "lopdf",
  "openssl",
  "pdf-extract",
  "regex",
@@ -3127,6 +3128,7 @@ dependencies = [
  "scraper",
  "serde",
  "serde_json",
+ "sha2",
  "tokio",
 ]
 
