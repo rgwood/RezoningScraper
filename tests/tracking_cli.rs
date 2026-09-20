@@ -60,7 +60,7 @@ fn tracking_only_never_consumes_existing_queues_or_updates_project_snapshots() {
         .env("SLACK_WEBHOOK_URL", "http://127.0.0.1:1/must-not-post")
         .env("BLUESKY_USER", "fake-test-user")
         .env("BLUESKY_PASSWORD", "fake-test-password")
-        .env("OPENAI_API_KEY", "fake-test-key")
+        .env("OPEN_ROUTER_API_KEY", "fake-test-key")
         .env(
             "DOGSTATSD_ADDRESS",
             "invalid address: tracking-only must not initialize monitoring",
@@ -109,6 +109,21 @@ fn rejects_conflicting_or_unsafe_cli_combinations_before_running() {
         vec!["--document-version", "1"],
         vec!["--summary-limit", "2"],
         vec!["--conditions-model", "another-model"],
+        vec![
+            "--summarize-conditions",
+            "--conditions-model",
+            "gpt-6-astra",
+        ],
+        vec![
+            "--summarize-conditions",
+            "--conditions-model",
+            "open_router::openai/gpt-5",
+        ],
+        vec![
+            "--summarize-conditions",
+            "--conditions-model",
+            "open_router::openrouter/auto",
+        ],
         vec!["--retry-failed-summaries"],
     ] {
         let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))

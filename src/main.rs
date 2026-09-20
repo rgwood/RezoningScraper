@@ -20,6 +20,7 @@ mod approvals;
 mod bluesky;
 mod conditions;
 mod db;
+mod llm;
 mod models;
 mod monitoring;
 mod queue;
@@ -88,6 +89,7 @@ struct Args {
         long,
         requires = "summarize_conditions",
         default_value = conditions::analysis::DEFAULT_MODEL,
+        value_parser = llm::parse_model,
         help = "Model used for every conditions-analysis stage"
     )]
     conditions_model: String,
@@ -352,6 +354,9 @@ async fn async_main(args: Args, monitoring: Option<&Monitoring>) -> Result<()> {
     // Process LLM queue
     {
         let depth = llm_queue.depth(&db)?;
+        if depth > 0 {
+            llm::require_api_key(llm::MODEL)?;
+        }
         let mut processed = 0;
 
         println!("Processing {} projects in LLM queue", depth);

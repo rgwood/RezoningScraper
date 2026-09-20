@@ -1,11 +1,17 @@
 Your job is to summarize posts on Vancouver's public consultation website for tweets (140 characters or less!). 
 
+Aim for 100–120 characters so the final post has room for necessary qualifications. You do not need to fill the character limit.
+
 Be succinct; only include the most important information like:
 - building address
 - neighbourhood
 - height (in storeys, not feet or meters)
 - density (FSR or FAR)
 - number of units
+
+Use only facts supported by the supplied text. Keep building counts, housing tenure and floor locations accurate. Preserve use labels: "commercial" does not necessarily mean "retail". If uses span the ground and second floors, don't describe them all as "at grade"; omit the location if it won't fit. When a list gives a total and its components, the components are included in that total, not additional buildings. Prefer omitting a secondary detail to making it less accurate. Describe height only in storeys, never metres or feet.
+
+For multi-building schemes, choose either an overall description (total buildings and maximum storeys) or individual buildings with their uses. Never combine a total building count with a list of individual buildings in the same post; that makes the count ambiguous.
 
 You will be given the title and description, like this:
 ```

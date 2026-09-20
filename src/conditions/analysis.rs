@@ -3,8 +3,7 @@
 use super::{format_post, overview_budget, parse_summary, ConditionsSummary, Requirement};
 use anyhow::{bail, ensure, Context, Result};
 use genai::chat::{
-    ChatMessage, ChatOptions, ChatRequest, ChatResponseFormat, JsonSpec, ReasoningEffort,
-    StopReason,
+    ChatMessage, ChatOptions, ChatRequest, ChatResponseFormat, JsonSpec, StopReason,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
@@ -18,18 +17,8 @@ const REVIEW: &str = include_str!("review_prompt.txt");
 const VERIFY: &str = include_str!("verify_prompt.txt");
 const TERMINOLOGY: &str = include_str!("terminology.txt");
 const MAX_ROUNDS: usize = 4;
-pub const DEFAULT_MODEL: &str = "open_router::z-ai/glm-5.3-flash";
-
-pub fn require_api_key(model: &str) -> Result<()> {
-    let adapter = genai::adapter::AdapterKind::from_model(model)?;
-    if let Some(name) = adapter.default_key_env_name() {
-        ensure!(
-            std::env::var(name).is_ok_and(|key| !key.trim().is_empty()),
-            "{name} is required to summarize conditions"
-        );
-    }
-    Ok(())
-}
+pub const DEFAULT_MODEL: &str = crate::llm::MODEL;
+pub use crate::llm::require_api_key;
 
 /// Identify the actual workflow, not just a manually incremented version number.
 pub fn workflow_fingerprint() -> String {
@@ -42,6 +31,7 @@ pub fn workflow_fingerprint() -> String {
         TERMINOLOGY,
         include_str!("analysis.rs"),
         include_str!("../conditions.rs"),
+        include_str!("../llm.rs"),
     ] {
         hash.update(part.as_bytes());
         hash.update([0]);
@@ -336,24 +326,10 @@ async fn complete_once(
         } else {
             JsonSpec::new(stage, schema).into()
         });
-    if model.starts_with("open_router::") {
-        let mut extra = json!({
-            "reasoning":{"effort":if matches!(stage, "review_conditions" | "verify_conditions") {"high"} else {"medium"}},
-            "provider":{"require_parameters":true}
-        });
-        if model == DEFAULT_MODEL {
-            extra["provider"] = json!({"only":["z-ai/fp8"],"allow_fallbacks":false,"require_parameters":true,"max_price":{"prompt":0.15,"completion":0.50,"request":0}});
-        }
-        options = options.with_extra_body(extra);
-    } else {
-        options = options.with_reasoning_effort(
-            if matches!(stage, "review_conditions" | "verify_conditions") {
-                ReasoningEffort::High
-            } else {
-                ReasoningEffort::Medium
-            },
-        );
-    }
+    options = options.with_extra_body(json!({
+        "reasoning":{"effort":if matches!(stage, "review_conditions" | "verify_conditions") {"high"} else {"medium"}},
+        "provider":crate::llm::provider_options(model)?
+    }));
     let response = tokio::time::timeout(
         Duration::from_secs(120),
         client.exec_chat(
@@ -817,6 +793,7 @@ async fn workflow(
     pages: &[String],
     trace: &mut Vec<Step>,
 ) -> Result<ConditionsSummary> {
+    crate::llm::validate_model(model)?;
     ensure!(
         overview_budget(url) >= 40,
         "Source URL leaves too little room for a post"
@@ -975,13 +952,6 @@ mod tests {
     async fn mock_client(
         responses: Vec<Value>,
     ) -> (genai::Client, tokio::task::JoinHandle<Vec<Value>>) {
-        mock_client_for(responses, false).await
-    }
-
-    async fn mock_client_for(
-        responses: Vec<Value>,
-        openrouter: bool,
-    ) -> (genai::Client, tokio::task::JoinHandle<Vec<Value>>) {
         use genai::resolver::{AuthData, AuthResolver, Endpoint, ServiceTargetResolver};
         use tokio::{
             io::{AsyncReadExt, AsyncWriteExt},
@@ -1001,11 +971,7 @@ mod tests {
                     bytes.extend_from_slice(&buffer[..read]);
                     if let Some(index) = bytes.windows(4).position(|x| x == b"\r\n\r\n") {
                         let headers = String::from_utf8_lossy(&bytes[..index]);
-                        assert!(headers.starts_with(if openrouter {
-                            "POST /v1/chat/completions"
-                        } else {
-                            "POST /v1/responses"
-                        }));
+                        assert!(headers.starts_with("POST /v1/chat/completions"));
                         let len = headers
                             .lines()
                             .find_map(|line| {
@@ -1026,7 +992,7 @@ mod tests {
                     bytes.extend_from_slice(&buffer[..read]);
                 }
                 let request: Value = serde_json::from_slice(&bytes[start..start + len]).unwrap();
-                if openrouter {
+                {
                     assert_eq!(request["model"], "z-ai/glm-5.3-flash");
                     assert_eq!(
                         request["provider"]["max_price"],
@@ -1050,38 +1016,10 @@ mod tests {
                             6000
                         }
                     );
-                } else {
-                    assert_eq!(request["store"], false);
-                    assert_eq!(
-                        request["max_output_tokens"],
-                        if matches!(
-                            request["text"]["format"]["name"].as_str(),
-                            Some("review_conditions" | "verify_conditions")
-                        ) {
-                            10000
-                        } else {
-                            6000
-                        }
-                    );
-                    assert_eq!(
-                        request["reasoning"]["effort"],
-                        if matches!(
-                            request["text"]["format"]["name"].as_str(),
-                            Some("review_conditions" | "verify_conditions")
-                        ) {
-                            "high"
-                        } else {
-                            "medium"
-                        }
-                    );
-                    assert!(request.get("max_tokens").is_none());
                 }
                 requests.push(request);
-                let body = if openrouter {
-                    json!({"id":"test-openrouter", "model":"z-ai/glm-5.3-flash", "provider":"TestProvider", "usage":{"prompt_tokens":10,"completion_tokens":20,"total_tokens":30,"cost":0.0012},
-                        "choices":[{"finish_reason":"stop","message":{"role":"assistant","content":response.to_string()}}]})
-                } else { json!({"id":"test", "status":"completed", "model":"gpt-5.6-luna", "usage":{"input_tokens":10,"output_tokens":20,"total_tokens":30},
-                    "output":[{"type":"message","role":"assistant","content":[{"type":"output_text","text":response.to_string()}]}]}) }.to_string();
+                let body = json!({"id":"test-openrouter", "model":"z-ai/glm-5.3-flash", "provider":"TestProvider", "usage":{"prompt_tokens":10,"completion_tokens":20,"total_tokens":30,"cost":0.0012},
+                    "choices":[{"finish_reason":"stop","message":{"role":"assistant","content":response.to_string()}}]}).to_string();
                 socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",body.len()).as_bytes()).await.unwrap();
             }
             requests
@@ -1115,8 +1053,29 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn forbidden_models_fail_before_any_paid_request() {
+        for model in [
+            "gpt-6-astra",
+            "open_router::openai/gpt-5",
+            "open_router::openrouter/auto",
+        ] {
+            let result = analyze_pages(
+                &genai::Client::default(),
+                model,
+                "Test",
+                "https://example.com",
+                &["Provide five bicycle spaces in revised drawings.".into()],
+            )
+            .await;
+            assert!(result.summary.is_none());
+            assert!(result.trace.is_empty());
+            assert!(result.error.unwrap().contains("disabled"));
+        }
+    }
+
+    #[tokio::test]
     async fn openrouter_uses_exact_model_and_preserves_provider_charge() {
-        let (client, server) = mock_client_for(sample_responses(true), true).await;
+        let (client, server) = mock_client(sample_responses(true)).await;
         let result = analyze_pages(
             &client,
             DEFAULT_MODEL,
@@ -1452,7 +1411,7 @@ mod tests {
         let (client, server) = mock_client(responses).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &["Provide five Class B bicycle spaces in revised plans.".into()],
@@ -1466,9 +1425,12 @@ mod tests {
             .unwrap()
             .contains("newsworthy"));
         let requests = server.await.unwrap();
-        assert_eq!(requests[3]["instructions"], REVIEW);
+        assert!(requests[3]["messages"][0]["content"]
+            .as_str()
+            .unwrap()
+            .starts_with(REVIEW));
         let repair: Value =
-            serde_json::from_str(requests[3]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[3]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert!(repair["format_feedback"]
             .as_str()
             .unwrap()
@@ -1496,7 +1458,7 @@ mod tests {
         let (client, server) = mock_client(responses).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &[
@@ -1514,7 +1476,7 @@ mod tests {
             .contains("candidate 1"));
         let requests = server.await.unwrap();
         let writer: Value =
-            serde_json::from_str(requests[1]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[1]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert_eq!(writer["selected_candidate_index"], 1);
     }
 
@@ -1530,7 +1492,7 @@ mod tests {
         let (client, server) = mock_client(responses).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &[text.into()],
@@ -1540,7 +1502,7 @@ mod tests {
         assert!(result.trace[0].decision.is_none());
         let requests = server.await.unwrap();
         let writer: Value =
-            serde_json::from_str(requests[1]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[1]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert_eq!(writer["selected_candidate_index"], 0);
         assert_eq!(writer["required_concrete_terms"], json!(["separation"]));
     }
@@ -1554,7 +1516,7 @@ mod tests {
             mock_client((0..MAX_ROUNDS).flat_map(|_| round.clone()).collect()).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &["Provide five Class B bicycle spaces in revised plans.".into()],
@@ -1583,7 +1545,7 @@ mod tests {
         let (client, server) = mock_client(responses).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &["Provide five Class B bicycle spaces in revised plans.".into()],
@@ -1595,11 +1557,11 @@ mod tests {
         assert!(result.trace[3].error.as_ref().unwrap().contains("not six"));
         let requests = server.await.unwrap();
         let second_review: Value =
-            serde_json::from_str(requests[4]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[4]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert_eq!(second_review["drafts"].as_array().unwrap().len(), 1);
         assert_eq!(second_review["drafts"][0]["index"], 1);
         let audit: Value =
-            serde_json::from_str(requests[5]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[5]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert_eq!(audit.as_object().unwrap().len(), 3);
         assert!(!audit.to_string().contains("six"));
     }
@@ -1651,7 +1613,7 @@ mod tests {
         let (client, server) = mock_client(responses).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &["Provide five Class B bicycle spaces in revised plans.".into()],
@@ -1666,12 +1628,12 @@ mod tests {
             .contains("limited scope"));
         let requests = server.await.unwrap();
         let audit: Value =
-            serde_json::from_str(requests[3]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[3]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert_eq!(audit.as_object().unwrap().len(), 3);
         assert_eq!(audit["source_pages"][0]["page"], 1);
         assert!(audit["post"].as_str().unwrap().contains("five"));
         let repair: Value =
-            serde_json::from_str(requests[4]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[4]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert!(repair["previous_feedback"]
             .as_str()
             .unwrap()
@@ -1686,7 +1648,7 @@ mod tests {
         let (client, server) = mock_client(responses).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &["Provide five Class B bicycle spaces in revised plans.".into()],
@@ -1709,7 +1671,7 @@ mod tests {
         let (client, server) = mock_client(responses).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &["Provide five Class B bicycle spaces in revised plans.".into()],
@@ -1725,13 +1687,16 @@ mod tests {
             .contains("over budget"));
         let requests = server.await.unwrap();
         let repair: Value =
-            serde_json::from_str(requests[2]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[2]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert!(repair["previous_feedback"]
             .as_str()
             .unwrap()
             .contains("Measured validation results"));
         assert!(repair["target_words"].as_u64().unwrap() <= 16);
-        assert_eq!(requests[2]["instructions"], WRITE);
+        assert!(requests[2]["messages"][0]["content"]
+            .as_str()
+            .unwrap()
+            .starts_with(WRITE));
     }
 
     #[tokio::test]
@@ -1742,7 +1707,7 @@ mod tests {
         let pages = vec!["Conditional approval for 1 Test St daycare. Revised drawings must provide five Class B bicycle spaces.".into()];
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "1 Test St daycare",
             "https://example.com/letter",
             &pages,
@@ -1758,14 +1723,23 @@ mod tests {
         assert!(result.trace[2].error.is_some());
         let requests = server.await.unwrap();
         let repair: Value =
-            serde_json::from_str(requests[3]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[3]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert!(repair["previous_feedback"]
             .as_str()
             .unwrap()
             .contains("Timing needs correction"));
-        assert_eq!(requests[0]["instructions"], SELECT);
-        assert_eq!(requests[1]["instructions"], WRITE);
-        assert_eq!(requests[2]["instructions"], REVIEW);
+        assert!(requests[0]["messages"][0]["content"]
+            .as_str()
+            .unwrap()
+            .starts_with(SELECT));
+        assert!(requests[1]["messages"][0]["content"]
+            .as_str()
+            .unwrap()
+            .starts_with(WRITE));
+        assert!(requests[2]["messages"][0]["content"]
+            .as_str()
+            .unwrap()
+            .starts_with(REVIEW));
     }
 
     #[tokio::test]
@@ -1774,7 +1748,7 @@ mod tests {
         let (client, server) = mock_client(vec![invalid; MAX_ROUNDS]).await;
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &["A complete source paragraph without any invented fee.".into()],
@@ -1798,7 +1772,7 @@ mod tests {
         ];
         let result = analyze_pages(
             &client,
-            "gpt-5.6-luna",
+            DEFAULT_MODEL,
             "Test",
             "https://example.com",
             &pages,
@@ -1810,7 +1784,7 @@ mod tests {
         assert_eq!(result.trace.len(), 4);
         let requests = server.await.unwrap();
         let audit: Value =
-            serde_json::from_str(requests[3]["input"][0]["content"].as_str().unwrap()).unwrap();
+            serde_json::from_str(requests[3]["messages"][1]["content"].as_str().unwrap()).unwrap();
         assert_eq!(audit["source_pages"].as_array().unwrap().len(), 2);
         assert_eq!(audit["source_pages"][1]["text"], pages[1]);
     }

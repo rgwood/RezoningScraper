@@ -3,6 +3,7 @@ pub mod approvals;
 pub mod bluesky;
 pub mod conditions;
 pub mod db;
+pub mod llm;
 pub mod models;
 pub mod queue;
 pub mod summarizer;

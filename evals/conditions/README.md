@@ -33,12 +33,15 @@ independent-grader feedback are passed to it.
 
 Start with a small pilot (`--case city-03 --case city-12 --case focused-security`,
 one repeat) and inspect both output quality and actual charges before a full run.
-OpenRouter requests use only the official Z.ai provider (`z-ai/fp8`), with
+Default GLM requests use only the official Z.ai provider (`z-ai/fp8`), with
 fallback disabled and price caps ($0.15/M input, $0.50/M output, no
 per-request fee). The scorer reports the API's cost, not an estimate from token
 counts. Missing cost data leaves the total unknown and exposes only a partial
 subtotal. Model/provider identifiers and generation IDs stay in the raw traces.
-Direct OpenAI models require `OPENAI_API_KEY`; the scorer needs neither key.
+Overrides must be explicit non-OpenAI OpenRouter models. Direct providers,
+OpenAI models, automatic routers and presets are rejected before API calls.
+The scorer needs no key. Historical OpenAI results are retained only as records
+of earlier experiments; the runner can no longer generate them.
 
 Generation and scoring exit non-zero if any selected trial fails. The first
 scoring command still exports the review packet, but exits non-zero until local

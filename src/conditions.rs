@@ -395,6 +395,7 @@ pub async fn summarize_conditions_with_model(
     retry_failed: bool,
     model: &str,
 ) -> Result<SummaryRun> {
+    crate::llm::validate_model(model)?;
     let ids = selected_versions_for_model(db, limit, version, retry_failed, model)?;
     for id in &ids {
         if cached_summary(db, *id, model)?.is_none() {

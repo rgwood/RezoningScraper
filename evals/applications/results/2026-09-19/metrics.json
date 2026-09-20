@@ -1,0 +1,69 @@
+{
+  "groups": {
+    "disabled-reasoning-pilot": {
+      "trials": 1,
+      "completed": 0,
+      "successful_api_calls": 0,
+      "reported_cost_usd": 0.0,
+      "max_characters": 0
+    },
+    "low-reasoning-pilot": {
+      "trials": 1,
+      "completed": 1,
+      "successful_api_calls": 1,
+      "reported_cost_usd": 0.00015035,
+      "max_characters": 109
+    },
+    "original-prompt": {
+      "trials": 20,
+      "completed": 20,
+      "successful_api_calls": 22,
+      "reported_cost_usd": 0.00159255,
+      "max_characters": 136
+    },
+    "grounded-prompt": {
+      "trials": 20,
+      "completed": 20,
+      "successful_api_calls": 22,
+      "reported_cost_usd": 0.00195537,
+      "max_characters": 136
+    },
+    "use-labels-prompt": {
+      "trials": 20,
+      "completed": 20,
+      "successful_api_calls": 23,
+      "reported_cost_usd": 0.00175117,
+      "max_characters": 128
+    },
+    "medium-reasoning-pilot": {
+      "trials": 2,
+      "completed": 2,
+      "successful_api_calls": 4,
+      "reported_cost_usd": 0.00024895,
+      "max_characters": 128
+    },
+    "source-checked": {
+      "trials": 20,
+      "completed": 18,
+      "successful_api_calls": 44,
+      "reported_cost_usd": 0.00315728,
+      "max_characters": 139
+    },
+    "final-checked": {
+      "trials": 20,
+      "completed": 20,
+      "successful_api_calls": 42,
+      "reported_cost_usd": 0.00361685,
+      "max_characters": 136
+    }
+  },
+  "reported_cost_usd": 0.01247252,
+  "final_source_sha256": {
+    "src/summarizer.rs": "1c444736424277334ea84bc89bc0c5cf609089a32bf29014f99255fcb8f88069",
+    "src/system_prompt.txt": "6979ab3becdbb339967ffa5a843cfafe382f153fd27a24162c231e3b51ce7d31",
+    "src/application_review_prompt.txt": "150b7f3c1eaad8e053239066e3f19e20a738d7c3339a28041313e0009142f911",
+    "src/llm.rs": "8b42d33f28613d11143342b2550612d2ece60fc77113726cbc19a79ac5ea5bff",
+    "examples/eval_applications.rs": "7e67fa5de111e2caaec10c261d3e677201ad1b8ff031ec95b15c9c364fd95e61",
+    "test_files/ExampleInput.json": "7f3538dc554c415ebeb8b95367d14b511a769df8a1e6d00aefeb5ac4e8fe1c9b"
+  }
+}

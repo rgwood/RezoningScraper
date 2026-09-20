@@ -12,7 +12,28 @@ Download a binary from [the releases page](https://github.com/rgwood/RezoningScr
 
 Run it; on the first launch it will download all ShapeYourCity projects without posting any. On subsequent launches, it will post to Slack and/or Bluesky if credentials are set via argument or environment variable.
 
-Bluesky functionality uses OpenAI for summarizing projects; you will also need to specify an `OPENAI_API_KEY` environment variable.
+Slack and Bluesky share the same project-summary generator. All new project and
+approval-condition summaries default to GLM 5.3 Flash through OpenRouter, pinned
+to the official Z.ai provider with fallback disabled. Set `OPEN_ROUTER_API_KEY`;
+`OPENAI_API_KEY` is never used. Direct-provider models, OpenAI models through
+OpenRouter, automatic routers and presets are rejected before making a request.
+
+When deploying this change, set the OpenRouter key in the service/cron environment
+and remove its old OpenAI key. The app does not read `openrouter.key` automatically;
+that local file is gitignored. Existing saved summaries and already-queued post
+text are retained. A missing OpenRouter key stops new summarization before queued
+projects consume a retry attempt.
+
+Ordinary project summaries keep the 140-character prompt, with explicit source
+accuracy rules for counts, use labels and floor locations. They use medium
+reasoning, a 2,000-token cap and a 60-second timeout per call. A separate call to
+the same GLM model checks each draft against the original source. An overlong
+checked response gets one rewrite and another source check (at most four calls
+per attempt); empty, incomplete or still overlong responses fail without posting.
+The source check reduces errors but is not a guarantee of factual accuracy.
+Provider errors never trigger a model
+fallback. Both summarizers share the same provider pin and price caps described
+below. See the [application-summary checks](evals/applications/README.md).
 
 ```
 
@@ -161,9 +182,9 @@ GLM uses Chat Completions with JSON mode and local validation, pinned to the off
 Z.ai provider (`z-ai/fp8`) with provider fallback disabled. Price caps are
 at most $0.15 per million input tokens and $0.50 per million output tokens, with
 no per-request fee. Every stage records the returned model, provider, generation
-ID and raw usage including the reported charge. Other configured providers use
-their SDK adapter and corresponding key environment variable; the existing
-application-summary model is unchanged.
+ID and raw usage including the reported charge. Model comparisons must specify
+an explicit non-OpenAI OpenRouter model and use the same OpenRouter key. The
+regular Slack/Bluesky generator also uses the shared GLM default.
 Incomplete responses are rejected.
 The official endpoint uses JSON mode rather than constrained JSON-schema decoding.
 Extra metadata is tolerated, but missing verdicts, qualifications or citations fail.
@@ -259,7 +280,7 @@ FROM ConditionsSummaries s, json_each(s.SummaryJson, '$.requirements') r;
 ```
 
 Tests include a real six-page childcare conditions letter, quote/page validation,
-retry limits, PDF and prompt version changes, a local mock OpenAI server, and CLI
+retry limits, PDF and prompt version changes, a local mock OpenRouter server, and CLI
 checks that existing posting queues remain untouched. The default test suite
 never uses a real API key. An opt-in smoke test checks the existing application
 summarizer against the live API without posting:
