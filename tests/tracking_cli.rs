@@ -146,11 +146,11 @@ fn displaying_cached_conditions_summary_never_processes_posting_queues() {
             .push(&db, "must not process".into())
             .unwrap();
     }
-    let summary = serde_json::json!({"overview":"An archived summary.", "requirements":[{
+    let summary = serde_json::json!({"overview":"Test childcare approval requires five Class B bicycle spaces.", "requirements":[{
         "requirement":"Provide five Class B bicycle spaces.", "page":2,
         "evidence":"Provide the required five (5) Class B bicycle spaces"}], "limitations":[]});
     db.execute("INSERT INTO ConditionsSummaries(DocumentVersionId, Model, PromptVersion, ExtractorVersion, SummaryJson, Attempts, CompletedAt)
-        VALUES (1, 'gpt-5.6-luna', 1, 'pdf-extract-0.12.1-v1', ?1, 1, 1)", [summary.to_string()]).unwrap();
+        VALUES (1, 'gpt-5.6-luna', 2, 'pdf-extract-0.12.1-v1', ?1, 1, 1)", [summary.to_string()]).unwrap();
     let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
         .env_clear()
         .env("SLACK_WEBHOOK_URL", "http://127.0.0.1:1/must-not-post")
@@ -176,8 +176,8 @@ fn displaying_cached_conditions_summary_never_processes_posting_queues() {
         String::from_utf8_lossy(&output.stderr)
     );
     let stdout = String::from_utf8_lossy(&output.stdout);
-    assert!(stdout.contains("Provide five Class B bicycle spaces. (PDF p. 2)"));
-    assert!(stdout.contains("https://example.com/conditions.pdf"));
+    assert_eq!(stdout.trim_end(), "Test childcare approval requires five Class B bicycle spaces.\nhttps://example.com/conditions.pdf");
+    assert!(stdout.trim_end().chars().count() <= 300);
     for name in ["llm_queue", "slack_post_queue", "bluesky_post_queue"] {
         assert_eq!(Queue::<String>::new(name, &db).depth(&db).unwrap(), 1);
     }

@@ -128,7 +128,7 @@ cargo clippy --locked --all-targets -- -D warnings
 ## Conditions summaries
 
 Conditions letters can be long, and approval does not mean the applicant can
-start building. The summary command explains the main requirements in the PDFs
+start building. The summary command drafts a short post from the PDFs
 already collected by approval tracking:
 
 ```console
@@ -136,26 +136,43 @@ rezoning-scraper --summarize-conditions --database approvals.db --summary-limit 
 ```
 
 This uses `OPENAI_API_KEY` and the same `gpt-5.6-luna` model as application
-summaries. It prints a readable Markdown summary and saves structured JSON in
+summaries. It prints one short paragraph and the source URL, and saves structured JSON in
 SQLite. It does not crawl, post, consume posting queues, or send monitoring
 events. Run approval tracking separately to collect new documents.
 
 The SDK is `genai` 0.6.5, which routes this model through OpenAI's Responses API.
-Conditions requests have a 5,000-token output limit and a 90-second timeout;
+Conditions requests use low reasoning effort, a 5,000-token output limit and a 90-second timeout;
 incomplete responses are rejected.
 
-Each summary includes a short overview, the main requirements, PDF page
-references, and limitations. The prompt distinguishes conditions before permit
+The post identifies the project and highlights one or two concrete conditions,
+with a bias toward potentially burdensome or distinctive demands: off-site work,
+utility upgrades, land rights, payments, redesigns, and specialist studies.
+It states the requirements rather than making unsupported claims that they are
+unusual or unnecessary. Routine requirements rank lower when more consequential
+conditions are available.
+It omits the checklist, page references, and routine administrative steps.
+The prompt aims for 160–180 characters of prose. The hard limit applies to
+the entire draft: the full source URL, separator, and prose must fit within
+300 characters. Length is validated after generation rather than constrained by
+the JSON schema, which produced cut-off sentences in live testing. Longer
+responses are rejected, never cut off. Control characters and drafts without a
+closing period are also rejected. Counting Unicode
+scalar values is conservative for Bluesky's grapheme limit.
+
+Supporting requirements, PDF page references, and limitations stay in SQLite.
+The prompt distinguishes conditions before permit
 issuance from permit terms, occupancy requirements, and advisory comments. It
 preserves alternatives and qualifications, highlights explicit fees and
 deadlines, and avoids guessing costs or describing requirements as onerous.
 
-Each requirement also has a supporting quote in the saved JSON. The app checks
+Each supporting requirement has a quote in the saved JSON. The app checks
 that the quote occurs on the cited page before saving the summary. This catches
 invented citations, but does not prove the paraphrase is correct. These are
 AI-generated, selective summaries, not complete compliance checklists.
 The last raw model response is retained in `RawResponse` for reviewing rejected
-citations; only validated responses populate `SummaryJson`.
+citations or overlong drafts; only validated responses populate `SummaryJson`.
+Prompt version 2 generates compact posts; earlier detailed summaries remain
+stored under their original version.
 
 PDF text extraction is built into the binary; no external PDF tools are needed.
 The app keeps page boundaries and saves the text used for the summary. It rejects

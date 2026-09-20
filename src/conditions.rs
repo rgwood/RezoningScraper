@@ -10,7 +10,8 @@ use std::time::Duration;
 use crate::{db::Database, summarizer::MODEL};
 
 // Bump when changing the prompt/schema or extraction/validation behaviour.
-const PROMPT_VERSION: i64 = 1;
+const PROMPT_VERSION: i64 = 2;
+const MAX_POST_CHARS: usize = 300;
 const EXTRACTOR_VERSION: &str = "pdf-extract-0.12.1-v1";
 const MAX_ATTEMPTS: i64 = 3;
 const MAX_TEXT_BYTES: usize = 120_000;
@@ -62,22 +63,28 @@ pub struct SummaryRecord {
 }
 
 impl SummaryRecord {
-    pub fn markdown(&self) -> String {
-        let mut result = format!("## {}\n\n{}\n\n", self.project_name, self.summary.overview);
-        for item in &self.summary.requirements {
-            result.push_str(&format!("- {} (PDF p. {})\n", item.requirement, item.page));
-        }
-        if !self.summary.limitations.is_empty() {
-            result.push_str("\nLimitations: ");
-            result.push_str(&self.summary.limitations.join(" "));
-            result.push('\n');
-        }
-        result.push_str(&format!(
-            "\n[Source conditions letter]({}) · archived PDF version {}\n\nAI-generated, selective summary; check the letter for the full conditions.\n",
-            self.source_url, self.document_version_id,
-        ));
-        result
+    pub fn post_text(&self) -> Result<String> {
+        format_post(&self.summary, &self.source_url).with_context(|| {
+            format!(
+                "Cannot format conditions post for {} (PDF version {})",
+                self.project_name, self.document_version_id
+            )
+        })
     }
+}
+
+fn overview_budget(source_url: &str) -> usize {
+    MAX_POST_CHARS.saturating_sub(source_url.chars().count() + 1)
+}
+
+fn format_post(summary: &ConditionsSummary, source_url: &str) -> Result<String> {
+    // Counting Unicode scalar values is conservative: never more permissive than
+    // Bluesky's 300-grapheme limit. Include the complete URL and separator.
+    ensure!(
+        summary.overview.chars().count() <= overview_budget(source_url),
+        "Conditions post exceeds its character budget including the source URL"
+    );
+    Ok(format!("{}\n{}", summary.overview, source_url))
 }
 
 #[derive(Default, Debug)]
@@ -96,7 +103,9 @@ fn response_schema() -> serde_json::Value {
     json!({
         "type": "object", "additionalProperties": false,
         "properties": {
-            "overview": {"type": "string", "maxLength": 2000},
+            // Validate length after generation. Constrained decoding with maxLength
+            // can force a string to end mid-sentence instead of rewriting it.
+            "overview": {"type": "string"},
             "requirements": {"type": "array", "maxItems": 12, "items": {
                 "type": "object", "additionalProperties": false,
                 "properties": {
@@ -121,6 +130,7 @@ fn request(input: &SummaryInput) -> ChatRequest {
         json!({
             "project_name": input.project_name,
             "source_url": input.source_url,
+            "overview_character_limit": overview_budget(&input.source_url),
             "pages": pages,
         })
         .to_string(),
@@ -137,7 +147,7 @@ struct OpenAiSummarizer(genai::Client);
 impl SummaryModel for OpenAiSummarizer {
     async fn summarize(&self, input: &SummaryInput) -> Result<String> {
         let options = ChatOptions::default()
-            .with_reasoning_effort(ReasoningEffort::None)
+            .with_reasoning_effort(ReasoningEffort::Low)
             .with_max_tokens(5000)
             .with_response_format(JsonSpec::new("conditions_summary", response_schema()));
         let response = tokio::time::timeout(
@@ -199,8 +209,14 @@ fn parse_summary(text: &str, pages: &[String]) -> Result<ConditionsSummary> {
     let summary: ConditionsSummary =
         serde_json::from_str(text).context("Invalid conditions summary JSON")?;
     ensure!(
-        !summary.overview.trim().is_empty() && summary.overview.len() <= 2000,
+        !summary.overview.trim().is_empty()
+            && summary.overview.chars().count() <= MAX_POST_CHARS
+            && !summary.overview.chars().any(char::is_control),
         "Summary overview is empty or too long"
+    );
+    ensure!(
+        summary.overview.ends_with('.'),
+        "Conditions post must end with a complete sentence"
     );
     ensure!(
         summary.requirements.len() <= 12,
@@ -380,6 +396,10 @@ async fn summarize_one(
     source_url: &str,
     model: &impl SummaryModel,
 ) -> Result<ConditionsSummary> {
+    ensure!(
+        overview_budget(source_url) >= 40,
+        "Source URL leaves too little room for a conditions post"
+    );
     let saved: Option<String> = db.query_row("SELECT PagesJson FROM ConditionsSummaries
         WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
         params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION], |r| r.get(0))?;
@@ -409,7 +429,9 @@ async fn summarize_one(
     db.execute("UPDATE ConditionsSummaries SET RawResponse = ?5
         WHERE DocumentVersionId = ?1 AND Model = ?2 AND PromptVersion = ?3 AND ExtractorVersion = ?4",
         params![id, MODEL, PROMPT_VERSION, EXTRACTOR_VERSION, response])?;
-    parse_summary(&response, &input.pages)
+    let summary = parse_summary(&response, &input.pages)?;
+    format_post(&summary, source_url)?;
+    Ok(summary)
 }
 
 pub async fn run_command(
@@ -421,7 +443,7 @@ pub async fn run_command(
     let db = Database::new_from_file(database)?;
     let run = summarize_conditions(&db, limit, version, retry_failed).await?;
     for record in &run.summaries {
-        println!("{}", record.markdown());
+        println!("{}\n", record.post_text()?);
     }
     if !run.failures.is_empty() {
         bail!(
@@ -512,6 +534,39 @@ mod tests {
     #[tokio::test]
     async fn malformed_pdf_is_a_recoverable_error() {
         assert!(extract_pages(b"not a pdf".to_vec()).await.is_err());
+    }
+
+    #[test]
+    fn post_budget_includes_full_url_and_rejects_overflow_without_truncating() {
+        let mut summary = parse_summary(&answer(&pages()), &pages()).unwrap();
+        let url = format!("https://example.com/{}", "a".repeat(100));
+        let budget = overview_budget(&url);
+        summary.overview = "é".repeat(budget);
+        let post = format_post(&summary, &url).unwrap();
+        assert_eq!(post.chars().count(), 300);
+        assert!(post.ends_with(&url));
+        summary.overview.push('!');
+        assert!(format_post(&summary, &url).is_err());
+        assert_eq!(overview_budget("https://example.com"), 280);
+        assert_eq!(overview_budget(&"a".repeat(400)), 0);
+        // A post may use spare room after the link; 200 is not a separate cap.
+        summary.overview = format!("{}.", "a".repeat(220));
+        assert!(format_post(&summary, "https://example.com").is_ok());
+        assert!(parse_summary(&serde_json::to_string(&summary).unwrap(), &pages()).is_ok());
+    }
+
+    #[test]
+    fn rejects_long_or_multiline_post_text() {
+        let mut value: serde_json::Value = serde_json::from_str(&answer(&pages())).unwrap();
+        for overview in [
+            "a".repeat(MAX_POST_CHARS + 1),
+            "First paragraph.\nSecond paragraph.".into(),
+            "Requires either four drop".into(),
+            "Loading outside operating\u{2}?".into(),
+        ] {
+            value["overview"] = overview.into();
+            assert!(parse_summary(&value.to_string(), &pages()).is_err());
+        }
     }
 
     #[test]
@@ -748,6 +803,7 @@ mod tests {
             assert_eq!(body["model"], MODEL);
             assert!(body.get("max_tokens").is_none());
             assert_eq!(body["max_output_tokens"], 5000);
+            assert_eq!(body["reasoning"]["effort"], "low");
             assert_eq!(body["store"], false);
             assert_eq!(body["text"]["format"]["strict"], true);
             assert_eq!(body["text"]["format"]["schema"], response_schema());
@@ -756,6 +812,7 @@ mod tests {
                 serde_json::from_str(body["input"][0]["content"].as_str().unwrap()).unwrap();
             assert_eq!(source["pages"][0]["page"], 1);
             assert_eq!(source["pages"][0]["text"], pages()[0]);
+            assert_eq!(source["overview_character_limit"], 273);
             let response = json!({"id":"local-test", "status":status, "model":MODEL,
                 "incomplete_details": {"reason":"max_output_tokens"},
                 "output":[{"type":"message","role":"assistant","content":[{"type":"output_text","text":answer(&pages())}]}]}).to_string();
