@@ -15,6 +15,7 @@
       ],
       "critical_rules": [
         "Do not require both passenger-space options. The 5 bicycle spaces remain required whichever passenger option is chosen.",
+        "Do not invent a one-year operating term by combining the standard 12-month validation clause (3.4) with the unspecified expiry in 3.9. No actual limited expiry date is given.",
         "26 children is a maximum, with final capacity determined at inspection; approval is not permit issuance."
       ]
     },
@@ -110,13 +111,13 @@
     "split": "development",
     "retrieved": "2026-09-19",
     "gold": {
-      "reference": "601 Stamp's Landing restaurant conditionally approved. Patio seating must close by 10 p.m.; amplified music and live entertainment are banned around the patio.",
+      "reference": "Approval conditions: 601 Stamp's Landing restaurant alterations. The permit expires 1 year after issuance unless extended in writing.",
       "acceptable_highlights": [
-        "Patio must close and clear patrons by 10 p.m. nightly (p3).",
-        "No amplified music or live entertainment in/around the patio at any time (p3).",
-        "Loading in the parking area must occur outside operating hours (p2); strongest paired with an operating restriction."
+        "The permit expires one year from issuance unless extended in writing by the Director of Planning (p3, 3.6). This duration is the lead; retain the extension option.",
+        "Patio closure at 10 p.m. or the entertainment ban may supplement the limited term if they fit, but must not displace it."
       ],
       "critical_rules": [
+        "The explicit one-year limited permit in 3.6 is distinct from the routine validation deadline in 3.4. Do not say a permit has already been issued or that extension is guaranteed.",
         "Do not imply the entire restaurant must close at 10 p.m.; the restriction concerns outdoor seating.",
         "Sprinklers for the enclosed deck are later Building Review comments, not construction required before the development permit.",
         "No estimates of fees: additional fees may apply after revised floor area is confirmed."
@@ -125,8 +126,8 @@
     "calibration": [
       {
         "text": "601 Stamp's Landing restaurant conditionally approved. Patio seating must close by 10 p.m.; amplified music and live entertainment are banned around the patio.",
-        "expected_pass": true,
-        "reason": "Specific, faithful and short; not the only acceptable wording."
+        "expected_pass": false,
+        "reason": "Accurate but misses the explicit one-year limited permit, a more consequential restriction than the patio rules alone."
       },
       {
         "text": "601 Stamp's Landing restaurant conditionally approved. The restaurant must close at 10 p.m. and install sprinklers before the development permit is issued.",
@@ -148,6 +149,7 @@
       "acceptable_highlights": [
         "Reduce lower-floor ceiling height by 1 ft, with corresponding slab and roof reductions (p2).",
         "Solar panels at least 2 ft from roof perimeter and ridge (p2).",
+        "Paired design demands: improve Unit C living-room natural light (p2, 1.3), while removing the east-facing window at the main-floor northeast projection for consistency/privacy (p3, 1.9ii). Preserve distinct locations; do not assert they concern the same room or prove a contradiction.",
         "Consolidate two parcels into one, with updated title/legal documents (p5).",
         "Specific garage/tree-root protection construction planning (pp3–5), or later geotechnical/structural/envelope requirements if clearly labelled building review."
       ],
@@ -180,12 +182,14 @@
     "split": "development",
     "retrieved": "2026-09-19",
     "gold": {
-      "reference": "3989 Fraser St rental project conditionally approved. Conditions include funding sidewalks, a lane crossing and duct banks, backed by a letter of credit or City-approved security.",
+      "reference": "Approval conditions: 3989 Fraser St rental building. Plans must improve the streetscape; seating, pedestrian amenities or visual interest are suggested.",
       "acceptable_highlights": [
-        "Services Agreement covering site/off-site works at no cost to City, including 3 m Fraser sidewalk, 2.1 m E24th sidewalk, curb ramps, lane crossing and duct banks (p5).",
-        "Letter of credit OR another security acceptable to City under the Services Agreement (pp5–6)."
+        "Landscape 1.7 requires design development to enhance the public realm interface (p3), suggesting seating, pedestrian amenities and/or visual interest. Preserve these as suggestions, not mandatory installations.",
+        "Urban Design 1.1 asks the applicant to consider more appropriately sized outdoor amenity space (p2); rooftop play space and the indoor amenity ratio are recommendations, not unconditional construction requirements.",
+        "Routine sidewalk widths and Services Agreement/security are weaker editorial choices here than the discretionary design demands. Quantities alone do not make them strong highlights."
       ],
       "critical_rules": [
+        "Do not turn suggested seating or amenity space into mandatory construction. Section 1.7 does not state a measurable target, but this does not prove that no external design standards exist.",
         "Do not invent a dollar amount for works or security.",
         "Preserve security alternatives if stated; a letter of credit is not the only permitted instrument.",
         "Agreement/security required before development permit; do not say all street works must be built first.",
@@ -195,8 +199,8 @@
     "calibration": [
       {
         "text": "3989 Fraser St rental project conditionally approved. Conditions include funding sidewalks, a lane crossing and duct banks, backed by a letter of credit or City-approved security.",
-        "expected_pass": true,
-        "reason": "Specific, faithful and short; not the only acceptable wording."
+        "expected_pass": false,
+        "reason": "Routine engineering works displace the discretionary landscape/design criteria. Accurate quantities and legal instruments alone are not enough for a strong selection."
       },
       {
         "text": "3989 Fraser St rental project conditionally approved. It must pay a $500,000 cash deposit and finish all street works before the development permit.",
@@ -214,10 +218,10 @@
     "split": "development",
     "retrieved": "2026-09-19",
     "gold": {
-      "reference": "222 Keefer St SRO renovation conditionally approved. It needs a separate permit to convert 6 protected rooms, plus agreements for structures extending over the street and lane.",
+      "reference": "Approval conditions: 222 Keefer St SRO renovation. Encroachment agreements are required for the existing cornices and bay windows over Keefer Street.",
       "acceptable_highlights": [
         "Separate Single Room Accommodation conversion/demolition approval for 6 protected rooms (p2).",
-        "Encroachment agreements for existing/proposed structures over Keefer Street and lane (p2)."
+        "Encroachment agreements for existing cornices and bay windows over Keefer Street (p2). Existing-building context is the angle; preserve existing rather than merely listing structures. The proposed gutter/drainpipe in the lane is separate."
       ],
       "critical_rules": [
         "Use the letter’s 47-to-41 room figures if mentioning counts; the application webpage differs.",
@@ -227,7 +231,7 @@
     },
     "calibration": [
       {
-        "text": "222 Keefer St SRO renovation conditionally approved. It needs a separate permit to convert 6 protected rooms, plus agreements for structures extending over the street and lane.",
+        "text": "Approval conditions: 222 Keefer St SRO renovation. Encroachment agreements are required for the existing cornices and bay windows over Keefer Street.",
         "expected_pass": true,
         "reason": "Specific, faithful and short; not the only acceptable wording."
       },
@@ -250,7 +254,8 @@
       "reference": "1410 E 49th Ave daycare conditionally approved. It needs on-site outdoor play space; indoor space cannot substitute. Plans must show at least 2 passenger spaces and at least 3 bike spaces.",
       "acceptable_highlights": [
         "On-site outdoor play area complying with licensing capacity; indoor area cannot substitute (p2).",
-        "At least 3 Class B bicycle spaces and 2 passenger spaces (p2), useful in combination with outdoor-play requirement."
+        "At least 3 Class B bicycle spaces and 2 passenger spaces (p2), useful in combination with outdoor-play requirement.",
+        "A neutral summary of building-review fire separation between the outdoor play area and garbage/recycling room can pass as a routine fallback, but its 2-hour rating does not establish that it is exceptional."
       ],
       "critical_rules": [
         "Capacity is up to 20 children, subject to final inspection.",
@@ -314,11 +319,10 @@
     "split": "development",
     "retrieved": "2026-09-19",
     "gold": {
-      "reference": "3550 Kingsway daycare expansion conditionally approved. Building review calls for code, structural and falling-hazard reports and flags upgrades across the entire building.",
+      "reference": "Approval conditions: 3550 Kingsway daycare expansion. The limited term expires September 11, 2027 unless extended in writing.",
       "acceptable_highlights": [
-        "Later Building Review requests code analysis, structural assessment and falling-hazard investigation; high upgrade levels affect the entire building (p6).",
-        "Building-review concern about elevator access/internal stairs preventing full accessibility (p6) if accurately scoped.",
-        "Time-limited approval expires September 11, 2027 unless extended (pp1,4)."
+        "Time-limited approval expires September 11, 2027 unless extended in writing (pp1,4). This explicit term takes priority over later code-review requirements.",
+        "Later whole-building review or accessibility requirements may supplement the limited term if they fit."
       ],
       "critical_rules": [
         "Clearly distinguish later building-permit requirements from the acknowledgement required before the development permit.",
@@ -328,7 +332,7 @@
     },
     "calibration": [
       {
-        "text": "3550 Kingsway daycare expansion conditionally approved. Building review calls for code, structural and falling-hazard reports and flags upgrades across the entire building.",
+        "text": "Approval conditions: 3550 Kingsway daycare expansion. The limited term expires September 11, 2027 unless extended in writing.",
         "expected_pass": true,
         "reason": "Specific, faithful and short; not the only acceptable wording."
       },
@@ -675,6 +679,82 @@
         "expected_pass": false,
         "reason": "Converts alternative returnable security into a cash fee and invents an early construction deadline."
       }
+    ]
+  },
+  {
+    "id": "editorial-routine",
+    "split": "editorial",
+    "project_name": "120 Alder St office alteration",
+    "source_url": "https://example.com/conditions/alder",
+    "pages": [
+      "120 Alder Street, interior alterations to an existing office. The application is approved subject to conditions; no permit has been issued. Before development permit issuance, submit revised drawings showing at least four visitor bicycle spaces at the entrance. Each space must be at least 0.6 m wide and 1.8 m long. Confirm that the applicant has read this letter. These are the complete conditions of this synthetic letter."
+    ],
+    "gold": {
+      "reference": "Approval conditions: 120 Alder St office alteration. Revised plans must show at least 4 visitor bike spaces at the entrance.",
+      "acceptable_highlights": ["There is no strong highlight. Still produce a neutral summary of the visitor bicycle spaces, preserving the minimum and drawing stage."],
+      "critical_rules": ["Do not skip or return a generation failure because the conditions are routine.", "Do not claim that this requirement is unusual, onerous or unnecessary.", "Do not require installed spaces before the development permit; the prior-to requirement is revised drawings."]
+    },
+    "provenance": "Synthetic regression for the user's September 20 editorial feedback, authored before generation; not an unseen holdout.",
+    "calibration": [
+      {"text": "Approval conditions: 120 Alder St office alteration. Revised plans must show at least 4 visitor bike spaces at the entrance.", "expected_pass": true, "reason": "Useful routine fallback; no exceptional condition is needed to pass."},
+      {"text": "Approval conditions: 120 Alder St office alteration. An unusually onerous demand forces 4 bike spaces to be installed before the permit.", "expected_pass": false, "reason": "Invents comparative significance, loses the minimum and changes drawings to installation."}
+    ]
+  },
+  {
+    "id": "editorial-design",
+    "split": "editorial",
+    "project_name": "240 Birch St apartment development",
+    "source_url": "https://example.com/conditions/birch",
+    "pages": [
+      "240 Birch Street apartment development, conditionally approved. Prior to development permit issuance, submit revised drawings. Landscape Review 1.1: design development to improve the relationship between the entrance forecourt and the street. Note: this may include seating, planting or other pedestrian amenities. No dimensions or number of amenities are specified in this condition. Engineering 1.2: drawings must show a sidewalk at least 3.0 m wide, with a curb ramp, to the City's standard detail. These are the complete conditions for this synthetic letter."
+    ],
+    "gold": {
+      "reference": "Approval conditions: 240 Birch St apartments. Plans must improve how the entrance forecourt meets the street; seating or planting are suggested.",
+      "acceptable_highlights": ["The open-ended forecourt/street relationship is a stronger editorial angle than the standard sidewalk dimension. Report the required outcome and, optionally, examples clearly identified as suggestions."],
+      "critical_rules": ["Seating, planting and other amenities are possible methods, not mandatory installations.", "Do not claim that the City has no design standards anywhere.", "A quantified routine sidewalk alone is a weak selection when the discretionary landscape condition is available."]
+    },
+    "provenance": "Synthetic regression for the user's September 20 editorial feedback, authored before generation; not an unseen holdout.",
+    "calibration": [
+      {"text": "Approval conditions: 240 Birch St apartments. Plans must improve how the entrance forecourt meets the street; seating or planting are suggested.", "expected_pass": true, "reason": "Reports the discretionary outcome without inventing mandatory methods."},
+      {"text": "Approval conditions: 240 Birch St apartments. Plans must show a sidewalk at least 3 m wide and a curb ramp.", "expected_pass": false, "reason": "Accurate but weak selection; dimensions displace the discretionary design condition."}
+    ]
+  },
+  {
+    "id": "editorial-permit-term",
+    "split": "editorial",
+    "project_name": "360 Cedar St restaurant patio alteration",
+    "source_url": "https://example.com/conditions/cedar",
+    "pages": [
+      "360 Cedar Street restaurant patio alteration. The application is approved subject to conditions; this is not an issued permit. Term 3.1: the development permit is valid for twelve months from issuance unless otherwise validated by a building permit. Term 3.2: the patio must be cleared by 10 p.m. nightly. Term 3.3: this time-limited permit expires eighteen months from issuance unless extended in writing by the Director of Planning. The applicant must request an extension before expiry. These are the complete conditions for this synthetic letter."
+    ],
+    "gold": {
+      "reference": "Approval conditions: 360 Cedar St restaurant patio. The permit expires 18 months after issuance unless extended in writing.",
+      "acceptable_highlights": ["The explicit 18-month limited term and extension option must take priority over the nightly patio closure."],
+      "critical_rules": ["Do not confuse the 12-month validation deadline with the 18-month limited permit term.", "Do not claim that the permit is already issued or extension is automatic.", "A patio-curfew-only summary fails selection despite being accurate."]
+    },
+    "provenance": "Synthetic regression for the user's September 20 editorial feedback, authored before generation; not an unseen holdout.",
+    "calibration": [
+      {"text": "Approval conditions: 360 Cedar St restaurant patio. The permit expires 18 months after issuance unless extended in writing.", "expected_pass": true, "reason": "Preserves the actual limited term and conditional extension."},
+      {"text": "Approval conditions: 360 Cedar St restaurant patio. The permit expires after 12 months and automatically renews.", "expected_pass": false, "reason": "Conflates two terms and invents automatic renewal."}
+    ]
+  },
+  {
+    "id": "editorial-unspecified-expiry",
+    "split": "editorial",
+    "project_name": "480 Maple St office alteration",
+    "source_url": "https://example.com/conditions/maple",
+    "pages": [
+      "480 Maple Street office alteration, conditionally approved. Prior-to condition 1.1: revised plans must show at least six visitor bicycle spaces. Term 3.1: this Development Permit is valid for a period of 12 months from issuance unless otherwise validated by a Building Permit. Term 3.2: this permit has been issued for a time limited period and will expire on the date noted unless extended in writing. Note 4.1: if the prior-to conditions have not been complied with by November 30, 2027, the application may stand refused. No actual limited-term expiry date is specified in this synthetic letter."
+    ],
+    "gold": {
+      "reference": "Approval conditions: 480 Maple St office alteration. Revised plans must show at least 6 visitor bike spaces.",
+      "acceptable_highlights": ["Use the neutral bicycle-space fallback. Neither the standard validation period nor the application-refusal deadline establishes the unspecified permit expiry."],
+      "critical_rules": ["Do not invent a 12-month operating permit by combining separate clauses.", "November 30, 2027 is the deadline for complying with conditions, not the issued permit's expiry.", "Routine summaries must still be generated when no strong highlight exists."]
+    },
+    "provenance": "Synthetic regression added after the September 20 pilot combined validation and expiry clauses in a real letter; not an unseen holdout.",
+    "calibration": [
+      {"text": "Approval conditions: 480 Maple St office alteration. Revised plans must show at least 6 visitor bike spaces.", "expected_pass": true, "reason": "Useful neutral fallback without guessing the missing expiry."},
+      {"text": "Approval conditions: 480 Maple St office alteration. The permit expires 12 months after issuance unless extended in writing.", "expected_pass": false, "reason": "Borrows the validation deadline to invent an unspecified operating term."}
     ]
   }
 ]

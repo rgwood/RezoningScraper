@@ -5,6 +5,12 @@ detail in a ten-page letter. These evals check both mechanics and reporting
 quality. They run the same bounded workflow as `--summarize-conditions`, without
 touching a database, crawling, posting or sending monitoring events.
 
+The [September 20 editorial revision](results/2026-09-20/README.md) passed its
+final 24-case run with local source review. It adds neutral routine fallbacks,
+revised selection priorities and four regression cases. The report includes
+earlier failures and all recorded API charges; it is one trial per known case,
+not an unseen model benchmark.
+
 ## Run a model comparison
 
 Export `OPEN_ROUTER_API_KEY` in your shell. Use a new output directory for every run:
@@ -76,18 +82,25 @@ regression case; add fresh held-out letters or edge cases for future changes.
 - The post preserves alternatives, scope, optional recommendations, timing and
   duration. A security deposit must not become a fee; plans required before a
   permit must not become construction completed before a permit.
-- It selects a concrete, consequential condition. Generic paperwork loses to
-  public works, land access, specific redesigns and operating restrictions.
-  “Unusual” or “onerous” is not itself a useful or supported claim.
+- It prioritizes discretionary design/landscaping demands, open-ended acceptance
+  criteria, consequential permit terms, and requirements made notable by the
+  existing building or project scale. A precise quantity alone is not a strong
+  highlight. If none exists, a neutral, useful summary of a routine condition
+  still passes; the app should not skip it or manufacture controversy.
 - It reads naturally without unexplained municipal jargon. The grader scores
   salience and clarity from 1–5; both must be at least 4. Accuracy and preservation
   of qualifications are separate mandatory gates.
 
-`cases.json` contains 12 public City letters and eight synthetic edge cases, with
+`cases.json` contains 12 public City letters and twelve synthetic edge cases, with
 assistant-curated reference posts, acceptable alternative angles, critical
 qualifications, and positive/negative calibration examples. References are
-guides, not exact-match targets. They were written from source text before the
-new workflow's outputs; they are not independent human annotations.
+guides, not exact-match targets. The September 20 revision incorporates the user's
+editorial feedback on five real letters and adds four synthetic cases for routine
+fallbacks, discretionary design versus standard engineering, and limited permit
+terms versus validation deadlines (including unspecified expiry dates). These are
+regression cases, not unseen holdouts.
+Historical scores use the earlier rubric and do not establish quality under this
+revision. Changing the rubric/case notes invalidates old review fingerprints.
 
 The PDFs are unchanged archived downloads, with source URLs, retrieval dates
 and SHA-256 hashes in the manifest. The runner and scorer verify those hashes.
@@ -122,6 +135,18 @@ letting an unaudited fallback through.
 Opaque code-level leads use the next eligible ranked fact, with that decision
 stored separately from the unmodified model response. Failed
 generations stay in the denominator.
+Candidate categories now make the editorial order explicit: limited permit terms,
+discretionary design, existing physical features, other highlights, then routine
+summaries. The app enforces that order before drafting, preserving the model's
+choice among equally ranked candidates. Routine conditions remain eligible when
+there is no stronger angle. Tests cover ranking, fallback, conflict exclusions,
+and preservation of advisory wording; live evals check the model's classifications.
+After two failed rounds on a source passage, candidates from fresh passages take
+priority. One corrective round can preserve a strong angle before changing the
+condition. Alternatives still need the full factual review and audit; a failed
+draft is never published as a fallback. A conservative wording check rejects
+permit-extension decision deadlines attached to expiry, requesting the simpler
+expiry/extension condition instead of inferring when the City must decide.
 
 The scorer saves `scores.json` and, separately, `calibration.json`, including the
 review-manifest and rubric hashes. Local review

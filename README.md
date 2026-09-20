@@ -268,21 +268,34 @@ Incomplete responses are rejected.
 The official endpoint uses JSON mode rather than constrained JSON-schema decoding.
 Extra metadata is tolerated, but missing verdicts, qualifications or citations fail.
 Malformed output gets one format retry within that stage. Leads containing only
-code levels, weekday daycare hours or routine capacity confirmation fall back to the next eligible ranked fact,
+code levels fall back to the next eligible ranked fact. Weekday daycare hours and
+routine capacity confirmation rank below other useful conditions,
 with the decision recorded. A code-level paragraph that also names a concrete
 physical requirement can stay, but the post must report that requirement.
-Recognized conflicts between conditions cannot be selected as the lead. Both
+Claims that depend on resolving conflicting instructions cannot be selected as
+the lead. A factual pairing of clear design demands can be reported, with their
+separate locations preserved and no invented claim of contradiction. Both
 source-reading stages identify suggested methods separately from required
 outcomes; when either identifies advice, the app requires explicit suggestion
 wording. Those classifications still depend on the model reading the source
 correctly, so they do not replace editorial evaluation.
 
-The post identifies the project and highlights one or two concrete conditions,
-with a bias toward potentially burdensome or distinctive demands: off-site work,
-utility upgrades, land rights, payments, redesigns, and specialist studies.
-It states the requirements rather than making unsupported claims that they are
-unusual or unnecessary. Routine requirements rank lower when more consequential
-conditions are available.
+The post identifies the project and prioritizes discretionary design/landscaping
+demands, open-ended acceptance criteria, consequential permit terms, and
+requirements made notable by an existing building or project scale. Engineering
+and building-review conditions remain eligible, but a precise quantity alone
+does not make a condition a strong highlight. If there is no strong highlight,
+the app still posts a concise, neutral summary of a routine condition. It does
+not skip the letter or invent controversy. Suggested design methods remain
+suggestions, and an explicit limited permit term retains its extension option.
+The selector classifies candidates as limited permit terms, discretionary design,
+existing physical features, other highlights, or routine summaries. The app
+enforces that priority before drafting and records any changed selection in the
+trace. Classification still depends on the model; source review and evals check
+whether it assigned the right category. Routine-only letters remain eligible.
+After two failed rounds on a source passage, later rounds prefer another passage.
+This leaves one opportunity to correct the wording of a strong condition first.
+The alternative still has to pass the same accuracy checks before it can be posted.
 It omits the checklist, page references, and routine administrative steps.
 The app adds a compact project introduction and gives the writer the remaining
 character budget. The hard limit applies to
@@ -307,7 +320,7 @@ prove the paraphrase is correct. These are
 AI-generated, selective summaries, not complete compliance checklists.
 `TraceJson` retains every selection, draft and review, with errors, token usage
 and timings, including failed rounds. Only accepted posts populate `SummaryJson`;
-`RawResponse` holds the assembled candidate summary. Prompt version 3 uses this
+`RawResponse` holds the assembled candidate summary. Prompt version 4 uses this
 workflow; earlier summaries remain
 stored under their original version.
 

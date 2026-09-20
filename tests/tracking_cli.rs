@@ -166,7 +166,7 @@ fn displaying_cached_conditions_summary_never_processes_posting_queues() {
         "requirement":"Provide five Class B bicycle spaces.", "page":2,
         "evidence":"Provide the required five (5) Class B bicycle spaces"}], "limitations":[]});
     db.execute("INSERT INTO ConditionsSummaries(DocumentVersionId, Model, PromptVersion, ExtractorVersion, SummaryJson, Attempts, CompletedAt)
-        VALUES (1, 'open_router::z-ai/glm-5.3-flash', 3, 'pdf-extract-0.12.1-v2', ?1, 1, 1)", [summary.to_string()]).unwrap();
+        VALUES (1, 'open_router::z-ai/glm-5.3-flash', ?2, 'pdf-extract-0.12.1-v2', ?1, 1, 1)", rusqlite::params![summary.to_string(), rezoning_scraper::conditions::PROMPT_VERSION]).unwrap();
     let output = Command::new(env!("CARGO_BIN_EXE_rezoning-scraper"))
         .env_clear()
         .env("SLACK_WEBHOOK_URL", "http://127.0.0.1:1/must-not-post")

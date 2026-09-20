@@ -8,7 +8,7 @@ use genai::chat::{
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::time::{Duration, Instant};
 
 const SELECT: &str = include_str!("select_prompt.txt");
@@ -103,8 +103,31 @@ pub struct Analysis {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+enum EditorialCategory {
+    LimitedPermit,
+    DesignDiscretion,
+    ExistingFeature,
+    OtherHighlight,
+    RoutineSummary,
+}
+
+impl EditorialCategory {
+    fn rank(&self) -> u8 {
+        match self {
+            Self::LimitedPermit => 0,
+            Self::DesignDiscretion => 1,
+            Self::ExistingFeature => 2,
+            Self::OtherHighlight => 3,
+            Self::RoutineSummary => 4,
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 struct Candidate {
     fact: String,
+    editorial_category: EditorialCategory,
     has_unresolved_conflict: bool,
     reports_advisory_method: bool,
     source_ids: Vec<String>,
@@ -168,7 +191,7 @@ struct Verification {
     issues: Vec<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 struct VerifiedClaim {
     text: String,
     quotes: Vec<SourceQuote>,
@@ -176,7 +199,7 @@ struct VerifiedClaim {
     explanation: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 struct SourceQuote {
     page: usize,
     text: String,
@@ -197,6 +220,7 @@ fn brief_schema() -> Value {
         "lead_candidate_index":{"type":"integer"}, "lead_rationale":{"type":"string"},
         "candidates":array(object(json!({
             "fact":{"type":"string"}, "source_ids":array(json!({"type":"string"})),
+            "editorial_category":{"type":"string", "enum":["limited_permit","design_discretion","existing_feature","other_highlight","routine_summary"]},
             "has_unresolved_conflict":{"type":"boolean"},
             "reports_advisory_method":{"type":"boolean"},
             "stage":{"type":"string"}, "qualifications":{"type":"string"},
@@ -243,7 +267,7 @@ impl Stage {
                 json!({"claims":[{"text":"exact fragment of condition_text", "quotes":[{"page":1,"text":"verbatim source quotation"}],"entailed":false,"explanation":"Does the quotation actually establish every part of this claim?"}],"meaning_changes":[],"assessment":"claim-by-claim comparison with source", "accurate":false, "qualified":false, "concrete":false, "issues":["material discrepancy if any"]})
             }
             Self::Select => {
-                json!({"project_label":"address and type", "lead_candidate_index":0, "lead_rationale":"source-based reason for this lead", "candidates":[{"fact":"one source-backed condition", "has_unresolved_conflict":false, "reports_advisory_method":false, "source_ids":["p1s1"], "stage":"stage from source", "qualifications":"material qualifications from source", "editorial_reason":"why this matters"}]})
+                json!({"project_label":"address and type", "lead_candidate_index":0, "lead_rationale":"source-based reason for this lead", "candidates":[{"fact":"one source-backed condition", "editorial_category":"routine_summary", "has_unresolved_conflict":false, "reports_advisory_method":false, "source_ids":["p1s1"], "stage":"stage from source", "qualifications":"material qualifications from source", "editorial_reason":"why this matters"}]})
             }
             Self::Write => {
                 json!({"drafts":[{"text":"A complete concise sentence.", "candidate_indices":[0]}]})
@@ -364,7 +388,10 @@ async fn complete_once(
             "Incomplete model response: {:?}",
             response.stop_reason
         );
-        let value: Value = serde_json::from_str(&step.response).context("Invalid model JSON")?;
+        let (value, unwrapped) = parse_stage_response(&step.response)?;
+        if unwrapped {
+            step.decision = Some("Parsed one complete JSON object after a prose preamble; original response retained and all required-field checks still apply.".into());
+        }
         match stage {
             "select_conditions" => {
                 serde_json::from_value::<Brief>(value.clone())?;
@@ -387,6 +414,26 @@ async fn complete_once(
     }
     trace.push(step);
     result
+}
+
+fn parse_stage_response(response: &str) -> Result<(Value, bool)> {
+    match serde_json::from_str::<Value>(response) {
+        Ok(value) => Ok((value, false)),
+        Err(original) => {
+            // JSON mode occasionally returns prose followed by the object. Only
+            // accept one unambiguous, complete object; never repair its contents.
+            let response = response.trim();
+            if let Some(start) = response.find('{').filter(|&start| start > 0) {
+                let prefix = &response[..start];
+                if !prefix.contains(['[', ']', '}']) && !response.starts_with('"') {
+                    if let Ok(value) = serde_json::from_str::<Value>(&response[start..]) {
+                        return Ok((value, true));
+                    }
+                }
+            }
+            Err(original).context("Invalid model JSON")
+        }
+    }
 }
 
 fn validate_brief(brief: &Brief, spans: &[SourceSpan]) -> Result<()> {
@@ -464,12 +511,35 @@ fn materialize(
         "Draft must retain the selected lead fact"
     );
     let mut used = HashSet::new();
+    let extension_procedure =
+        regex::Regex::new(r"(?i)\b(?:request\w*|applicant|ask\w*|receiv\w*)\b").unwrap();
+    let extension_deadline = regex::Regex::new(r"(?i)\b(?:approv\w*|receiv\w*|grant\w*|extend\w*)\b[^;.]{0,140}\b(?:before|by)\b[^;.]{0,60}\b(?:expir\w*|date|then)\b").unwrap();
+    let later_review = regex::Regex::new(r"(?i)\bbuilding[ -]+(?:permit|review)\b").unwrap();
+    let review_wording =
+        regex::Regex::new(r"(?i)\bbuilding review\b|\blater building[ -]+permit\b").unwrap();
     for &index in &draft.candidate_indices {
         ensure!(used.insert(index), "Duplicate candidate index");
         let candidate = brief
             .candidates
             .get(index)
             .context("Draft cites an unknown candidate")?;
+        ensure!(
+            !later_review.is_match(&candidate.stage) || review_wording.is_match(&draft.text),
+            "This candidate is a later building-review requirement. Begin with Building review calls for, rather than implying a development-permit prerequisite"
+        );
+        if matches!(
+            candidate.editorial_category,
+            EditorialCategory::LimitedPermit
+        ) {
+            ensure!(
+                !extension_procedure.is_match(&draft.text),
+                "Focus the limited-permit post on its expiry and extension option. Omit the application/request procedure rather than inferring its form or decision deadline"
+            );
+            ensure!(
+                !extension_deadline.is_match(&draft.text),
+                "Keep the expiry/extension condition separate from procedural deadlines. Do not attach an extension-request deadline to the City's approval. Prefer: The permit expires [date/duration] unless extended in writing"
+            );
+        }
         let anchors = concrete_anchors(&candidate.fact);
         ensure!(
             !has_opaque_levels(&candidate.fact) || anchors.iter().any(|term| draft.text.to_lowercase().contains(term)),
@@ -632,8 +702,9 @@ fn validate_claims(
     );
     let body = super::normalized(body);
     let source_choice = regex::Regex::new(r"(?i)\b([a-z-]{3,})\s+or\s+([a-z-]{3,})\b").unwrap();
-    let explicit_choice =
-        regex::Regex::new(r"(?i)\b(?:or|alternatives?)\b|\b(?:can|may) accept\b").unwrap();
+    let explicit_choice = regex::Regex::new(
+        r"(?i)\b(?:or|alternatives?)\b|\b(?:can|may) accept\b|\bone (?:suggested|recommended|possible) (?:way|method|option)\b",
+    ).unwrap();
     let body_words: Vec<_> = body
         .to_lowercase()
         .split(|c: char| !c.is_alphabetic())
@@ -665,6 +736,15 @@ fn validate_claims(
             (1..=8).contains(&claim.quotes.len()),
             "Each audited claim needs source quotations"
         );
+        validate_facing_direction(
+            &text,
+            &claim
+                .quotes
+                .iter()
+                .map(|q| q.text.as_str())
+                .collect::<Vec<_>>()
+                .join(" "),
+        )?;
         for quote in &claim.quotes {
             ensure!(
                 available.contains(&quote.page),
@@ -785,6 +865,118 @@ fn resolve_audit_quotes(
     Ok(corrections)
 }
 
+fn validate_facing_direction(text: &str, evidence: &str) -> Result<()> {
+    let facing = regex::Regex::new(
+        r"(?i)\b(north|south|east|west|northeast|northwest|southeast|southwest)[- ]facing\b",
+    )
+    .unwrap();
+    let evidence = super::normalized(evidence);
+    for capture in facing.captures_iter(text) {
+        let direction = &capture[1];
+        let supported = regex::Regex::new(&format!(
+            r"(?i)\b(?:{direction}[- ]facing|(?:facing|faces?)\s+(?:the\s+)?{direction})\b"
+        ))
+        .unwrap();
+        ensure!(supported.is_match(&evidence),
+            "Moving a feature toward {direction} does not establish that it faces {direction}. Preserve the source's spatial wording or omit the orientation");
+    }
+    Ok(())
+}
+
+fn explicit_expiry(source: &str) -> bool {
+    let duration = r"(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|eighteen|twenty-four)\s*(?:\(\d+\)\s*)?(?:days?|months?|years?)\b";
+    let date = r"(?:(?:Jan\w*|Feb\w*|Mar\w*|Apr\w*|May|Jun\w*|Jul\w*|Aug\w*|Sep\w*|Oct\w*|Nov\w*|Dec\w*)\.?\s*\d{1,2},?\s+\d{4}|\d{4}-\d{2}-\d{2})\b";
+    regex::Regex::new(&format!(
+        r"(?i)\bexpir(?:e[sd]?|ing|y)\b[^.;]{{0,80}}(?:{duration}|{date})"
+    ))
+    .unwrap()
+    .is_match(&super::normalized(source))
+}
+
+fn filter_unspecified_permits(brief: &mut Brief, spans: &[SourceSpan]) -> Result<usize> {
+    let old_lead = brief.candidates[brief.lead_candidate_index].fact.clone();
+    let count = brief.candidates.len();
+    let permit_expiry =
+        regex::Regex::new(r"(?i)\bpermit\b.*\b(?:expir\w*|time[ -]+limited)\b").unwrap();
+    brief.candidates.retain(|candidate| {
+        !(matches!(
+            candidate.editorial_category,
+            EditorialCategory::LimitedPermit
+        ) || permit_expiry.is_match(&candidate.fact))
+            || candidate.source_ids.iter().any(|id| {
+                spans
+                    .iter()
+                    .any(|span| &span.id == id && explicit_expiry(&span.text))
+            })
+    });
+    ensure!(!brief.candidates.is_empty(), "No eligible condition: limited permit candidates lack a source-backed expiry date or duration; select another condition");
+    brief.lead_candidate_index = brief
+        .candidates
+        .iter()
+        .position(|c| c.fact == old_lead)
+        .unwrap_or(0);
+    Ok(count - brief.candidates.len())
+}
+
+fn expand_claim_fragments(verification: &mut Verification, body: &str) -> Result<usize> {
+    let body = super::normalized(body);
+    let ellipsis = regex::Regex::new(r"\.{3}|…").unwrap();
+    let mut claims = Vec::new();
+    let mut repaired = 0;
+    for claim in &verification.claims {
+        let text = super::normalized(&claim.text);
+        if !body.contains(&text) && ellipsis.is_match(&text) {
+            let mut offset = 0;
+            for fragment in ellipsis.split(&text).map(str::trim) {
+                ensure!(!fragment.is_empty(), "Empty audited claim fragment");
+                let position = body[offset..]
+                    .find(fragment)
+                    .context("Audited claim fragment is absent or out of order")?;
+                offset += position + fragment.len();
+                let mut part = claim.clone();
+                part.text = fragment.to_owned();
+                claims.push(part);
+            }
+            repaired += 1;
+        } else {
+            claims.push(claim.clone());
+        }
+    }
+    verification.claims = claims;
+    Ok(repaired)
+}
+
+fn rank_lead(
+    brief: &mut Brief,
+    rejected_sources: &HashMap<String, usize>,
+) -> Result<Option<String>> {
+    let previous = brief.lead_candidate_index;
+    let selected = brief
+        .candidates
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| {
+            !c.has_unresolved_conflict
+                && (!has_opaque_levels(&c.fact) || !concrete_anchors(&c.fact).is_empty())
+        })
+        // Preserve the model's choice among equally ranked eligible candidates.
+        .min_by_key(|(index, c)| (
+            c.source_ids.iter().any(|id| rejected_sources.get(id).copied().unwrap_or(0) >= 2),
+            weak_daycare_administration(&brief.project_label, &c.fact),
+            c.editorial_category.rank(),
+            *index != previous,
+        ))
+        .map(|(index, _)| index)
+        .context("No eligible condition: candidates have unresolved conflicts or unexplained code levels")?;
+    brief.lead_candidate_index = selected;
+    Ok((selected != previous).then(|| {
+        format!(
+            "Selected candidate {selected} ({:?}) instead of {previous} using editorial priorities, twice-rejected source passages and eligibility checks. Routine summaries remain eligible when no higher-priority condition exists.",
+            brief.candidates[selected].editorial_category
+        )
+    }))
+}
+
 async fn workflow(
     client: &genai::Client,
     model: &str,
@@ -801,18 +993,21 @@ async fn workflow(
     let spans = source_spans(pages);
     ensure!(!spans.is_empty(), "No source passages");
     let mut feedback = String::new();
+    let mut rejected_sources = HashMap::new();
     for round in 1..=MAX_ROUNDS {
+        let mut lead_sources = Vec::new();
         let result: Result<ConditionsSummary> = async {
             let mut brief: Brief = serde_json::from_value(complete(client, model, Stage::Select,
                 json!({"project_name":name, "sources":spans, "previous_feedback":feedback}), round, trace).await?)?;
             validate_brief(&brief, &spans)?;
-            let lead = &brief.candidates[brief.lead_candidate_index];
-            if (has_opaque_levels(&lead.fact) && concrete_anchors(&lead.fact).is_empty()) || weak_daycare_administration(&brief.project_label, &lead.fact) {
-                let previous = brief.lead_candidate_index;
-                brief.lead_candidate_index = brief.candidates.iter().position(|c| !c.has_unresolved_conflict && !c.reports_advisory_method && (!has_opaque_levels(&c.fact) || !concrete_anchors(&c.fact).is_empty()) && !weak_daycare_administration(&brief.project_label, &c.fact))
-                    .context("Every candidate uses unexplained code levels, conflict or advice; select a concrete independent requirement")?;
-                if let Some(last) = trace.last_mut() { last.decision = Some(format!("Lead {previous} offers only code levels or routine daycare hours or final-capacity confirmation; selected the first eligible ranked candidate {} instead.", brief.lead_candidate_index)); }
+            let removed = filter_unspecified_permits(&mut brief, &spans)?;
+            if removed > 0 {
+                if let Some(last) = trace.last_mut() { last.decision = Some(format!("Discarded {removed} limited-permit candidates without a specific expiry in their cited source passages. ")); }
             }
+            if let Some(decision) = rank_lead(&mut brief, &rejected_sources)? {
+                if let Some(last) = trace.last_mut() { last.decision.get_or_insert_default().push_str(&decision); }
+            }
+            lead_sources.clone_from(&brief.candidates[brief.lead_candidate_index].source_ids);
             let body_budget = overview_budget(url).saturating_sub(post_prefix(&brief).chars().count());
             ensure!(body_budget >= 40, "Project label and link leave too little room for a condition");
             let mut drafts = Drafts { drafts: vec![] };
@@ -840,7 +1035,7 @@ async fn workflow(
             let mut audit_failures = Vec::new();
             while !valid.is_empty() {
             let review: Review = serde_json::from_value(complete(client, model, Stage::Review,
-                json!({"project_name":name, "sources":spans,
+                json!({"project_name":name, "sources":spans, "unsupported_limited_permit_candidates_removed":removed,
                     "drafts":valid.iter().map(|&index| json!({"index":index,"text":format!("{}{}",post_prefix(&brief),drafts.drafts[index].text),
                         "candidate_source_ids":drafts.drafts[index].candidate_indices.iter().flat_map(|&i| brief.candidates[i].source_ids.iter()).collect::<Vec<_>>()
                     })).collect::<Vec<_>>() }), round, trace).await?)?;
@@ -862,7 +1057,9 @@ async fn workflow(
                 json!({"post":summary.overview,"condition_text":drafts.drafts[index].text,"source_pages":evidence_pages.iter().map(|&page| json!({"page":page,"text":pages[page-1]})).collect::<Vec<_>>() }), round, trace).await?)?;
             ensure!(verification.accurate && verification.qualified && verification.concrete && verification.issues.is_empty() && verification.meaning_changes.is_empty(),
                 "Final source audit failed: {}; meaning changes: {:?}; issues: {:?}", verification.assessment, verification.meaning_changes, verification.issues);
-            let corrections = resolve_audit_quotes(&mut verification, pages, &evidence_pages)?;
+            let mut corrections = resolve_audit_quotes(&mut verification, pages, &evidence_pages)?;
+            let fragments = expand_claim_fragments(&mut verification, &drafts.drafts[index].text)?;
+            if fragments > 0 { corrections.push(format!("Expanded {fragments} ellipsized claim texts into ordered exact post fragments, preserving the original verdicts and quotations.")); }
             if !corrections.is_empty() {
                 if let Some(last) = trace.last_mut() { last.decision = Some(corrections.join("\n")); }
             }
@@ -888,6 +1085,13 @@ async fn workflow(
         match result {
             Ok(summary) => return Ok(summary),
             Err(error) => {
+                // Give a strong angle one chance to fix its wording before trying
+                // another passage. Every alternative still gets the full audit.
+                if error.downcast_ref::<serde_json::Error>().is_none() {
+                    for id in lead_sources {
+                        *rejected_sources.entry(id).or_insert(0) += 1;
+                    }
+                }
                 feedback = if error.downcast_ref::<serde_json::Error>().is_some() {
                     "A stage failed to produce valid JSON after a format retry. Follow your own stage's response format; select a concrete source-backed condition.".into()
                 } else {
@@ -1040,7 +1244,7 @@ mod tests {
 
     fn sample_responses(accepted: bool) -> Vec<Value> {
         let mut responses = vec![
-            json!({"project_label":"1 Test St daycare", "lead_candidate_index":0,"lead_rationale":"A concrete quantity.","candidates":[{"fact":"Provide five Class B bicycle spaces.", "has_unresolved_conflict":false,"reports_advisory_method":false,"source_ids":["p1s1"], "stage":"revised drawings", "qualifications":"", "editorial_reason":"Concrete requirement."}]}),
+            json!({"project_label":"1 Test St daycare", "lead_candidate_index":0,"lead_rationale":"A concrete quantity.","candidates":[{"fact":"Provide five Class B bicycle spaces.", "editorial_category":"routine_summary", "has_unresolved_conflict":false,"reports_advisory_method":false,"source_ids":["p1s1"], "stage":"revised drawings", "qualifications":"", "editorial_reason":"Concrete requirement."}]}),
             json!({"drafts":[{"text":"Provide five Class B bicycle spaces.", "candidate_indices":[0]}]}),
             json!({"assessment":"The source supports five bicycle spaces in revised drawings.","best_index":if accepted {0} else {-1}, "repair_feedback":if accepted {""} else {"Check the stage against p1s1."}, "reviews":[{
                 "index":0,"source_ids":["p1s1"],"reports_advisory_method":false,"factual":true,"qualified":accepted,"newsworthy":true,"readable":true,
@@ -1310,6 +1514,7 @@ mod tests {
             .remove("editorial_reason");
         assert!(serde_json::from_value::<Brief>(brief.clone()).is_ok());
         for field in [
+            "editorial_category",
             "has_unresolved_conflict",
             "reports_advisory_method",
             "source_ids",
@@ -1443,6 +1648,274 @@ mod tests {
                 .count(),
             1
         );
+    }
+
+    #[tokio::test]
+    async fn design_priority_overrides_routine_lead_before_drafting() {
+        let mut responses = sample_responses(true);
+        let text = "Plans must lower the ceiling by one foot.";
+        let mut design = responses[0]["candidates"][0].clone();
+        design["fact"] = json!(text);
+        design["editorial_category"] = json!("design_discretion");
+        responses[0]["candidates"]
+            .as_array_mut()
+            .unwrap()
+            .push(design);
+        responses[1]["drafts"][0]["text"] = json!(text);
+        responses[1]["drafts"][0]["candidate_indices"] = json!([1]);
+        responses[3]["claims"][0]["text"] = json!(text);
+        responses[3]["claims"][0]["quotes"][0]["text"] = json!(text);
+        let (client, server) = mock_client(responses).await;
+        let result = analyze_pages(
+            &client,
+            DEFAULT_MODEL,
+            "Test",
+            "https://example.com",
+            &[format!("Provide five Class B bicycle spaces. {text}")],
+        )
+        .await;
+        assert!(result.summary.is_some(), "{:?}", result.error);
+        assert!(result.summary.unwrap().overview.ends_with(text));
+        assert!(result.trace[0]
+            .decision
+            .as_ref()
+            .unwrap()
+            .contains("DesignDiscretion"));
+        let requests = server.await.unwrap();
+        let writer: Value =
+            serde_json::from_str(requests[1]["messages"][1]["content"].as_str().unwrap()).unwrap();
+        assert_eq!(writer["selected_candidate_index"], 1);
+    }
+
+    #[test]
+    fn routine_fallback_and_equal_priority_choices_remain_eligible() {
+        let mut brief: Brief = serde_json::from_value(sample_responses(true)[0].clone()).unwrap();
+        assert!(rank_lead(&mut brief, &HashMap::new()).unwrap().is_none());
+        let mut other: Candidate =
+            serde_json::from_value(sample_responses(true)[0]["candidates"][0].clone()).unwrap();
+        other.fact = "Revised plans must show two passenger spaces.".into();
+        brief.candidates.push(other);
+        brief.lead_candidate_index = 1;
+        assert!(rank_lead(&mut brief, &HashMap::new()).unwrap().is_none());
+        assert_eq!(brief.lead_candidate_index, 1);
+        brief.candidates.truncate(1);
+        brief.lead_candidate_index = 0;
+        brief.candidates[0].fact =
+            "Hours of operation are Monday to Friday, 8 a.m. to 5 p.m.".into();
+        // A weak angle is a fallback, not a reason to fail when it is all the letter gives.
+        assert!(rank_lead(&mut brief, &HashMap::new()).unwrap().is_none());
+    }
+
+    #[test]
+    fn prose_preamble_does_not_change_or_complete_model_verdicts() {
+        let value = sample_responses(false)[2].clone();
+        let (parsed, unwrapped) =
+            parse_stage_response(&format!("Source assessment follows.\n{value}")).unwrap();
+        assert!(unwrapped);
+        assert_eq!(parsed, value);
+        assert_eq!(
+            serde_json::from_value::<Review>(parsed).unwrap().best_index,
+            -1
+        );
+        for invalid in [
+            "An answer: {\"accurate\":true} {\"accurate\":false}",
+            "An answer: {\"accurate\":true} trailing prose",
+            "[{\"accurate\":true}",
+            "{malformed: {\"accurate\":true}",
+            "An answer: {\"accurate\":",
+        ] {
+            assert!(parse_stage_response(invalid).is_err(), "{invalid}");
+        }
+        let (missing, _) = parse_stage_response("Assessment: {\"best_index\":0}").unwrap();
+        assert!(serde_json::from_value::<Review>(missing).is_err());
+    }
+
+    #[test]
+    fn one_suggested_method_does_not_make_other_design_options_mandatory() {
+        let source = "Improve outdoor space. This may be achieved by providing two shared courtyard spaces under the Semi-private or shared open space guidelines.";
+        let mut value = sample_responses(true)[3].clone();
+        value["claims"][0]["quotes"][0]["text"] = json!(source);
+        for (body, passes) in [
+            ("Two shared courtyard spaces are one suggested way.", true),
+            ("Provide shared courtyard spaces.", false),
+        ] {
+            value["claims"][0]["text"] = json!(body);
+            let verification: Verification = serde_json::from_value(value.clone()).unwrap();
+            assert_eq!(
+                validate_claims(&verification, body, &[source.into()], &[1]).is_ok(),
+                passes
+            );
+        }
+    }
+
+    #[test]
+    fn ellipsized_claims_expand_only_into_existing_ordered_post_fragments() {
+        let mut value = sample_responses(true)[3].clone();
+        value["claims"][0]["text"] = json!("Provide five ... bicycle spaces.");
+        let mut verification: Verification = serde_json::from_value(value.clone()).unwrap();
+        assert_eq!(
+            expand_claim_fragments(&mut verification, "Provide five Class B bicycle spaces.")
+                .unwrap(),
+            1
+        );
+        assert_eq!(verification.claims.len(), 2);
+        validate_claims(
+            &verification,
+            "Provide five Class B bicycle spaces.",
+            &["Provide five Class B bicycle spaces in revised plans.".into()],
+            &[1],
+        )
+        .unwrap_err();
+        // The omitted Class B words must still be covered by another audited claim.
+        for text in [
+            "Provide six ... bicycle spaces.",
+            "bicycle spaces. ... Provide five",
+        ] {
+            value["claims"][0]["text"] = json!(text);
+            let mut verification: Verification = serde_json::from_value(value.clone()).unwrap();
+            assert!(expand_claim_fragments(
+                &mut verification,
+                "Provide five Class B bicycle spaces."
+            )
+            .is_err());
+        }
+    }
+
+    #[test]
+    fn failed_source_passages_yield_to_a_fresh_angle_without_dropping_fallbacks() {
+        let mut value = sample_responses(true)[0].clone();
+        value["candidates"][0]["editorial_category"] = json!("design_discretion");
+        let mut other = value["candidates"][0].clone();
+        other["source_ids"] = json!(["p2s1"]);
+        other["editorial_category"] = json!("routine_summary");
+        value["candidates"].as_array_mut().unwrap().push(other);
+        let mut brief: Brief = serde_json::from_value(value).unwrap();
+        let mut rejected = HashMap::from([("p1s1".into(), 2)]);
+        rank_lead(&mut brief, &rejected).unwrap();
+        assert_eq!(brief.lead_candidate_index, 1);
+        // If every source was tried, allow a corrected draft within the round budget.
+        rejected.insert("p2s1".into(), 2);
+        rank_lead(&mut brief, &rejected).unwrap();
+        assert_eq!(brief.lead_candidate_index, 0);
+    }
+
+    #[test]
+    fn limited_permit_posts_do_not_move_request_deadlines_onto_approval() {
+        let mut value = sample_responses(true)[0].clone();
+        value["candidates"][0]["editorial_category"] = json!("limited_permit");
+        let brief: Brief = serde_json::from_value(value).unwrap();
+        let pages = vec!["The permit expires one year after issuance unless extended in writing. The applicant must request an extension before expiry.".into()];
+        let spans = source_spans(&pages);
+        for text in [
+            "The permit expires in one year unless an extension is approved before the expiry date.",
+            "The permit expires in one year unless the applicant requests and receives an extension before then.",
+        ] {
+            let draft = Draft { text: text.into(), candidate_indices: vec![0] };
+            assert!(materialize(&draft, &brief, &spans, &pages, "https://example.com").is_err());
+        }
+        let draft = Draft {
+            text: "The permit expires 1 year after issuance unless extended in writing.".into(),
+            candidate_indices: vec![0],
+        };
+        assert!(materialize(&draft, &brief, &spans, &pages, "https://example.com").is_ok());
+    }
+
+    #[test]
+    fn later_building_review_needs_explicit_stage_wording() {
+        let mut value = sample_responses(true)[0].clone();
+        value["candidates"][0]["stage"] = json!("Later building permit review");
+        let brief: Brief = serde_json::from_value(value).unwrap();
+        let pages =
+            vec!["Building Review Branch comments: the building must be sprinklered.".into()];
+        let spans = source_spans(&pages);
+        for (text, allowed) in [
+            ("The building must be sprinklered.", false),
+            ("Building review calls for sprinklering the building.", true),
+        ] {
+            let draft = Draft {
+                text: text.into(),
+                candidate_indices: vec![0],
+            };
+            assert_eq!(
+                materialize(&draft, &brief, &spans, &pages, "https://example.com").is_ok(),
+                allowed
+            );
+        }
+    }
+
+    #[test]
+    fn expiry_detection_does_not_borrow_validation_or_refusal_deadlines() {
+        for text in [
+            "The permit will expire one (1) year from issuance unless extended in writing.",
+            "For a limited period of time, expiring on Sept.11, 2027, unless extended in writing.",
+            "The permit expires 2027-09-11.",
+        ] {
+            assert!(explicit_expiry(text), "{text}");
+        }
+        for text in [
+            "Valid for 12 months unless otherwise validated by a Building Permit.",
+            "Will expire on the date noted unless extended in writing. Conditions must be met by November 30, 2027 or the application may stand refused.",
+        ] { assert!(!explicit_expiry(text), "{text}"); }
+        let mut value = sample_responses(true)[0].clone();
+        let mut vague = value["candidates"][0].clone();
+        // A misclassified expiry cannot evade the source check.
+        vague["editorial_category"] = json!("other_highlight");
+        vague["fact"] = json!("The permit expires at an unspecified time.");
+        value["candidates"].as_array_mut().unwrap().insert(0, vague);
+        let mut brief: Brief = serde_json::from_value(value).unwrap();
+        let spans = source_spans(&["Valid for 12 months unless validated by a Building Permit. Expire on the date noted unless extended. Provide five bicycle spaces.".into()]);
+        assert_eq!(filter_unspecified_permits(&mut brief, &spans).unwrap(), 1);
+        assert_eq!(brief.lead_candidate_index, 0);
+        assert!(brief.candidates[0].fact.contains("bicycle"));
+    }
+
+    #[test]
+    fn moving_toward_a_direction_does_not_establish_facing_it() {
+        assert!(validate_facing_direction(
+            "A north-facing entrance is required.",
+            "Relocate the entrance from the east toward the north."
+        )
+        .is_err());
+        assert!(validate_facing_direction(
+            "Remove the east-facing window.",
+            "Remove the window facing East to improve privacy."
+        )
+        .is_ok());
+        assert!(validate_facing_direction(
+            "Retain the south-facing wall.",
+            "Retain the south-facing wall."
+        )
+        .is_ok());
+    }
+
+    #[test]
+    fn priority_does_not_override_conflict_safety_or_discard_design_advice() {
+        let mut value = sample_responses(true)[0].clone();
+        let mut design = value["candidates"][0].clone();
+        design["fact"] =
+            json!("The letter suggests adding seating to improve the street entrance.");
+        design["editorial_category"] = json!("design_discretion");
+        design["reports_advisory_method"] = json!(true);
+        let mut limited = value["candidates"][0].clone();
+        limited["fact"] = json!("The permit expires after one year unless extended in writing.");
+        limited["editorial_category"] = json!("limited_permit");
+        limited["has_unresolved_conflict"] = json!(true);
+        value["candidates"]
+            .as_array_mut()
+            .unwrap()
+            .extend([design, limited]);
+        let mut brief: Brief = serde_json::from_value(value).unwrap();
+        rank_lead(&mut brief, &HashMap::new()).unwrap();
+        assert_eq!(brief.lead_candidate_index, 1);
+        // Advice is eligible, but the existing wording guard still enforces its strength.
+        assert!(validate_advisory_wording(
+            "Plans must add seating.",
+            brief.candidates[1].reports_advisory_method
+        )
+        .is_err());
+        brief.candidates[2].has_unresolved_conflict = false;
+        rank_lead(&mut brief, &HashMap::new()).unwrap();
+        assert_eq!(brief.lead_candidate_index, 2);
     }
 
     #[tokio::test]
@@ -1744,7 +2217,7 @@ mod tests {
 
     #[tokio::test]
     async fn unknown_source_ids_fail_closed_after_bounded_rounds() {
-        let invalid = json!({"project_label":"Test", "lead_candidate_index":0,"lead_rationale":"", "candidates":[{"fact":"Invented fee", "has_unresolved_conflict":false,"reports_advisory_method":false,"source_ids":["nonexistent"], "stage":"", "qualifications":"", "editorial_reason":""}]});
+        let invalid = json!({"project_label":"Test", "lead_candidate_index":0,"lead_rationale":"", "candidates":[{"fact":"Invented fee", "editorial_category":"other_highlight", "has_unresolved_conflict":false,"reports_advisory_method":false,"source_ids":["nonexistent"], "stage":"", "qualifications":"", "editorial_reason":""}]});
         let (client, server) = mock_client(vec![invalid; MAX_ROUNDS]).await;
         let result = analyze_pages(
             &client,

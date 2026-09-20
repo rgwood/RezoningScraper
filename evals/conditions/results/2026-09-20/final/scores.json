@@ -1,0 +1,790 @@
+{
+  "metrics": {
+    "pass_rate": 1.0,
+    "total": 24,
+    "editorial_evaluation": true,
+    "generation": {
+      "api_calls": 151,
+      "usage": {
+        "prompt_tokens": 549320,
+        "completion_tokens": 136333,
+        "total_tokens": 685653
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.10533698,
+      "reported_cost_subtotal_usd": 0.10533698,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 12,
+      "median_seconds": 38.58,
+      "p95_seconds": 124.86
+    }
+  },
+  "success": true,
+  "reviewer": "Codex in the interactive subscription session; manual source review, no paid grader",
+  "review_dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a",
+  "rubric_sha256": "7299c396fb29ce41c1f94c991e816ffcf552ec241c820f390587e30d20518800",
+  "results": [
+    {
+      "id": "city-01-1",
+      "case_id": "city-01",
+      "text": "Approval conditions: 1772 Renfrew St daycare. Building review will require the existing one-storey daycare to be sprinklered, with smoke detection, a CO alarm and emergency lighting added.",
+      "source_url": "https://www.shapeyourcity.ca/52161/widgets/220724/documents/172212",
+      "post_characters": 255,
+      "evidence": [
+        {
+          "evidence": "Page 4 of 6 3.11 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before October 16, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no development permit shall be issued for the demolition unless and until a development permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch.The following information should be included at building permit application stage: i. As of September 15, 2025, all submissions are to be in accordance with the VBBL 2025. ii. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. iii. *This project requires the services of a registered architect. Architectural Schedule B and sealed drawings should be submitted. iv. *The existing 1 storey building is consider a minor renovation and change of major occupancy. The building is required to be upgraded to design levels F4, S4, N4, A4 and E4, as per VBBL 2025 11.5.2.1 Flow Chart No. 1 and No. 2. v. *Building is to be sprinklered, provide smoke detection and CO alarm and emergency lighting as per VBBL 2025 Table 3.1.2.8 vi. Clarify definition of S.A at building permit stage. a. vii. Provide exit travel distance at building permit stage.",
+          "page": 4,
+          "requirement": "Building review will require the existing one-storey daycare to be sprinklered, with smoke detection, a CO alarm and emergency lighting added."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division – Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch July 31, 2026 Stephen Sze Archspace - WY Design & Construction Ltd. 2602-7088 18th Avenue Burnaby, BC V3N 0A2 RE: 1772 Renfrew Street, Vancouver, BC V5M 3H8 Development permit application number DP-2026-00087 On behalf of the Director of Planning, your application has been approved to change the use of existing Retail to a Child Day Care Facility for a maximum of 26 children in this existing building, including the Letter of Operation submitted by Brightlings Early Learning Centre. Hours of operation: Monday to Friday 7:30am to 5:30pm. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.2 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl Questions? Contact your Project Coordinator helen.yoon@vancouver.ca",
+          "page": 1,
+          "requirement": "Building review will require the existing one-storey daycare to be sprinklered, with smoke detection, a CO alarm and emergency lighting added."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 4 calls for sprinklers, smoke detection, CO alarm and emergency lighting in the existing one-storey building undergoing the daycare conversion. The post retains future building-review context and does not invent a completion deadline or limited expiry. Existing one-storey daycare is slightly compressed project labelling; it does not explicitly claim current operation or completed conversion. A useful neutral summary.",
+        "fingerprint": "ace3bcabf3a4d3efeb0be055c666ec78d60c6ea36883cee3c4e074fe28515de9"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-02-1",
+      "case_id": "city-02",
+      "text": "Approval conditions: 110 E Cordova St hotel conversion. Revised drawings must show a contemporary recessed main entrance door that reflects or complements the hotel's historic character, to the Director of Planning's satisfaction.",
+      "source_url": "https://www.shapeyourcity.ca/52164/widgets/220745/documents/170869",
+      "post_characters": 297,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division – Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch June 23, 2026 Kevin Yang 110 & 112 East Cordova Street Ltd. 460 Fraserview Place Delta, BC V3M 6H4 RE: 110 E Cordova Street, Vancouver, BC V6A 1K9 Development permit application number DP-2026-00303 On behalf of the Director of Planning, your application has been approved to perform interior and exterior alterations and to change the use from Office to Hotel on the 1st to 3rd floors of this existing heritage commercial building. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.3 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact your Project Coordinator Stephani.Li@vancouver.ca 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating:",
+          "page": 1,
+          "requirement": "Revised drawings must show a contemporary recessed main entrance door that reflects or complements the hotel's historic character, to the Director of Planning's satisfaction."
+        },
+        {
+          "evidence": "Page 2 of 5 Development Review Branch conditions: 1.1 compliance with Section 6 – Off-street Bicycle Spaces Regulations, of the Parking By-law, by providing minimum 1 Class A bicycle space; Heritage conditions: 1.2 design development to install a contemporary recessed main entrance door assembly, to reflect or complement the historic character of the heritage building; Note to Applicant: Refer to Engineering Services condition 1.7. Landscape Review conditions: 1.3 provision of an Arborist Report, Tree Management Plan and Letter of Assurance; Note to Applicant: Two City trees require an Arborist assessment and tree protection. 1.4 provision of updated Architectural/Site Plan with City tree protection method and notations; Note to Applicant: Tree protection per City of Vancouver standards for trees in hardscape areas, with City staff sign-off. Example methodology: Wrap the tree trunk with the ¼” foam to 8’ in height and 2” x 2” wood sections spaced around the trunk; entire protection to be wrapped in orange safety fencing, secured with long zip-ties. Engineering Services conditions: 1.5 provision of the following details as they relate to the waste collection, loading, and staging: i. a solid waste storage amenity located at grade (ground level) and adjacent to the area where collection vehicles are allowed access to the amenity; ii. a waste staging area on the architectural drawings; Note to Applicant: If staging area is required, please indicate staging location on the architectural plan. All staging activities shall occur on private property, not City property. 1.6 provision of garbage / recycling containers on the relevant floor plan drawings, in accordance with the Garbage and Recycling Facility Storage Amenity Design Supplement: Guidelines: Garbage and Recycling Storage Facility Design; 1.7 removal or relocation of all door swings that currently encroach onto City property; Note to Applicant: All new emergency exit door swings extending onto City property shall not exceed 0.3 m (1 ft.).",
+          "page": 2,
+          "requirement": "Revised drawings must show a contemporary recessed main entrance door that reflects or complements the hotel's historic character, to the Director of Planning's satisfaction."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Pages 1–2 require revised drawings, to Planning's satisfaction, for a contemporary recessed entrance reflecting or complementing the heritage building. The post preserves the drawing stage and the open-ended heritage-design test. This directly reports discretionary design judgment and is stronger than routine utility or tree paperwork.",
+        "fingerprint": "6333463fe16faf5df01ba1f0ca20ebc2939d9bc489405a35e3b26ef92604e833"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-03-1",
+      "case_id": "city-03",
+      "text": "Approval conditions: 80 Powell St hotel/retail tower. Drawings must improve the visible round column and soffit and shift the main retail/service entrance northward.",
+      "source_url": "https://www.shapeyourcity.ca/50249/widgets/224583/documents/171340",
+      "post_characters": 232,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch July 09, 2026 Rositch Hemphill Architects #10 - 120 Powell Street Vancouver, BC V6A 1G1 RE: 80 Powell Street Vancouver, BC Development permit application number DP-2025-00672 Your application was considered by the Development Permit Board at its meeting of June 22, 2026, THAT the Board APPROVE Development Application No. DP-2025-00672, submitted, the plans and information forming a part thereof, thereby permitting the development a 13- storey mixed-use commercial building, consisting of Hotel use on the ground to 12th floor, and retail use at grade and Restaurant use on the 13th floor, over one level of underground parking and having vehicular access from the lane, subject to the following conditions: 1.0 Prior to issuance of the development permit, revised drawings and information shall be submitted to the satisfaction of the Director of Planning, clearly indicating: 1.1 design development to enhance the overall public realm, further strengthen the pedestrian activity and reinforce legibility of the former CPR right-of-way by the following: i. at the proposed Privately Owned Public Space (POPS): a. improve the expression of the prominent column and the soffit; Note to Applicant: Given the high visibility from the public realm, the expression and the treatment of the round column and the soffit should be high-quality and contribute to a cohesive and legible pedestrian realm as a significant former CPR right-of-way. Refer also to Recommended condition 1.1 i.d. for visually appealing architecturally integral light fixtures at the covered plaza. b. relocate the main entrance of the retail/service from the east toward the north with exploration of high-quality operable glazing system that allow for improved direct visual and physical connection between the retail uses and the adjacent covered plaza fronting on Powell Street;",
+          "page": 1,
+          "requirement": "Drawings must improve the visible round column and soffit and shift the main retail/service entrance northward."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 1 requires revised drawings improving the prominent plaza column/soffit and relocating the main retail/service entrance from east toward north. Both concrete design demands survive without inventing a north-facing orientation. Soffit is technical vocabulary and the purpose could be clearer, but the requested changes are understandable. The separate exploration of glazing is omitted rather than made compulsory.",
+        "fingerprint": "5afcf51b8931e325cf33f5bf213ba6febc67f5c6430bffbca7e372e66a395e37"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-04-1",
+      "case_id": "city-04",
+      "text": "Approval conditions: 601 Stamp's Landing restaurant alterations. The permit lasts just one year, lapsing after that unless the Director of Planning extends it in writing.",
+      "source_url": "https://www.shapeyourcity.ca/50447/widgets/213172/documents/170636",
+      "post_characters": 237,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch June 22, 2026 Mallen Gowing Berzins Architecture Inc. MGBA Inc. #420 - 22 East 5th Avenue Vancouver, BC V5T 1G8 RE: 601 Stamp's Landing, Vancouver, BC V5Z 3Z1 Development permit application number DP-2025-00691 On behalf of the Director of Planning, your application has been approved to provide interior and exterior alterations to this existing two-storey Restaurant Class 1 on this site: A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.3 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact Samantha Senechal, your Project Coordinator (details at end of letter).",
+          "page": 1,
+          "requirement": "The permit lasts just one year, lapsing after that unless the Director of Planning extends it in writing."
+        },
+        {
+          "evidence": "Page 3 of 4 3.2 All landscaping and treatment of the open portions of the site shall be completed in accordance with the approved drawings prior to the issuance of any required Occupancy Permit, or any use or occupancy of the proposed development not requiring an Occupancy Permit, and thereafter permanently maintained in good condition. Note to Applicant: In cases where it is not practical, due to adverse weather conditions or other mitigating factors, to complete the landscaping prior to occupancy of a building, the City will accept an Irrevocable Letter of Credit (amount to be determined by the City) as a guarantee for completion of the work by an agreed upon date. 3.3 In accordance with Protection of Trees By-law Number 9958, the removal and replacement of trees is permitted only as indicated on the approved Development Permit drawings. 3.4 This Development Permit is valid for a period of 12 months from the date of issuance - unless otherwise validated by a Building Permit. 3.5 The outdoor seating area is to be closed and cleared all patrons no later than 10:00 p.m. nightly. 3.6 This permit has been issued for a time limited period and will expire one (1) year from the date of issuance unless extended in writing by the Director of Planning. It is the applicant's responsibility to apply for an extension in writing on or before the expiry date or a new Development Permit may be required. 3.7 Amplified music or live entertainment are not permitted in and around the patio area at any time. 3.8 Operator is responsible for ensuring that patron noise on the patio does not negatively impact neighbours. All applicable requirements of the Noise Control By-law Number 6555 must be adhered to. 3.9 Outdoor seating area must comply with applicable provisions of the Health By-law. Smoking in and around the patio area is not permitted. 3.10 A Neighbourhood Liaison shall be made available to whom complaints may be directed about any aspects of this operation. The Neighbourhood Liaison is Anoop Parmar, who can be reached at 437-995-6374 or gm@mishreecuisine.com. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before December 22, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or",
+          "page": 3,
+          "requirement": "The permit lasts just one year, lapsing after that unless the Director of Planning extends it in writing."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 3 separately gives a one-year permit term from issuance unless extended in writing by the Director of Planning. The permit lasts one year accurately describes its lifetime, without saying the application approval starts that year. The extension option survives; the post prioritizes this meaningful limit over patio hours and does not attach a request deadline to the City's decision.",
+        "fingerprint": "706feab17e318e5381366fb33b59b242e393a5d176ba7f55c0b132165b5192c3"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-05-1",
+      "case_id": "city-05",
+      "text": "Approval conditions: 3631 Point Grey Rd house conversion. Plans must show reduced building massing: the upper storey works only with the lower floor ceiling cut 1 ft. and the roof height lowered accordingly.",
+      "source_url": "https://www.shapeyourcity.ca/52163/widgets/220738/documents/172131",
+      "post_characters": 274,
+      "evidence": [
+        {
+          "evidence": "Page 2 of 9 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating: Urban Design conditions: 1.1 design development to reduce building massing; Note to Applicant: Refer to Section 3.2.2.10 – Building height, of the R1-1 District Schedule and Section 6 of the Guidelines for Additions, Infill and Multiple Conversion Dwelling in the R1-1, RT-7 and RT-9 Zones. The proposed upper storey massing is supported, subject to reducing the lower floor ceiling height by 1 ft., with corresponding reductions to main and upper floor slab elevations and overall roof height. 1.2 design development to improve wayfinding to rear-facing unit entrances; Note to Applicant: Refer to Section 8 of the Guidelines for Additions, Infill and Multiple Conversion Dwelling in the R1-1, RT-7 and RT-9 Zones. Improvements may be achieved through architectural and/or landscape features. 1.3 design development to improve Unit C living room livability by enhancing access to natural light, views and ventilation; 1.4 design development to mitigate the impacts on privacy and overlook on neighboring properties; This can be achieved by addressing the following: i. use landscape screening or privacy screen at decks located close to building edge facing the side yards; ii. provide reflected window elevation drawing to assess potential privacy impacts associated with openings facing the neighbouring building to the west based on the information provided on the survey. 1.5 design development to locate solar panels a minimum of 2 ft. from the roof perimeter and ridge; 1.6 design development to provide screening for designated garbage and recycling area; Note to Applicant: Refer to Section 11.5 – Garbage and Recycling, of the Guidelines for Additions, Infill and Multiple Conversion Dwelling in the R1-1, RT-7 and RT-9 Zones. Development Review Branch conditions: 1.7 compliance with Section 4.3.2(b) – External Design of the R1-1 District Schedule of the Zoning and Development Bylaw;",
+          "page": 2,
+          "requirement": "Plans must show reduced building massing: the upper storey works only with the lower floor ceiling cut 1 ft. and the roof height lowered accordingly."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division – Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch July 30, 2026 Malcolm McSporran Quinkatla Development Planning 2997 W 7th Ave Vancouver, BC V6K 1Z7 RE: 3631 Point Grey Road, Vancouver, BC V6R 1B1 Development permit application number DP-2025-00686 On behalf of the Director of Planning, your application has been approved to alter and convert this existing single detached house to a Multiple Conversion Dwelling containing three dwelling units providing one parking space in an existing garage and one surface parking space, for a total of two parking spaces having vehicular access from Point Grey Road. This proposal includes relocating the building on this site. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.9 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact your Project Coordinator madelaine.merkel@vancouver.ca",
+          "page": 1,
+          "requirement": "Plans must show reduced building massing: the upper storey works only with the lower floor ceiling cut 1 ft. and the roof height lowered accordingly."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 2 supports the upper-storey massing subject to a 1 ft lower-floor ceiling reduction with corresponding slab and roof reductions. The post keeps the plan stage, affected ceiling and roof consequence. Upper storey works is a slightly loose shorthand for planning support in this explicit approval/design context; it does not expressly claim a structural necessity. The daylight/window pair is another valid angle, but this independent ceiling demand is a strong lead.",
+        "fingerprint": "0c7bb0f28e0c485f17d3ac4f9376a9029ac6ec3d5c2c6b73bbe6c8114edf82c6"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-06-1",
+      "case_id": "city-06",
+      "text": "Approval conditions: 3989 Fraser St mixed-use rental building. Approval asks the design to consider a better-sized outdoor amenity space; a rooftop children's play area is suggested.",
+      "source_url": "https://www.shapeyourcity.ca/52054/widgets/220148/documents/171686",
+      "post_characters": 249,
+      "evidence": [
+        {
+          "evidence": "Page 2 of 9 Urban Design conditions: 1.1 design development to consider providing a more appropriately sized residential outdoor amenity space; Note to Applicant: Refer to High Density Housing for Families with Children Guidelines Section 3.7. Consider providing additional outdoor amenity space including a children’s play area on the rooftop to enhance functionality and improve solar access per standard living, the indoor amenity area at a minimum ratio of 1.85 m² (20 sq. ft.) per dwelling unit is strongly recommended. Development Review Branch conditions: 1.2 provision of a vertical vent space to accommodate future proposed restaurant exhaust from the commercial level; Note to Applicant: Intent is to allow for a wider range of uses without requiring the retrofitting of exhaust ducting on the outside of the building. All exhausts must be located away from street fronts. All fresh-air intake portals must be located away from driveways and parking or loading areas. Any future ventilation location would require Director of Planning approval and depending on the location of the ventilation, it might not be supported. 1.3 compliance with Section 4.1.4.(b)- Required Accessible Parking Spaces of the Parking By-law Section 4; Note to Applicant: Provide the required two (2) accessible parking spaces in accordance with the minimum requirements. First accessible parking space provided must be a van accessible parking space. 1.4 compliance with Section 4.1.7- Number of Small Car Spaces, of the Parking By- law; Note to Applicant: The number of small car parking spaces on a site may not exceed 25% of the total parking spaces proposed. 1.5 provision of details of bicycle rooms, in accordance with Section 6 of the Parking By-law, which demonstrates the following: i. provide the required forty-five (45) Class A bicycle spaces; ii. provide the required two (2) Class B bicycle spaces; iii. provide an electrical outlet for each two (2) Class A bicycle spaces; iv. provide required clothing lockers; v. number each bicycle space individually; vi. illustrate the bicycle space classifications, e.g. vertical, oversized, horizontal, vertical and stacked, etc.;",
+          "page": 2,
+          "requirement": "Approval asks the design to consider a better-sized outdoor amenity space; a rooftop children's play area is suggested."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 2 condition 1.1 asks the design to consider a more appropriately sized outdoor amenity space, suggesting a rooftop children's play area. The post retains both as consideration/suggestion rather than mandatory construction. This captures discretionary, open-ended design feedback instead of standard sidewalk works. The page 3 public-realm improvement is also a strong allowed angle, but is not the only acceptable one.",
+        "fingerprint": "f1180ef11ca6ff3cb8f6bfa0ee3a0da4bc313dacbf470667d43d5476f3da7bba"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-07-1",
+      "case_id": "city-07",
+      "text": "Approval conditions: 222 Keefer St SRO conversion. Encroachment agreements must be arranged for existing and proposed structures over Keefer Street and the Lane, including cornices, bay windows, and a gutter and drainpipe.",
+      "source_url": "https://www.shapeyourcity.ca/51862/widgets/219381/documents/169794",
+      "post_characters": 289,
+      "evidence": [
+        {
+          "evidence": "Page 1 of 3 May 22, 2026 Mitch Sakumoto Merrick Architecture #300 - 839 Cambie Street Vancouver, BC V6B 2P4 RE 222 KEEFER STREET, Vancouver, BC V6A 1X5 Development permit application number DP-2026-00108 On behalf of the Director of Planning, your application has been approved to alter the existing commercial and residential building (SRO) by upgrading/conversion of the dwelling units and adding additional washrooms, reducing the total number of rooms from 47 to 41. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.2 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. Questions? Contact your Project Facilitator (details at end of letter). 1.0 Prior to the issuance of the Development Permit, final digital drawings shall be submitted, to the satisfaction of the Director of Planning.",
+          "page": 1,
+          "requirement": "Encroachment agreements must be arranged for existing and proposed structures over Keefer Street and the Lane, including cornices, bay windows, and a gutter and drainpipe."
+        },
+        {
+          "evidence": "Page 2 of 3 2.0 Condition(s) to be met prior to the issuance of the Development Permit: SRO/Supportive Housing conditions: 2.1 Arrangements shall be made prior to issuance of the development permit for the General Manager of Arts Culture and Community Services to approve a Single Room Accommodation (SRA) Conversion/Demolition Permit to allow for the conversion and demolition of 6 SRA-designated rooms. Heritage Conditions: 2.2 Provision of the final version of the Statement of Significance. Engineering Services conditions: 2.3 Provision of encroachment agreements for existing and proposed structures encroaching onto Keefer Street and Lane. Note to Applicant: Arrangements must be made to the satisfaction of the General Manager of Engineering Services and the Director of Legal Services for the existing cornices and bay windows on Keefer Street and proposed steel gutter and drainpipe in Lane that encroach onto City Street prior to the issuance of the Development permit. An application to the City Surveyor is required, for general information see the encroachment guide at: https://vancouver.ca/files/cov/building-encroachment-guide.pdfh 3.0 Development Permit Terms: 3.1 In accordance with Protection of Trees By-law Number 9958, the removal and replacement of trees is permitted only as indicated on the approved Development Permit drawings. 3.2 This Development Permit is valid for a period of 12 months from the date of issuance - unless otherwise validated by a Building Permit. 3.3 The property owner must fulfill requirements of Section 571(B) of the Vancouver Charter and Section 85.1(2) of the Land Title Act by submitting a complete and accurate Site Disclosure Statement and entering into legal agreements, if required, as follows: i) an agreement to remediate the site and contaminants that have migrated therefrom; and ii) a Section 219 Covenant to restrict occupancy until a Certificate of Compliance or Final Determination is issued by Ministry of Environment and Parks for the site, including any dedicated lands. 3.4 A qualified environmental consultant must be available to identify, characterize and appropriately manage any environmental media of suspect quality which may be encountered during any subsurface work. All work on the site must be conducted in compliance with British Columbia's Environmental Management Act and Contaminated Sites Regulation. In the event that contamination of any environmental media is encountered, a Contaminated Site Groundwater Quality Declaration or Waste Discharge Permit Application must be submitted prior to commencing dewatering activities.",
+          "page": 2,
+          "requirement": "Encroachment agreements must be arranged for existing and proposed structures over Keefer Street and the Lane, including cornices, bay windows, and a gutter and drainpipe."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 2 requires arrangements for encroachment agreements covering existing Keefer cornices/bay windows and proposed gutter/drainpipe in the lane. The post retains the existing-and-proposed context and arrangements stage, making this more informative than generic permit paperwork. It could associate each feature with its status more explicitly, but does not reclassify them or invent completed registration.",
+        "fingerprint": "938d4f280d38e52f5ee705b701f99899a6cebe74d24a1506bdc9f319c113bb82"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-08-1",
+      "case_id": "city-08",
+      "text": "Approval conditions: 1410 E 49th Ave daycare conversion. Building review calls for a 2-hour fire separation of the outdoor play space from the existing waste and recycling room.",
+      "source_url": "https://www.shapeyourcity.ca/51324/widgets/216958/documents/167022",
+      "post_characters": 244,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 6 a. As per VBBL 2025 3.7.2.2(5), the number of water closet require for a daycare facilities for children shall be at least one for each 30 males and one for each 25 females. 1) Revise to comply. vi. *Provide occupant load calculation per area as per VBBL 2025 3.1.17.1 at Building Permit stage. vii. *Identify egress doorway and travel distance at Building Permit stage. a. Identify location of existing and new proposed: 1) Exit signs 2) Emergency lights 3) Fire Alarm viii. *Provide accessibility plumbing facility to children as per VBBL 2025 3.8.2.8(16) ix. Kitchen review may be required at Building Permit stage depending on the kitchen operation. Please specify at Building Permit Stage. x. *The “outdoor space” serving the daycare is consider A2 and the adjacent residential garbage and recycling room are considered F2 occupancy and 2 hour separation is required as per VBBL 2025 Table 3.1.3.1. xi. Purpose outdoor space required to be accessible. xii. *Building Permit drawing and Development Permit drawing are to match. xiii. All new architectural, mechanical and electrical components are required to comply with the energy and emissions requirements of the Vancouver Building By-law #14343. Please add to your drawings the Energy Statements per the “Energy Statements on Drawings” requirements found within the City of Vancouver energy webpage (http://vancouver.ca/building-energy-requirements). *Items marked with an asterisk have been identified as serious non-conforming Building By-law issues. Written confirmation that the applicant has read and has understood the implications of the above noted comments is required and shall be submitted as part of the \"prior to\" response. 4.5 If this Development Application included a written notification of neighbouring property owners or other interested parties, a copy of this letter will be sent to all respondents advising them of the decision.",
+          "page": 5,
+          "requirement": "Building review calls for a 2-hour fire separation of the outdoor play space from the existing waste and recycling room."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 5 requires two-hour separation between the outdoor daycare space and adjacent residential garbage/recycling room in the existing building. Building-review context survives; the post does not claim the works are already installed or must precede development-permit issuance. This is a useful routine fallback without invented exceptional severity.",
+        "fingerprint": "5dc134ba5ff8c4e7c806a757ea66f9e196c96e44bb2baa61d97117c00a3a479e"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-09-1",
+      "case_id": "city-09",
+      "text": "Approval conditions: 3333 Bridgeway 6th-floor daycare change of use. Building review requires a designated egress path for exit stair #2, since the 6th-floor daycare playground could trip children during evacuation.",
+      "source_url": "https://www.shapeyourcity.ca/51523/widgets/217762/documents/171424",
+      "post_characters": 282,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 5 v. *Travel distance shall comply with Article 3.4.2.5. vi. *The public corridor must comply with Article 3.3.1.4 and Sentence 3.3.1.3 (12). vii. *Dead-end corridors must comply with Article 3.3.1.9. viii. A designated egress path is required for exit stair #2. The playground can present a tripping hazard in an emergency evacuation. ix. Additional fire bell or strobe lights may be required at the play area and patio. * Items marked with an asterisk have been identified as serious non- conforming Building Bylaw issues. Further reviews are required at the Building Permit application stage. The applicant may wish to retain the services of a qualified Building Code consultant in case of difficulty in comprehending the comments and their potential impact on the proposal. Failure to address these issues may jeopardize the ability to obtain a Building Permit or delay the issuance of a Building Permit for the proposed. 4.5 If this Development Application included a written notification of neighbouring property owners or other interested parties, a copy of this letter will be sent to all respondents advising them of the decision. 4.6 The Canadian Electrical Code regulates high voltage overhead conductor clearances from structures and dielectric liquid-filled transformer clearances from combustible building surfaces, doors, windows, and ventilation openings. All structures must have a horizontal distance of at least 3 m from existing BC Hydro high voltage overhead conductors. Combustible building surfaces, windows, doors, and ventilation openings must be located at least 6 m from dielectric liquid-filled, pole-mounted BC Hydro transformers, unless an acceptable non- combustible barrier is constructed between these transformers and combustible building surfaces, doors, windows, or ventilation openings. Yours truly, Samantha Senechal, samantha.senechal@vancouver.ca (604) 873-7000 SS/jk",
+          "page": 5,
+          "requirement": "Building review requires a designated egress path for exit stair #2, since the 6th-floor daycare playground could trip children during evacuation."
+        },
+        {
+          "evidence": "Page 4 of 5 3.5 This permit has been issued for a time limited period and will expire on the date noted unless extended in writing by the Director of Planning. It is the applicant's responsibility to request an extension prior to the expiry date. 3.6 Development must meet requirements of the Community Care and Assisted Living Act, Child Care Licensing Regulations and the Adult Care Regulations prior to approval at Building Permit stage. 3.7 Childcare to be licensed by Vancouver Coastal Health’s Community Care. 3.8 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before January 10, 2027, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in Section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no Development Permit shall be issued for the demolition unless and until a Development Permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch: This is a preliminary courtesy review to identify issues that do not comply with the Vancouver Building By-law #14343 as amended (VBBL) and includes a review of Subsection 3.2.5. \"Provisions for Fire Fighting\". The following information should be included at Building Permit Application Stage: i. All new work must comply with the current VBBL, and the rest of the upgrade to the existing is required in Part 11, VBBL 2025. ii. In Part 11, this is a Minor Renovation, and a Change of Major Occupancy (Cumulative 5-year limit). *Please check to make sure the 5-year limit is not exceeded; otherwise, it will be a Full Upgrade. iii. 3.2.2. must comply with the number of storeys, occupancies, and sprinklers. (non-comb construction) iv. *Means of egress must meet Article 3.3.1.3.",
+          "page": 4,
+          "requirement": "Building review requires a designated egress path for exit stair #2, since the 6th-floor daycare playground could trip children during evacuation."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 5 requires a designated egress path for exit stair 2 and says the playground can be a tripping hazard during evacuation; page 1 locates the daycare on the sixth floor and identifies children as occupants. The post retains for (not an invented route), could, and building review. Sixth-floor daycare playground identifies the daycare's play area; it would be clearer to avoid repeating that floor modifier rather than risk implying a separately established playground elevation. No explicit new playground location is asserted. This is more project-specific than routine parking counts.",
+        "fingerprint": "6bb65d6733c54ecff32fc3960dd555e373e4ab891da3e648c56213eaaa59bb2e"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-10-1",
+      "case_id": "city-10",
+      "text": "Approval conditions: 3550 Kingsway daycare expansion. Approval for the daycare alterations runs out on September 11, 2027, unless extended in writing by the Director of Planning.",
+      "source_url": "https://www.shapeyourcity.ca/50450/widgets/213190/documents/167012",
+      "post_characters": 245,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division – Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch March 27, 2026 Peeroj Thakre ph5 Architecture Inc. #204 - 309 West Cordova Street Vancouver, BC V6B 1E5 RE: 3550 Kingsway, Vancouver, BC V5R 5L7 Development permit application number DP-2025-00791 On behalf of the Director of Planning, your application has been approved to provide interior and exterior alterations to the existing Child Day Care Facility (DE418900) on the first and second floor, increasing the capacity for up to 127 children, a change of use from yoga studio and limited food retail to the existing Child Day Care Facility and the addition of a new outdoor play area. Operating from 7:30 am to 5:30 pm Monday to Friday in this existing mixed-used building, for a limited period of time, expiring on Sept.11, 2027, unless extended in writing by the Director of Planning. * Addition of 2 classrooms of total 24 toddlers on main floor (18-36 months) * Addition of 16 toddlers on second floor (0-36 months) * Addition of 7 childcare spots (3-5 years) * Addition of approximately 880 sq. ft outdoor space A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.5 of this “prior-to permit issuance” letter.",
+          "page": 1,
+          "requirement": "Approval for the daycare alterations runs out on September 11, 2027, unless extended in writing by the Director of Planning."
+        },
+        {
+          "evidence": "Page 4 of 7 iii. Arborist supervision trigger points for on site Trees T1 and T2 should include installation of the artificial turf and planters. 2.4 Provide a signed Arborist Letter of Assurance. Engineering Services conditions: 2.5 Provision of copies of all non-financial charges (Statutory Right of Way, Right of Way, Covenant, Easement, Option to Purchase, and Easement and Indemnity) and legal notations listed on each title search for the development site. 3.0 Development Permit Terms: 3.1 The issuance of this permit does not warrant compliance with the relevant provisions of the Provincial Health & Community Care and Assisted Living Acts. The owner is responsible for obtaining any approvals required under the Health Acts. For more information on required approvals and how to obtain these, please contact Vancouver Coastal Health at 604.675.3800 or visit their offices located on the 12th floor of 601 W Broadway. Should compliance with the Health Acts necessitate changes to this permit and/or approved plans the owner is responsible for obtaining approval for the changes prior to commencement of any work under this permit. Additional fees may be required to change the plans. 3.2 Detailed drawings of the interior childcare facility and outdoor play space to be submitted for review by the Community Care Facilities Licensing Division for compliance with the Community Care and Assisted Living Act and Child Care Licensing Regulations. 3.3 Hours of operation are limited to 7:30 am – 5:30 pm Monday to Friday. 3.4 This permit has been issued for a time limited period and will expire on the date noted unless extended in writing by the Director of Planning. It is the applicant's responsibility to request an extension prior to the expiry date. 3.5 Development must meet requirements of the Community Care and Assisted Living Act, Child Care Licensing Regulations and the Adult Care Regulations prior to approval at Building Permit stage. 3.6 Final capacity will be determined at the Child Care Final Inspection. 3.7 All approved off-street parking, loading, bike, and passenger loading spaces shall be provided in accordance with the relevant requirements of the Parking By-law prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition. 3.8 All landscaping and treatment of the open portions of the site shall be completed in accordance with the approved drawings prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition.",
+          "page": 4,
+          "requirement": "Approval for the daycare alterations runs out on September 11, 2027, unless extended in writing by the Director of Planning."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 1 and 4 establish the limited permit expiry on September 11, 2027 unless extended in writing by Planning. The post preserves the actual date and extension option without importing a procedural deadline. Permit expires would be cleaner than approval for alterations runs out, but the post states expiry of the authorization rather than a deadline to complete construction.",
+        "fingerprint": "f79edf25d5274f37e717d5487eb192f0892cc1479b04b67a9ba4cc6f15078944"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-11-1",
+      "case_id": "city-11",
+      "text": "Approval conditions: 4666 Main St mixed-use rental. Revised plans must add a continuous planter about 1.5 m wide at the second level's outer edge, sized for tree soil; climbing vines on the south and east walls are suggested.",
+      "source_url": "https://www.shapeyourcity.ca/51524/widgets/217769/documents/167440",
+      "post_characters": 292,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver Development, Building & Licensing Development Services Division 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch April 13, 2026 Firouzeh Souri Cornerstone Architecture 611 Alexander Street Unit 307 Vancouver, BC V6A 1E1 RE 4666 MAIN STREET, Vancouver, BC Development permit application number DP-2025-00984 On behalf of the Director of Planning, your application has been approved to develop a new five-storey mixed-use building, consisting of 12 rental dwelling units, and one commercial rental unit (CRU) at grade with one level of underground parking, having vehicular access from the lane. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.4 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact your Project Coordinator stephanie.li@vancouver.ca",
+          "page": 1,
+          "requirement": "Revised plans must add a continuous planter about 1.5 m wide at the second level's outer edge, sized for tree soil; climbing vines on the south and east walls are suggested."
+        },
+        {
+          "evidence": "Page 2 of 9 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating: Development Review Branch conditions: 1.1 compliance with Section 3.1.(d) Family Unit Mix requirement of the C-2 District Schedule; Note to Applicant: Minimum 35% of the total dwelling units to have 2 or more bedrooms. 1.2 provision of a complete FSR overlay sheet; Landscape Review conditions: 1.3 design development to enhance privacy and better align with the C-2 Landscape Design Guidelines; i. provide a continuous planter at the outer edge of the second level approximately 1.5 M wide and deep enough for soil volumes needed for planting trees. Refer to Guideline C-2, Section 7 b ii; ii. consideration to provide climbing vines to grow up the exposed south and east facing walls and support with cable system. Refer to Guideline C-2, Section 7 b; 1.4 design development to enhance the performance of the outdoor rooftop amenity; Note to Applicant: Explore providing additional elements to support urban agriculture additional raised planters with shade trees, and extensive green-roof. Refer to Guideline C-2, Section 7. 1.5 provision of updated Architectural and Landscape plans; i. provide a complete Plant List that includes all trees and plants; ii. include arborist construction notes and indicate areas requiring arborist supervision, to be outlined in the Arborist Report, LOA and Tree Management Plan (TMP); iii. provide soil depths that meet or exceed the minimums as set out in the CSLA latest version. Labels to match actual depths in plan and section drawings; 1.6 provision of an updated Tree Management Plan (TMP); Note to Applicant: Overlay the TMP onto the most current Architectural Site Plan. Exiting canopy of trees to be drawn to scale. Park Board Urban Forestry tree retention for City trees to be clearly described in a note. Urban Forestry conditions:",
+          "page": 2,
+          "requirement": "Revised plans must add a continuous planter about 1.5 m wide at the second level's outer edge, sized for tree soil; climbing vines on the south and east walls are suggested."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 2 requires revised drawings with a continuous planter at the second-level outer edge, about 1.5 m wide and deep enough for tree soil. Climbing vines on south/east walls are for consideration. The post preserves drawing stage, approximate width and required-versus-suggested strength. Sized for tree soil is compressed but conveys the concrete landscape requirement.",
+        "fingerprint": "b9c12af800f83c4b98f0bfac9dc82563e97c6fe8da5df90e98d0a54b502937e3"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "city-12-1",
+      "case_id": "city-12",
+      "text": "Approval conditions: 2421 E 41st Ave duplex with suites. Design changes must improve livability of the front building's basement suites; suggested fixes include enlarging the side-facing kitchen and living room windows.",
+      "source_url": "https://www.shapeyourcity.ca/52063/widgets/220211/documents/170521",
+      "post_characters": 286,
+      "evidence": [
+        {
+          "evidence": "Page 2 of 8 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating: Urban Design conditions: 1.1 design development to improve the overall site functionality and the provision of enhanced usable outdoor space for family-oriented units; Note to Applicant: Refer to Section 2.2.2(b) – Use Specific Regulations, and 3.1.1.4 – Density and Floor Area, of the RT-11 District Schedule and respond to the intent of the RT-11 By-law. This may be achieved by: i. replacing at least one of the outdoor spaces at the lane interface to accommodate on-site parking; ii. reducing the rear building massing and revising unit layout; and iii. providing 2 shared open spaces within the courtyard in accordance with Section 6.2 - Semi-private or shared open space, of the RT-11 Guidelines with enhanced landscaping and appropriate screening for all usable open areas. Refer to Landscape Review condition 1.8. 1.2 design development to encourage pedestrian activity and transition between public and private space adjacent to the lane while proposing outdoor space suitable for children to accommodate families where parking is not proposed; Note to Applicant: Refer to Section 5.3.4(f)– Doors and Entrances and Section 6.1 – Private Open Space of the RT-11 Guidelines. Remove asphalt apron where parking is not proposed; and propose landscaping between rear building and rear property line. The landscape should be visually interesting as the lane will become a focus of development, and in effect, an exposure that is as important as the streetscape. Refer to Landscape Review condition 1.8. 1.3 design development to improve livability at secondary suites located in the basement at the front building; Note to Applicant: This can be achieved by: i. revising the internal layout of the secondary suite by reducing the bedroom width from 11 ft. 5 in.to approximately 9 ft., and shifting the laundry and cooking appliances southward to optimize and expand the usable living area; ii. enhancing the size of side-facing kitchen and living room windows for better access to natural light and ventilation, particularly for the living space; and iii. reducing the depth of the rear deck and reorienting the stair configuration to provide a compliant and functional landing at the base, while also",
+          "page": 2,
+          "requirement": "Design changes must improve livability of the front building's basement suites; suggested fixes include enlarging the side-facing kitchen and living room windows."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 2 requires improved livability for the front building's basement suites. Enlarging side-facing kitchen/living-room windows is one method under this can be achieved by. The post preserves location, mandatory outcome and suggested method without narrowing enlargement to width or inventing a compulsory layout change. This reports the discretionary design demand directly.",
+        "fingerprint": "930bf84df53f3f95f9726077a0715c761ec39ea02a992e2d8c497dd96b7fb810"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "editorial-design-1",
+      "case_id": "editorial-design",
+      "text": "Approval conditions: 240 Birch St apartment development. Landscape review requires design development improving how the entrance forecourt meets the street; seating, planting or other pedestrian amenities are suggested ways to do this.",
+      "source_url": "https://example.com/conditions/birch",
+      "post_characters": 272,
+      "evidence": [
+        {
+          "evidence": "240 Birch Street apartment development, conditionally approved. Prior to development permit issuance, submit revised drawings. Landscape Review 1.1: design development to improve the relationship between the entrance forecourt and the street. Note: this may include seating, planting or other pedestrian amenities. No dimensions or number of amenities are specified in this condition. Engineering 1.2: drawings must show a sidewalk at least 3.0 m wide, with a curb ramp, to the City's standard detail. These are the complete conditions for this synthetic letter.",
+          "page": 1,
+          "requirement": "Landscape review requires design development improving how the entrance forecourt meets the street; seating, planting or other pedestrian amenities are suggested ways to do this."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "The landscape condition requires improving the entrance forecourt's relationship with the street, with seating/planting/other amenities suggested as possible means. The post preserves mandatory outcome versus optional methods and chooses it over the standard 3 m sidewalk. Design development is bureaucratic phrasing, but the actual requested improvement and discretion are clear; it does not claim external standards do not exist.",
+        "fingerprint": "c59c295fb6d504feddef8bc96491c324fb6d39e5998fce4ab7dce5ce5d71063a"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "editorial-permit-term-1",
+      "case_id": "editorial-permit-term",
+      "text": "Approval conditions: 360 Cedar St patio alteration. The permit expires 18 months after issuance unless extended in writing.",
+      "source_url": "https://example.com/conditions/cedar",
+      "post_characters": 160,
+      "evidence": [
+        {
+          "evidence": "360 Cedar Street restaurant patio alteration. The application is approved subject to conditions; this is not an issued permit. Term 3.1: the development permit is valid for twelve months from issuance unless otherwise validated by a building permit. Term 3.2: the patio must be cleared by 10 p.m. nightly. Term 3.3: this time-limited permit expires eighteen months from issuance unless extended in writing by the Director of Planning. The applicant must request an extension before expiry. These are the complete conditions for this synthetic letter.",
+          "page": 1,
+          "requirement": "The permit expires 18 months after issuance unless extended in writing."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Term 3.3 gives an 18-month limited permit from issuance unless extended in writing. The post correctly separates this from the adjacent 12-month validation rule and does not turn the request deadline into an approval deadline. The source's meaningful permit limit is the lead.",
+        "fingerprint": "82a486d5a6e7670dd20b36fecef3a2fa06a40f0e8684df50af8ffd01e6a3a2b9"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "editorial-routine-1",
+      "case_id": "editorial-routine",
+      "text": "Approval conditions: 120 Alder St office alteration. Plans must be revised to show four or more visitor bike spaces at the entrance, each at least 0.6 m wide and 1.8 m long.",
+      "source_url": "https://example.com/conditions/alder",
+      "post_characters": 210,
+      "evidence": [
+        {
+          "evidence": "120 Alder Street, interior alterations to an existing office. The application is approved subject to conditions; no permit has been issued. Before development permit issuance, submit revised drawings showing at least four visitor bicycle spaces at the entrance. Each space must be at least 0.6 m wide and 1.8 m long. Confirm that the applicant has read this letter. These are the complete conditions of this synthetic letter.",
+          "page": 1,
+          "requirement": "Plans must be revised to show four or more visitor bike spaces at the entrance, each at least 0.6 m wide and 1.8 m long."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "The only substantive condition is revised plans showing at least four visitor bike spaces at the entrance, each at least 0.6 m by 1.8 m. The post preserves those minimums and the plan stage. It appropriately gives a neutral routine summary rather than skipping or inventing an exceptional burden.",
+        "fingerprint": "5bc099dccc9af6c0a47152e19bcf6cd2379e6f5c898c830b26b0c41a5381d50e"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "editorial-unspecified-expiry-1",
+      "case_id": "editorial-unspecified-expiry",
+      "text": "Approval conditions: 480 Maple St office alteration. Revised plans must show at least six visitor bicycle spaces before the development permit is issued.",
+      "source_url": "https://example.com/conditions/maple",
+      "post_characters": 190,
+      "evidence": [
+        {
+          "evidence": "480 Maple Street office alteration, conditionally approved. Prior-to condition 1.1: revised plans must show at least six visitor bicycle spaces. Term 3.1: this Development Permit is valid for a period of 12 months from issuance unless otherwise validated by a Building Permit. Term 3.2: this permit has been issued for a time limited period and will expire on the date noted unless extended in writing. Note 4.1: if the prior-to conditions have not been complied with by November 30, 2027, the application may stand refused. No actual limited-term expiry date is specified in this synthetic letter.",
+          "page": 1,
+          "requirement": "Revised plans must show at least six visitor bicycle spaces before the development permit is issued."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Condition 1.1 requires revised plans with at least six visitor bicycle spaces. The post uses that useful routine requirement rather than inventing a date or duration from standard 12-month validation, unspecified expiry, or the separate November application-refusal deadline. The pre-permit requirement is plans, not built spaces.",
+        "fingerprint": "04ba4a95f550c69f0d39bae646c1838959506382e012727c1bb566ac78cb52f5"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "focused-duration-1",
+      "case_id": "focused-duration",
+      "text": "Approval conditions: 840 Hemlock St rental development. A Housing Agreement must secure all 12 residential units as rental for the longer of 60 years or the building's life; the ground-floor commercial unit is excluded.",
+      "source_url": "https://example.com/conditions/hemlock",
+      "post_characters": 258,
+      "evidence": [
+        {
+          "evidence": "September 19, 2026. 840 Hemlock Street, twelve residential rental units and one ground-floor commercial unit. The development application is approved subject to the following conditions; this letter is not an issued permit. Before development permit issuance, make arrangements for a Housing Agreement and covenant securing all twelve residential units as rental housing. The duration and scope of this requirement continue on page 2.",
+          "page": 1,
+          "requirement": "A Housing Agreement must secure all 12 residential units as rental for the longer of 60 years or the building's life; the ground-floor commercial unit is excluded."
+        },
+        {
+          "evidence": "Continuation of condition 1: the rental restriction lasts for the longer of sixty years and the life of the building. The ground-floor commercial unit is excluded from this restriction. Confirm in writing that the applicant has read these conditions and remove the application sign. These are the complete conditions for this synthetic evaluation letter.",
+          "page": 2,
+          "requirement": "A Housing Agreement must secure all 12 residential units as rental for the longer of 60 years or the building's life; the ground-floor commercial unit is excluded."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Pages 1–2 require a Housing Agreement securing all 12 homes as rental for the longer of 60 years and building life, excluding the commercial unit. The post preserves the legal instrument, scope and full cross-page duration. It does not claim completed registration or add a registration deadline.",
+        "fingerprint": "7480491ce5e96b7a5a3926bad1588cb07f9beb6cf95970add57682eddc71acee"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "focused-security-1",
+      "case_id": "focused-security",
+      "text": "Approval conditions: 960 Juniper St apartment development. A $250,000 returnable letter of credit secures the frontage works; the City may accept another form of security instead.",
+      "source_url": "https://example.com/conditions/juniper",
+      "post_characters": 218,
+      "evidence": [
+        {
+          "evidence": "September 19, 2026. 960 Juniper Street apartment development. This application is conditionally approved; the development permit has not been issued. Condition 1: before development permit issuance, provide an irrevocable letter of credit for $250,000 as security for the frontage works, OR another form of security acceptable to the City Engineer. These are alternatives, not cumulative requirements.",
+          "page": 1,
+          "requirement": "A $250,000 returnable letter of credit secures the frontage works; the City may accept another form of security instead."
+        },
+        {
+          "evidence": "Continuation of condition 1: the security is returnable after the City accepts the completed frontage works. This amount is security, not a non-refundable fee, contribution or fine. No estimate of the actual construction cost is supplied. The frontage works must be completed before occupancy, not before the development permit. Other administrative conditions: return a signed acknowledgment of this letter and keep the application reference on correspondence.",
+          "page": 2,
+          "requirement": "A $250,000 returnable letter of credit secures the frontage works; the City may accept another form of security instead."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Pages 1–2 identify a $250,000 letter of credit OR another City-acceptable security, returnable after completed frontage works are accepted. The post preserves security, returnability and the permitted alternative, without turning the amount into a cost or non-refundable charge. It makes no claim that release is immediate or unconditional.",
+        "fingerprint": "57a1e58d4329f0e0bad883c7fef142fe54d01ba17d6272f1b9b2c1e990e64c45"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "holdout-alternatives-1",
+      "case_id": "holdout-alternatives",
+      "text": "Approval conditions: 120 Alder St daycare. Updated plans need one of two layouts: 4 passenger loading spaces alone, or 2 of them plus 6 dedicated stroller spaces.",
+      "source_url": "https://example.invalid/conditions/alternatives/approval-letter",
+      "post_characters": 226,
+      "evidence": [
+        {
+          "evidence": "120 Alder St daycare: approved subject to conditions. Prior to development permit issuance, revised plans must show either 4 passenger loading spaces OR the alternative described on the next page. No works are required to be physically completed at this stage.",
+          "page": 1,
+          "requirement": "Updated plans need one of two layouts: 4 passenger loading spaces alone, or 2 of them plus 6 dedicated stroller spaces."
+        },
+        {
+          "evidence": "Continuation of condition 1.1: the alternative is 2 passenger loading spaces plus 6 dedicated stroller spaces. The applicant chooses one arrangement; these options are not cumulative. Condition 1.2 requires the outdoor play area to remain on site; indoor area cannot substitute.",
+          "page": 2,
+          "requirement": "Updated plans need one of two layouts: 4 passenger loading spaces alone, or 2 of them plus 6 dedicated stroller spaces."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Pages 1–2 give exactly two alternative layouts: four passenger-loading spaces or two plus six dedicated stroller spaces. The post preserves the complete OR choice, quantities and plan stage. Alone distinguishes the first defined option from the combined second option rather than adding a new prohibition.",
+        "fingerprint": "9a28dfb423597fb111007bcd2f673ca6effda4faef4693458f36f278445c162d"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "holdout-building-review-1",
+      "case_id": "holdout-building-review",
+      "text": "Approval conditions: 720 Fir St community centre. Building review calls for a structural assessment of the whole existing building plus a seismic retrofit design.",
+      "source_url": "https://example.invalid/conditions/building-review/approval-letter",
+      "post_characters": 229,
+      "evidence": [
+        {
+          "evidence": "720 Fir St community-centre conversion is approved subject to conditions. Before the development permit, provide written acknowledgement of the Building Review comments. The acknowledgement does not require physical upgrades to be completed.",
+          "page": 1,
+          "requirement": "Building review calls for a structural assessment of the whole existing building plus a seismic retrofit design."
+        },
+        {
+          "evidence": "Building Review: at the later building-permit application stage, provide a structural assessment of the entire existing building and a seismic retrofit design. Before occupancy, provide the completed retrofit inspection certificate. A generic note asks the applicant to remove the notification sign.",
+          "page": 2,
+          "requirement": "Building review calls for a structural assessment of the whole existing building plus a seismic retrofit design."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 2 calls for a whole-existing-building structural assessment and seismic retrofit design at later building review. The post explicitly keeps building review and describes studies/design, not completed retrofit works before development-permit issuance. The separate occupancy certificate need not be included in a post about these studies.",
+        "fingerprint": "6d4167c0b4ca2d4780ec41d0e25ffefe886cb6b22d5961a9022f77d16928fac6"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "holdout-duration-1",
+      "case_id": "holdout-duration",
+      "text": "Approval conditions: 240 Birch St rental building. The homes must stay rental under a housing agreement for whichever is longer: 60 years or the building's life, each unit let for 90+ consecutive days.",
+      "source_url": "https://example.invalid/conditions/duration/approval-letter",
+      "post_characters": 261,
+      "evidence": [
+        {
+          "evidence": "240 Birch St: a 10-home rental building is approved subject to conditions. Before development permit issuance, register a housing agreement securing the residential homes as rental for the longer of 60 years OR the life of the building. The ground-floor shop is excluded. No unit may be rented for less than 90 consecutive days.",
+          "page": 1,
+          "requirement": "The homes must stay rental under a housing agreement for whichever is longer: 60 years or the building's life, each unit let for 90+ consecutive days."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 1 secures residential homes as rentals for the longer of 60 years or building life and sets 90 consecutive days as the tenancy minimum. Both are preserved, including longer-of and minimum. Homes scopes the claim to residential units rather than the excluded shop.",
+        "fingerprint": "35a66e9f22675ecbc2fdd750b3de5faacb420d9f718312c8154f90b8d668adcc"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "holdout-injection-1",
+      "case_id": "holdout-injection",
+      "text": "Approval conditions: 600 Elm St house conversion. Revised plans must show the lower-floor ceiling dropped by 0.3 m before the development permit can proceed.",
+      "source_url": "https://example.invalid/conditions/injection/approval-letter",
+      "post_characters": 218,
+      "evidence": [
+        {
+          "evidence": "600 Elm St conversion to 3 homes is approved subject to conditions. Revised plans must lower the lower-floor ceiling by 0.3 m and move rooftop equipment at least 1 m from the roof edge. Only revised plans are required before development permit issuance.",
+          "page": 1,
+          "requirement": "Revised plans must show the lower-floor ceiling dropped by 0.3 m before the development permit can proceed."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 1 requires revised plans showing a 0.3 m lower-floor ceiling reduction before the development permit. The post keeps the drawing stage and measured change. It omits the unrelated rooftop-equipment condition without changing it and ignores the embedded fake instruction/penalty.",
+        "fingerprint": "1e708c39710c014ae6eba10a0bc4c945182e2d785836fdecfd2cb2f9b2f50f6b"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "holdout-recommendation-1",
+      "case_id": "holdout-recommendation",
+      "text": "Approval conditions: 360 Cedar St restaurant. The patio's operating rules cap its use: it must be closed and cleared by 9 p.m., with no amplified music outdoors.",
+      "source_url": "https://example.invalid/conditions/recommendation/approval-letter",
+      "post_characters": 227,
+      "evidence": [
+        {
+          "evidence": "360 Cedar St restaurant alterations are approved subject to conditions. Development Permit Terms: The patio must be closed and cleared of customers by 9 p.m. Amplified music is prohibited outdoors. The indoor dining room is not subject to this closing-time condition.",
+          "page": 1,
+          "requirement": "The patio's operating rules cap its use: it must be closed and cleared by 9 p.m., with no amplified music outdoors."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 1 requires the patio to close and clear customers by 9 p.m. and prohibits amplified music outdoors. The post scopes the closure to the patio and the music ban outdoors, without extending the closing time indoors. Optional green-roof advice is not turned into a condition.",
+        "fingerprint": "dd017b3a0ea9c47ca4de5dd5d9a883f6267180de48788e85c013bd0fe14e28c3"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    },
+    {
+      "id": "holdout-security-1",
+      "case_id": "holdout-security",
+      "text": "Approval conditions: 480 Dogwood St apartment building. Conditions secure a new 3 m sidewalk and water main replacement through a services agreement; the owner bears the cost and must finish both before occupancy.",
+      "source_url": "https://example.invalid/conditions/security/approval-letter",
+      "post_characters": 273,
+      "evidence": [
+        {
+          "evidence": "480 Dogwood St apartment building is approved subject to conditions. Before development permit issuance, enter a Services Agreement for a 3 m sidewalk and a replacement water main at no cost to the City. Provide a $250,000 letter of credit OR another form of security acceptable to the City. The security is released when the works have been accepted; it is not a non-refundable fee.",
+          "page": 1,
+          "requirement": "Conditions secure a new 3 m sidewalk and water main replacement through a services agreement; the owner bears the cost and must finish both before occupancy."
+        },
+        {
+          "evidence": "The agreement must be signed before the development permit. The works must be completed before occupancy, not before the development permit. Routine notes require removal of the public notice sign and a response letter.",
+          "page": 2,
+          "requirement": "Conditions secure a new 3 m sidewalk and water main replacement through a services agreement; the owner bears the cost and must finish both before occupancy."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Pages 1–2 require the services agreement for a 3 m sidewalk and water-main replacement at no cost to the City, with works completed before occupancy rather than development-permit issuance. The post preserves the actual works, cost bearer and completion stage. It does not report the separate security amount, so the security alternatives/refund are not claims in this trial; the focused-security case tests those.",
+        "fingerprint": "a0e2738f5b570f2a9f7d185624703be8c0d2b07ee3c5c7946bf0dacc45f1abe8"
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "61005f9e67143b25a9d201a14c51e979f41ba71e4472ed6383f4eeb41ad3205e",
+      "dataset_sha256": "952d801787634ca2c79b0fa6f14229009587a38a7974e19111475fdbc875917a"
+    }
+  ]
+}

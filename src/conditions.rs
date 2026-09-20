@@ -9,7 +9,7 @@ use serde_json::json;
 use crate::{db::Database, summarizer::MODEL};
 
 // Bump when changing the prompt/schema or extraction/validation behaviour.
-pub const PROMPT_VERSION: i64 = 3;
+pub const PROMPT_VERSION: i64 = 4;
 const MAX_POST_CHARS: usize = 300;
 pub const EXTRACTOR_VERSION: &str = "pdf-extract-0.12.1-v2";
 const MAX_ATTEMPTS: i64 = 3;

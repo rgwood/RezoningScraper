@@ -1,0 +1,255 @@
+[
+  {
+    "run": "pilot",
+    "expected_trials": 8,
+    "completed_trials": 8,
+    "generated_summaries": 6,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 86,
+      "usage": {
+        "prompt_tokens": 320763,
+        "completion_tokens": 86805,
+        "total_tokens": 407568
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.07325391,
+      "reported_cost_subtotal_usd": 0.07325391,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 4,
+      "median_seconds": 43.16,
+      "p95_seconds": 352.05
+    }
+  },
+  {
+    "run": "term",
+    "expected_trials": 6,
+    "completed_trials": 6,
+    "generated_summaries": 6,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 33,
+      "usage": {
+        "prompt_tokens": 97494,
+        "completion_tokens": 27049,
+        "total_tokens": 124543
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.02175884,
+      "reported_cost_subtotal_usd": 0.02175884,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 5,
+      "median_seconds": 37.3,
+      "p95_seconds": 61.84
+    }
+  },
+  {
+    "run": "final",
+    "expected_trials": 23,
+    "completed_trials": 2,
+    "generated_summaries": 2,
+    "stopped_early": true,
+    "metrics": {
+      "api_calls": 10,
+      "usage": {
+        "prompt_tokens": 47048,
+        "completion_tokens": 10752,
+        "total_tokens": 57800
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.01075896,
+      "reported_cost_subtotal_usd": 0.01075896,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 1,
+      "median_seconds": 46.8,
+      "p95_seconds": 56.58
+    }
+  },
+  {
+    "run": "v4",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 24,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 181,
+      "usage": {
+        "prompt_tokens": 718526,
+        "completion_tokens": 164655,
+        "total_tokens": 883181
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.14389584,
+      "reported_cost_subtotal_usd": 0.14389584,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 16,
+      "median_seconds": 39.79,
+      "p95_seconds": 157.04
+    }
+  },
+  {
+    "run": "v5",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 24,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 166,
+      "usage": {
+        "prompt_tokens": 640755,
+        "completion_tokens": 148745,
+        "total_tokens": 789500
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.12516607,
+      "reported_cost_subtotal_usd": 0.12516607,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 12,
+      "median_seconds": 38.69,
+      "p95_seconds": 136.54
+    }
+  },
+  {
+    "run": "v6",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 22,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 196,
+      "usage": {
+        "prompt_tokens": 772919,
+        "completion_tokens": 188394,
+        "total_tokens": 961313
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.15615981,
+      "reported_cost_subtotal_usd": 0.15615981,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 14,
+      "median_seconds": 37.61,
+      "p95_seconds": 224.41
+    }
+  },
+  {
+    "run": "v7",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 23,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 143,
+      "usage": {
+        "prompt_tokens": 534552,
+        "completion_tokens": 130187,
+        "total_tokens": 664739
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.10214542,
+      "reported_cost_subtotal_usd": 0.10214542,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 13,
+      "median_seconds": 32.87,
+      "p95_seconds": 112.51
+    }
+  },
+  {
+    "run": "v8",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 23,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 178,
+      "usage": {
+        "prompt_tokens": 669679,
+        "completion_tokens": 164425,
+        "total_tokens": 834104
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.12822083,
+      "reported_cost_subtotal_usd": 0.12822083,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 19,
+      "median_seconds": 47.73,
+      "p95_seconds": 151.44
+    }
+  },
+  {
+    "run": "v9",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 22,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 187,
+      "usage": {
+        "prompt_tokens": 730304,
+        "completion_tokens": 178333,
+        "total_tokens": 908637
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.14310122,
+      "reported_cost_subtotal_usd": 0.14310122,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 15,
+      "median_seconds": 39.27,
+      "p95_seconds": 170.33
+    }
+  },
+  {
+    "run": "v10",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 22,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 170,
+      "usage": {
+        "prompt_tokens": 678089,
+        "completion_tokens": 152520,
+        "total_tokens": 830609
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.12783831,
+      "reported_cost_subtotal_usd": 0.12783831,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 14,
+      "median_seconds": 38.25,
+      "p95_seconds": 175.24
+    }
+  },
+  {
+    "run": "v11",
+    "expected_trials": 24,
+    "completed_trials": 24,
+    "generated_summaries": 24,
+    "stopped_early": false,
+    "metrics": {
+      "api_calls": 151,
+      "usage": {
+        "prompt_tokens": 549320,
+        "completion_tokens": 136333,
+        "total_tokens": 685653
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": 0.10533698,
+      "reported_cost_subtotal_usd": 0.10533698,
+      "calls_without_reported_cost": 0,
+      "calls_without_usage": 0,
+      "trials_needing_repair": 12,
+      "median_seconds": 38.58,
+      "p95_seconds": 124.86
+    }
+  }
+]
