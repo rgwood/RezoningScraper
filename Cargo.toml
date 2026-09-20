@@ -22,6 +22,7 @@ html2md = "0.2.15"
 genai = "0.5.0"
 itertools = "0.14.0"
 image = "0.25.9"
+regex = "1.12.2"
 
 # Force vendored OpenSSL on Linux to make building for musl easier
 [target.'cfg(target_os = "linux")'.dependencies]

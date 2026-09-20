@@ -2877,6 +2877,7 @@ dependencies = [
  "indicatif",
  "itertools",
  "openssl",
+ "regex",
  "reqwest 0.13.1",
  "rusqlite",
  "scraper",
