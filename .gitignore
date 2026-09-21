@@ -37,5 +37,9 @@ publish/*
 /target
 .aider*
 .env
+/openrouter.key
 
 resized.jpg
+
+/evals/conditions/runs/
+__pycache__/

@@ -16,8 +16,13 @@ use std::time::Duration;
 use summarizer::project_to_tweet;
 use tokio::time::sleep;
 
+mod approval_posts;
+mod approval_storage;
+mod approvals;
 mod bluesky;
+mod conditions;
 mod db;
+mod llm;
 mod models;
 mod monitoring;
 mod queue;
@@ -68,6 +73,64 @@ struct Args {
 
     #[arg(
         long,
+        help = "Collect approval history even when automatic conditions posting is disabled",
+        conflicts_with = "skip_update_db"
+    )]
+    track_approvals: bool,
+
+    #[arg(long, env = "POST_CONDITIONS", default_value_t = true, action = clap::ArgAction::Set, num_args = 0..=1, default_missing_value = "true", help = "Automatically collect and post new conditions; set false to disable")]
+    post_conditions: bool,
+
+    #[arg(long, env = "CONDITIONS_POST_LIMIT", default_value_t = 3, value_parser = clap::value_parser!(u32).range(1..=20), help = "Maximum conditions summaries and deliveries per destination per run")]
+    conditions_post_limit: u32,
+
+    #[arg(long, conflicts_with_all = ["tracking_only", "track_approvals", "summarize_conditions", "monitoring_test", "projects_file"], help = "Print PDF storage and conditions delivery counts without crawling, generating or posting")]
+    approval_storage_stats: bool,
+
+    #[arg(long, help = "Only collect approvals; bypass all summarizing and posting queues", conflicts_with_all = ["skip_update_db", "monitoring_test"])]
+    tracking_only: bool,
+
+    #[arg(long, help = "Summarize archived conditions PDFs locally; do not crawl or post", conflicts_with_all = ["tracking_only", "track_approvals", "projects_file", "skip_update_db", "monitoring_test", "api_cache"])]
+    summarize_conditions: bool,
+
+    #[arg(long, default_value_t = 10, requires = "summarize_conditions", value_parser = clap::value_parser!(u32).range(1..=100), help = "Maximum PDFs to summarize in one run")]
+    summary_limit: u32,
+
+    #[arg(
+        long,
+        requires = "summarize_conditions",
+        default_value = conditions::analysis::DEFAULT_MODEL,
+        value_parser = llm::parse_model,
+        help = "Model used for every conditions-analysis stage"
+    )]
+    conditions_model: String,
+
+    #[arg(long, requires = "summarize_conditions", value_parser = clap::value_parser!(i64).range(1..), help = "Summarize one archived PDF version, or show its cached summary")]
+    document_version: Option<i64>,
+
+    #[arg(
+        long,
+        requires = "summarize_conditions",
+        help = "Retry summaries that have already failed three times"
+    )]
+    retry_failed_summaries: bool,
+
+    #[arg(
+        long,
+        default_value = "rezoning_scraper.db",
+        help = "SQLite database path"
+    )]
+    database: String,
+
+    #[arg(
+        long,
+        requires = "tracking_only",
+        help = "Read a saved projects API response instead of fetching the API (document downloads still use HTTP)"
+    )]
+    projects_file: Option<std::path::PathBuf>,
+
+    #[arg(
+        long,
         value_enum,
         help = "Send a test status to monitoring without running the scraper"
     )]
@@ -76,16 +139,38 @@ struct Args {
 
 fn main() -> Result<()> {
     let args = Args::parse();
+    let runtime = tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()?;
+    if args.approval_storage_stats {
+        let db = Database::new_from_file(&args.database)?;
+        println!(
+            "{}",
+            serde_json::to_string_pretty(
+                &json!({"storage":approval_storage::stats(&db)?,"deliveries":approval_posts::status_counts(&db)?})
+            )?
+        );
+        return Ok(());
+    }
+    if args.summarize_conditions {
+        return runtime.block_on(conditions::run_command(
+            &args.database,
+            args.summary_limit as usize,
+            args.document_version,
+            args.retry_failed_summaries,
+            &args.conditions_model,
+        ));
+    }
+    if args.tracking_only {
+        return runtime.block_on(async_main(args, None));
+    }
     let monitoring = Monitoring::new()?;
 
     if let Some(status) = args.monitoring_test {
         return test_monitoring(&monitoring, status);
     }
 
-    let result = tokio::runtime::Builder::new_multi_thread()
-        .enable_all()
-        .build()?
-        .block_on(async_main(args, &monitoring));
+    let result = runtime.block_on(async_main(args, Some(&monitoring)));
 
     match result {
         Ok(()) => monitoring.service_check(
@@ -130,7 +215,7 @@ fn test_monitoring(monitoring: &Monitoring, status: MonitoringTestStatus) -> Res
     }
 }
 
-async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
+async fn async_main(args: Args, monitoring: Option<&Monitoring>) -> Result<()> {
     println!(
         "{}",
         format!("Rezoning Scraper v{}", env!("CARGO_PKG_VERSION"))
@@ -138,39 +223,62 @@ async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
             .green()
     );
 
-    if args.slack_webhook_url.is_none() {
+    if !args.tracking_only && args.slack_webhook_url.is_none() {
         eprintln!(
             "{}",
             "Slack URI not specified; will not publish updates to Slack.".yellow()
         );
     }
 
-    if args.bluesky_user.is_none() || args.bluesky_password.is_none() {
+    if !args.tracking_only && (args.bluesky_user.is_none() || args.bluesky_password.is_none()) {
         eprintln!("Bluesky username and password are required; will not post to Bluesky.");
     }
 
-    let mut db = Database::new_from_file("rezoning_scraper.db")?;
+    let mut db = Database::new_from_file(&args.database)?;
 
-    println!("{}", "Getting API token...".bold().cyan());
-    let token_spinner = ProgressBar::new_spinner();
-    token_spinner.set_message("Getting API token...");
-    token_spinner.enable_steady_tick(Duration::from_millis(100));
-    let token = get_token_from_db_or_website(&mut db, &token_spinner).await?;
+    // Persist the kill switch even if fetching or ordinary processing later fails.
+    if !args.tracking_only && !args.skip_update_db {
+        approval_posts::configure(
+            &db,
+            args.post_conditions,
+            args.slack_webhook_url.is_some(),
+            args.bluesky_user.is_some() && args.bluesky_password.is_some(),
+        )?;
+    }
 
-    println!("{}", "Querying API...".bold().cyan());
     let client = reqwest::Client::builder()
         .timeout(PROJECT_REQUEST_TIMEOUT)
         .build()?;
 
     // Fetch projects
     let start = std::time::Instant::now();
-    let latest_projects = fetch_all_projects(&client, &token.jwt, &db, args.api_cache).await?;
+    let latest_projects = if let Some(path) = &args.projects_file {
+        println!("Reading saved projects from {}...", path.display());
+        let response: Projects = serde_json::from_slice(&std::fs::read(path)?)?;
+        response.data
+    } else {
+        println!("{}", "Querying API...".bold().cyan());
+        let token_spinner = ProgressBar::new_spinner();
+        token_spinner.set_message("Getting API token...");
+        token_spinner.enable_steady_tick(Duration::from_millis(100));
+        let token = get_token_from_db_or_website(&mut db, &token_spinner).await?;
+        fetch_all_projects(&client, &token.jwt, &db, args.api_cache).await?
+    };
 
     println!(
         "Retrieved {} projects in {}ms",
         format!("{}", latest_projects.len()).green(),
         format!("{}", start.elapsed().as_millis()).green()
     );
+
+    if args.tracking_only {
+        approvals::track_approvals(&mut db, &latest_projects).await?;
+        println!("Approval tracking complete; no approval updates were queued for posting.");
+    }
+    if args.tracking_only {
+        return Ok(());
+    }
+    let monitoring = monitoring.context("Monitoring is required for a normal scraper run")?;
 
     // Check if this is first run
     let is_initialization = db.is_empty()?;
@@ -277,6 +385,9 @@ async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
     // Process LLM queue
     {
         let depth = llm_queue.depth(&db)?;
+        if depth > 0 {
+            llm::require_api_key(llm::MODEL)?;
+        }
         let mut processed = 0;
 
         println!("Processing {} projects in LLM queue", depth);
@@ -328,13 +439,13 @@ async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
     }
 
     // Post to Slack if configured
-    if let Some(webhook_url) = args.slack_webhook_url {
+    if let Some(ref webhook_url) = args.slack_webhook_url {
         processing_failures +=
-            process_slack_queue(monitoring, &slack_queue, &mut db, &webhook_url).await?;
+            process_slack_queue(monitoring, &slack_queue, &mut db, webhook_url).await?;
     }
 
     // Post to Bluesky if configured
-    if let (Some(user), Some(pass)) = (args.bluesky_user, args.bluesky_password) {
+    if let (Some(user), Some(pass)) = (&args.bluesky_user, &args.bluesky_password) {
         let depth = bsky_queue.depth(&db)?;
         let mut processed = 0;
         println!("Processing {} tweets in Bluesky post queue", depth);
@@ -345,8 +456,8 @@ async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
                 if let Err(e) = bluesky::post_to_bluesky(
                     &message.payload.project,
                     &message.payload.tweet,
-                    &user,
-                    &pass,
+                    user,
+                    pass,
                 )
                 .await
                 {
@@ -383,6 +494,14 @@ async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
         }
     }
 
+    // Conditions failures cannot block ordinary posts. Standalone tracking/summary
+    // commands returned earlier and never enter this automatic posting path.
+    if !args.skip_update_db {
+        if let Err(error) = process_conditions(&args, &mut db, &latest_projects, monitoring).await {
+            monitoring.error("Conditions pipeline failed", &error, &[]);
+            processing_failures += 1;
+        }
+    }
     report_queue_depths(monitoring, &db, &llm_queue, &slack_queue, &bsky_queue)?;
 
     if processing_failures > 0 {
@@ -391,6 +510,95 @@ async fn async_main(args: Args, monitoring: &Monitoring) -> Result<()> {
         ));
     }
 
+    Ok(())
+}
+
+async fn process_conditions(
+    args: &Args,
+    db: &mut Database,
+    projects: &[Project],
+    monitoring: &Monitoring,
+) -> Result<()> {
+    let slack = args.slack_webhook_url.is_some();
+    let bluesky = args.bluesky_user.is_some() && args.bluesky_password.is_some();
+    let enabled = args.post_conditions && (slack || bluesky);
+    if !enabled && !args.track_approvals {
+        return Ok(());
+    }
+    let mut failures = Vec::new();
+    if let Err(error) = approvals::track_for_posting(db, projects).await {
+        failures.push(format!("Approval tracking: {error:#}"));
+    }
+    println!(
+        "Approval storage: {}",
+        serde_json::to_string(&approval_storage::stats(db)?)?
+    );
+    if enabled {
+        match approval_posts::prepare(db, args.conditions_post_limit, Utc::now().timestamp()).await
+        {
+            Ok(errors) => failures.extend(errors),
+            Err(error) => failures.push(format!("Conditions summaries: {error:#}")),
+        }
+        for channel in ["slack", "bluesky"] {
+            if (channel == "slack" && !slack) || (channel == "bluesky" && !bluesky) {
+                continue;
+            }
+            for _ in 0..args.conditions_post_limit {
+                let Some(delivery) = approval_posts::claim(db, channel, Utc::now().timestamp())?
+                else {
+                    break;
+                };
+                let outcome = if channel == "slack" {
+                    approval_posts::send_slack(
+                        args.slack_webhook_url.as_deref().unwrap(),
+                        &delivery.text,
+                    )
+                    .await
+                } else {
+                    match tokio::time::timeout(
+                        Duration::from_secs(120),
+                        bluesky::post_conditions(
+                            &delivery,
+                            args.bluesky_user.as_deref().unwrap(),
+                            args.bluesky_password.as_deref().unwrap(),
+                        ),
+                    )
+                    .await
+                    {
+                        Ok(Ok(())) => approval_posts::Outcome::Sent,
+                        Ok(Err(_)) => approval_posts::Outcome::Retry(
+                            "Bluesky conditions delivery failed".into(),
+                        ),
+                        Err(_) => approval_posts::Outcome::Retry(
+                            "Bluesky conditions delivery timed out".into(),
+                        ),
+                    }
+                };
+                approval_posts::finish(db, delivery.id, channel, &outcome)?;
+                if !matches!(outcome, approval_posts::Outcome::Sent) {
+                    failures.push(format!(
+                        "Conditions post {} ({channel}): {outcome:?}",
+                        delivery.id
+                    ));
+                }
+            }
+        }
+    }
+    let counts = approval_posts::status_counts(db)?;
+    println!("Conditions deliveries: {counts}");
+    if counts.as_object().is_some_and(|counts| {
+        counts.iter().any(|(key, value)| {
+            (key.ends_with("_uncertain") || key.ends_with("_failed"))
+                && value.as_i64().unwrap_or(0) > 0
+        })
+    }) {
+        failures.push(format!("Conditions outbox needs attention: {counts}"));
+    }
+    let stats = approval_storage::stats(db)?;
+    monitoring.gauge("rezoning_scraper.approval_pdf_bytes", stats.pdf_bytes, &[])?;
+    if !failures.is_empty() {
+        anyhow::bail!("{}", failures.join("; "));
+    }
     Ok(())
 }
 

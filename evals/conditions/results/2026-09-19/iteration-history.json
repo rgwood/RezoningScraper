@@ -1,0 +1,557 @@
+{
+  "note": "Generation success is not editorial success. Stopped runs have no complete gate result. In-flight requests may have been billed without a saved trace; per-run subtotals do not establish cumulative spending. The OpenRouter key usage counter is reported separately.",
+  "runs": [
+    {
+      "run": "glm-pilot-v1",
+      "planned_trials": 3,
+      "saved_trials": 3,
+      "generated_summaries": 1,
+      "note": "Early multi-provider pilot before the official-provider instruction; included length failure and slow requests.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 18,
+        "usage": {
+          "prompt_tokens": 64018,
+          "completion_tokens": 23511,
+          "total_tokens": 87529
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": null,
+        "reported_cost_subtotal_usd": 0.0200729,
+        "calls_without_reported_cost": 3,
+        "calls_without_usage": 3,
+        "trials_needing_repair": 3,
+        "median_seconds": 225.47,
+        "p95_seconds": 334.94
+      }
+    },
+    {
+      "run": "glm-pilot-v2",
+      "planned_trials": 3,
+      "saved_trials": 3,
+      "generated_summaries": 3,
+      "note": "Early throughput-routed pilot before the official-provider instruction.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 15,
+        "usage": {
+          "prompt_tokens": 56236,
+          "completion_tokens": 11816,
+          "total_tokens": 68052
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": null,
+        "reported_cost_subtotal_usd": 0.0143434,
+        "calls_without_reported_cost": 1,
+        "calls_without_usage": 1,
+        "trials_needing_repair": 1,
+        "median_seconds": 32.23,
+        "p95_seconds": 183.28
+      }
+    },
+    {
+      "run": "glm-zai-pilot-v1",
+      "planned_trials": 3,
+      "saved_trials": 3,
+      "generated_summaries": 0,
+      "note": "Official endpoint rejected JSON-schema routing; no generation succeeded.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 9,
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": null,
+        "reported_cost_subtotal_usd": null,
+        "calls_without_reported_cost": 9,
+        "calls_without_usage": 9,
+        "trials_needing_repair": 3,
+        "median_seconds": 0.44,
+        "p95_seconds": 0.77
+      }
+    },
+    {
+      "run": "glm-zai-pilot-v2",
+      "planned_trials": 3,
+      "saved_trials": 3,
+      "generated_summaries": 3,
+      "note": "Official endpoint worked with JSON mode; output remained wordy.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 9,
+        "usage": {
+          "prompt_tokens": 38329,
+          "completion_tokens": 6838,
+          "total_tokens": 45167
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.00878435,
+        "reported_cost_subtotal_usd": 0.00878435,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 0,
+        "median_seconds": 30.16,
+        "p95_seconds": 31.16
+      }
+    },
+    {
+      "run": "glm-zai-v3",
+      "planned_trials": 60,
+      "saved_trials": 9,
+      "generated_summaries": 5,
+      "note": "Stopped after JSON-shape failures; incomplete run, not a release candidate.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 40,
+        "usage": {
+          "prompt_tokens": 160124,
+          "completion_tokens": 37929,
+          "total_tokens": 198053
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.03647046,
+        "reported_cost_subtotal_usd": 0.03647046,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 6,
+        "median_seconds": 39.71,
+        "p95_seconds": 92.48
+      }
+    },
+    {
+      "run": "glm-zai-pilot-v4",
+      "planned_trials": 9,
+      "saved_trials": 9,
+      "generated_summaries": 9,
+      "note": "Nine generations completed; editorial review passed six. Full scores and reviews are saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 30,
+        "usage": {
+          "prompt_tokens": 150714,
+          "completion_tokens": 28733,
+          "total_tokens": 179447
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.03059152,
+        "reported_cost_subtotal_usd": 0.03059152,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 1,
+        "median_seconds": 31.66,
+        "p95_seconds": 77.39
+      }
+    },
+    {
+      "run": "glm-zai-v5",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 59,
+      "note": "Complete run: 57/60 passed editorial and mechanical checks. Full scores and reviews are saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 207,
+        "usage": {
+          "prompt_tokens": 660992,
+          "completion_tokens": 157289,
+          "total_tokens": 818281
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.1315597,
+        "reported_cost_subtotal_usd": 0.1315597,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 8,
+        "median_seconds": 27.71,
+        "p95_seconds": 56.78
+      }
+    },
+    {
+      "run": "glm-zai-v6",
+      "planned_trials": 60,
+      "saved_trials": 29,
+      "generated_summaries": 29,
+      "note": "Stopped after Lot 17 and the east half of Lot 18 became Lots 17 and 18. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 108,
+        "usage": {
+          "prompt_tokens": 419332,
+          "completion_tokens": 96180,
+          "total_tokens": 515512
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.08585316,
+        "reported_cost_subtotal_usd": 0.08585316,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 6,
+        "median_seconds": 30.68,
+        "p95_seconds": 81.6
+      }
+    },
+    {
+      "run": "glm-zai-v7",
+      "planned_trials": 60,
+      "saved_trials": 17,
+      "generated_summaries": 16,
+      "note": "Stopped after generic code-level summaries passed the factual audit. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 82,
+        "usage": {
+          "prompt_tokens": 274745,
+          "completion_tokens": 58411,
+          "total_tokens": 333156
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.05045693,
+        "reported_cost_subtotal_usd": 0.05045693,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 5,
+        "median_seconds": 34.65,
+        "p95_seconds": 85.92
+      }
+    },
+    {
+      "run": "glm-zai-v8",
+      "planned_trials": 12,
+      "saved_trials": 12,
+      "generated_summaries": 10,
+      "note": "Ten generations completed; two failed. This exposed repeated selection of opaque code levels and cross-stage JSON-format feedback.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 73,
+        "usage": {
+          "prompt_tokens": 254274,
+          "completion_tokens": 57021,
+          "total_tokens": 311295
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.04830408,
+        "reported_cost_subtotal_usd": 0.04830408,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 6,
+        "median_seconds": 43.98,
+        "p95_seconds": 93.22
+      }
+    },
+    {
+      "run": "glm-zai-v9",
+      "planned_trials": 12,
+      "saved_trials": 12,
+      "generated_summaries": 12,
+      "note": "Twelve generations completed; eleven passed editorial review. A broadened any-building-permit claim failed. Full scores and reviews are saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 75,
+        "usage": {
+          "prompt_tokens": 277406,
+          "completion_tokens": 62736,
+          "total_tokens": 340142
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": null,
+        "reported_cost_subtotal_usd": 0.05570658,
+        "calls_without_reported_cost": 1,
+        "calls_without_usage": 1,
+        "trials_needing_repair": 7,
+        "median_seconds": 51.8,
+        "p95_seconds": 162.34
+      }
+    },
+    {
+      "run": "glm-zai-v10",
+      "planned_trials": 60,
+      "saved_trials": 39,
+      "generated_summaries": 39,
+      "note": "Stopped after an overly broad code filter discarded a real sprinkler requirement and selected routine weekday daycare hours. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 204,
+        "usage": {
+          "prompt_tokens": 713608,
+          "completion_tokens": 147366,
+          "total_tokens": 860974
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.13422948,
+        "reported_cost_subtotal_usd": 0.13422948,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 16,
+        "median_seconds": 35.93,
+        "p95_seconds": 91.38
+      }
+    },
+    {
+      "run": "glm-zai-v11",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 58,
+      "note": "Complete run: 57/60 passed. Two repeated review-schema failures and one weak contingent-covenant lead. Full scores and reviews saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 325,
+        "usage": {
+          "prompt_tokens": 992955,
+          "completion_tokens": 220027,
+          "total_tokens": 1212982
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.18330875,
+        "reported_cost_subtotal_usd": 0.18330875,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 32,
+        "median_seconds": 33.49,
+        "p95_seconds": 102.26
+      }
+    },
+    {
+      "run": "glm-zai-v12",
+      "planned_trials": 60,
+      "saved_trials": 17,
+      "generated_summaries": 17,
+      "note": "Stopped after full level 4 categories passed the editorial reviewer alongside a concrete sprinkler requirement. The unexplained classification still fails readability. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 72,
+        "usage": {
+          "prompt_tokens": 276366,
+          "completion_tokens": 48848,
+          "total_tokens": 325214
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.05164018,
+        "reported_cost_subtotal_usd": 0.05164018,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 2,
+        "median_seconds": 30.87,
+        "p95_seconds": 56.05
+      }
+    },
+    {
+      "run": "glm-zai-v13",
+      "planned_trials": 60,
+      "saved_trials": 26,
+      "generated_summaries": 26,
+      "note": "Stopped after a duplicated project introduction and an unsupported requirement to keep the entire playground out of the evacuation path. The source requires a designated path and warns of tripping hazards, without specifying that layout. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 119,
+        "usage": {
+          "prompt_tokens": 430016,
+          "completion_tokens": 78885,
+          "total_tokens": 508901
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.07355514,
+        "reported_cost_subtotal_usd": 0.07355514,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 6,
+        "median_seconds": 31.77,
+        "p95_seconds": 56.18
+      }
+    },
+    {
+      "run": "glm-zai-v14",
+      "planned_trials": 60,
+      "saved_trials": 31,
+      "generated_summaries": 31,
+      "note": "Nine difficult pilot trials passed source review, but the expanded run was stopped after remove-or-relocate became must-relocate and installed fire-safety work was attached to ambiguous at-permit-stage timing. Exact quotations exposed the mistaken entailment judgments. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 153,
+        "usage": {
+          "prompt_tokens": 541053,
+          "completion_tokens": 105796,
+          "total_tokens": 646849
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.09535643,
+        "reported_cost_subtotal_usd": 0.09535643,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 8,
+        "median_seconds": 31.62,
+        "p95_seconds": 88.49
+      }
+    },
+    {
+      "run": "glm-zai-v15",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 56,
+      "note": "Complete run: 53/60 passed. Four generation failures and three editorial failures. Overbroad local choice/coverage checks caused false rejections; summary errors broadened music to sound, a permit deadline and completion of authorization. Full scores saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 317,
+        "usage": {
+          "prompt_tokens": 974281,
+          "completion_tokens": 189085,
+          "total_tokens": 1163366
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.16373105,
+        "reported_cost_subtotal_usd": 0.16373105,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 20,
+        "median_seconds": 29.99,
+        "p95_seconds": 70.77
+      }
+    },
+    {
+      "run": "glm-zai-v16",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 59,
+      "note": "Complete run: 56/60 passed. One generation failure, one unsupported access duration, one weak capacity-confirmation lead and one marked/definite-hazard paraphrase. Full scores saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 326,
+        "usage": {
+          "prompt_tokens": 1054211,
+          "completion_tokens": 211306,
+          "total_tokens": 1265517
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.18340577,
+        "reported_cost_subtotal_usd": 0.18340577,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 20,
+        "median_seconds": 32.95,
+        "p95_seconds": 108.84
+      }
+    },
+    {
+      "run": "glm-zai-v17",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 56,
+      "note": "Complete run: 55/60 passed. Four generation failures from quote-page and coverage checks and an unsupported-terminology judgment, plus one ambiguous rental-agreement phrase. Full scores saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 433,
+        "usage": {
+          "prompt_tokens": 1349113,
+          "completion_tokens": 336134,
+          "total_tokens": 1685247
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.27614659,
+        "reported_cost_subtotal_usd": 0.27614659,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 31,
+        "median_seconds": 51.57,
+        "p95_seconds": 144.94
+      }
+    },
+    {
+      "run": "glm-zai-v18",
+      "planned_trials": 60,
+      "saved_trials": 14,
+      "generated_summaries": 14,
+      "note": "Stopped after quote-page mistakes and clipped qualifications exposed false rejections and missed context. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 77,
+        "usage": {
+          "prompt_tokens": 291600,
+          "completion_tokens": 74665,
+          "total_tokens": 366265
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.05947634,
+        "reported_cost_subtotal_usd": 0.05947634,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 7,
+        "median_seconds": 59.07,
+        "p95_seconds": 132.05
+      }
+    },
+    {
+      "run": "glm-zai-v19",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 59,
+      "note": "Complete run: 59/60 passed. One generation failure from rejecting the City-defined public-access meaning of a plaza right of way and inventing a completion deadline. Full scores saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 369,
+        "usage": {
+          "prompt_tokens": 1246736,
+          "completion_tokens": 293118,
+          "total_tokens": 1539854
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": null,
+        "reported_cost_subtotal_usd": 0.24593292,
+        "calls_without_reported_cost": 2,
+        "calls_without_usage": 2,
+        "trials_needing_repair": 25,
+        "median_seconds": 40.26,
+        "p95_seconds": 160.0
+      }
+    },
+    {
+      "run": "glm-zai-v20",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 59,
+      "note": "Complete run: 58/60 passed. One generation failure and one invented spatial relation (path for a stair became past the stair). Full scores saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 451,
+        "usage": {
+          "prompt_tokens": 1526341,
+          "completion_tokens": 368785,
+          "total_tokens": 1895126
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.29716829,
+        "reported_cost_subtotal_usd": 0.29716829,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 35,
+        "median_seconds": 51.28,
+        "p95_seconds": 171.5
+      }
+    },
+    {
+      "run": "glm-zai-v21",
+      "planned_trials": 60,
+      "saved_trials": 27,
+      "generated_summaries": 27,
+      "note": "Stopped after two weak leads exposed a local selection bug: a concrete two-hour separation was discarded because nearby A2/F2 occupancy labels matched the opaque-code filter and separation without the word fire was not recognized. Incomplete run.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 186,
+        "usage": {
+          "prompt_tokens": 682337,
+          "completion_tokens": 158615,
+          "total_tokens": 840952
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": 0.13176877,
+        "reported_cost_subtotal_usd": 0.13176877,
+        "calls_without_reported_cost": 0,
+        "calls_without_usage": 0,
+        "trials_needing_repair": 12,
+        "median_seconds": 56.36,
+        "p95_seconds": 170.58
+      }
+    },
+    {
+      "run": "glm-zai-v22",
+      "planned_trials": 60,
+      "saved_trials": 60,
+      "generated_summaries": 58,
+      "note": "Complete run: 57/60 passed. Two generation failures and one changed setback geometry. Failures also exposed throwing away valid alternative drafts and treating the conjunction plus as an unaudited fact. Full scores saved separately.",
+      "metrics_for_saved_trials_only": {
+        "api_calls": 419,
+        "usage": {
+          "prompt_tokens": 1367282,
+          "completion_tokens": 322311,
+          "total_tokens": 1689593
+        },
+        "quota_interruptions": 0,
+        "reported_cost_usd": null,
+        "reported_cost_subtotal_usd": 0.2657166,
+        "calls_without_reported_cost": 3,
+        "calls_without_usage": 3,
+        "trials_needing_repair": 32,
+        "median_seconds": 57.62,
+        "p95_seconds": 189.65
+      }
+    }
+  ]
+}

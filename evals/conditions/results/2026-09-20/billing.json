@@ -1,0 +1,6 @@
+{
+  "recorded_cost_subtotal_usd": 1.13763619,
+  "calls_without_reported_cost": 0,
+  "complete_account_cost_known": false,
+  "note": "One superseded run was interrupted; in-flight responses/charges are not available in its traces. This is recorded usage, not a reconciled account bill. All generation used GLM 5.3 Flash through the pinned official Z.ai OpenRouter endpoint."
+}

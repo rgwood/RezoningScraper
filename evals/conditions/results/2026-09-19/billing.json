@@ -1,0 +1,10 @@
+{
+  "observed_at_utc": "2026-09-20 06:23:59 UTC",
+  "source": "OpenRouter GET /api/v1/key, usage field",
+  "initial_key_usage_usd": 0,
+  "final_key_usage_usd": 3.03031348,
+  "final_batch_reported_cost_usd": 0.21970494,
+  "final_batch_api_calls": 333,
+  "final_batch_calls_without_reported_cost": 0,
+  "note": "Cumulative key usage includes all GLM experiments and stopped/in-flight requests; per-run trace totals alone do not capture all spending. No credential or account balance is stored here. Editorial scoring used local reviews in the subscription session and made no paid grader calls."
+}

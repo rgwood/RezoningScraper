@@ -1,0 +1,86 @@
+{
+  "reviewer": "Codex in the interactive subscription session; reviewed against original source pages, no paid grader calls",
+  "grades": {
+    "city-05-1": {
+      "fingerprint": "3780564502a8d7f21b02f2c5d1e43ad11e6c9f525dfc9bdf574c90288fcc3ec0",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Pages 5 and 7 require consolidation of the two parcels, with completion before the building permit to relocate the building. This post preserves that specific permit purpose and avoids the prior any-permit error."
+    },
+    "city-05-2": {
+      "fingerprint": "939a87970d9432bc683612435ff9b7a08bd44ce20ab59cf19ef1a261b226607d",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 6–7 classify the raising, relocation and added storey as reconstruction, apply upgrade triggers to the whole building, and explicitly require sprinklering. The post names the concrete work without decoding opaque upgrade codes."
+    },
+    "city-05-3": {
+      "fingerprint": "a08f025b3ac3528a46cd841366571b652f0ff0041eeb41630b95d9bbc05dd0a5",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 6–7 support the reconstruction classification and whole-building sprinkler requirement. Building review identifies the context without an invented installation deadline."
+    },
+    "city-09-1": {
+      "fingerprint": "e6f336cb2e91d76d6aef7c51f80942806cf7777cf67fa19102c9d5c866f7a48f",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Pages 4–5 identify the preliminary building-review context, required designated egress path for stair 2 and playground tripping hazard during evacuation. The post preserves the stage and does not invent a route outside the playground."
+    },
+    "city-09-2": {
+      "fingerprint": "c173fe71855eadd0b3cbeb21365b3075f05609dcf8d0e8ac7745c37b7ceaa1a4",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 5 requires a designated egress path for stair 2 and warns that the playground can cause tripping during evacuation. This states the path and hazard without inventing a route around the entire playground."
+    },
+    "city-09-3": {
+      "fingerprint": "2d6a9f163d07ad99842e6a2c2d11b0854948a58c930da5f47ca9e8b5a3ec2aea",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 5 supports the designated egress path for exit stair 2 and the playground evacuation hazard. Review comments preserves attribution and invents no construction deadline or geometry."
+    },
+    "focused-security-1": {
+      "fingerprint": "a11e63b424326fa9bbeb1eac6f42dda7d01e968af7b033cd7df267c5585c6470",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 require $250,000 letter-of-credit security or another approved form, and make it returnable. The post preserves amount, purpose, alternative and returnability; money is slightly loose wording but no upfront cash payment is asserted."
+    },
+    "focused-security-2": {
+      "fingerprint": "5c4a54389914f589a3e8259cb89bc0bf8a25d2b9dd76e797be59ce080e70a331",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 establish returnable $250,000 security for frontage works, as an irrevocable letter of credit OR another City-Engineer-accepted form. All material financial qualifications survive."
+    },
+    "focused-security-3": {
+      "fingerprint": "3782513ec8694277bd18e82aa280fb3d00529e9d0deeed54d6f90421d5e05f6f",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 support the before-permit $250,000 returnable security and frontage-work purpose. Security is the umbrella term for the permitted instruments, with a letter of credit given as an example rather than falsely the only form."
+    }
+  }
+}

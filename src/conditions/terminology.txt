@@ -1,0 +1,13 @@
+Verified terminology, not additional project requirements:
+
+Vancouver Building By-law 2025, Book I, Division B, Table 3.1.3.1 is titled "Major Occupancy Fire Separations" and gives fire-resistance ratings in hours. When a letter expressly requires an hour-rated separation under this table, describing it as a fire separation is an accurate terminology expansion, not an unsupported extra requirement. Preserve the letter's stated rating and the spaces it separates. Do not infer construction materials, additional barriers, or new ratings from the table.
+
+Source: City of Vancouver, Vancouver Building By-law 2025, Volume 1, version 4.00, PDF page 131, Table 3.1.3.1. Verified 2026-09-19.
+https://vancouver.ca/files/cov/vbbl-2025-volume-1-v4-00.pdf#page=131
+
+Use the actual letter's passage as the claim's quotation; this terminology note explains its cross-reference and is not a page of that letter. This narrow definition does not authorize decoding other building-code levels or adding project obligations from memory.
+
+For a privately owned public space (POPS), Vancouver uses statutory rights-of-way to secure public accessibility. A letter requiring an SRW for public life use of a private plaza can therefore be summarized as legal public use/access rights over the plaza. Public use/access is a plain-language description here, not an expansion into unrestricted activities. Do not infer a duration, permanent or 24-hour access, City ownership, or completed registration from that terminology.
+
+Source: City of Vancouver, Development permit conditions resource, Public realm conditions / Privately owned public space. The City's explanation says SRWs may be required so POPS remain accessible to the public. Verified 2026-09-19.
+https://vancouver.ca/home-property-development/development-permit-conditions-resource.aspx

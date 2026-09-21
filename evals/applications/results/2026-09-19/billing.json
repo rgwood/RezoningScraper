@@ -1,0 +1,10 @@
+{
+  "provider": "OpenRouter",
+  "source": "GET /api/v1/key, usage field",
+  "previous_usage_usd": 3.03031348,
+  "final_usage_usd": 3.04344646,
+  "usage_increase_usd": 0.01313298,
+  "saved_response_subtotal_usd": 0.01247252,
+  "difference_usd": 0.00066046,
+  "note": "Key-level counters include charges missing from failed-trial traces. The first post-run counter read lagged; this is the later settled reading."
+}

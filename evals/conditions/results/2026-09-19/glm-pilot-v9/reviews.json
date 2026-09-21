@@ -1,0 +1,115 @@
+{
+  "reviewer": "Codex in the interactive subscription session; reviewed against original source pages, no paid grader calls",
+  "grades": {
+    "city-01-1": {
+      "fingerprint": "31b9eae90cddf5cbf6ab45a81675569dfba73ce822bd787f68daed1e5be7ac31",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 4–5 require the named fire-safety systems and mark them as serious non-conforming issues. Building review preserves the later stage."
+    },
+    "city-01-2": {
+      "fingerprint": "3268c9e023ad3397601eae2e5ec5ff2c4200b9d61c4790a612acf6d3ce90b943",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 4 explicitly calls for sprinklering, smoke detection, CO alarm and emergency lighting in the existing one-storey building, at building review."
+    },
+    "city-01-3": {
+      "fingerprint": "9b84258ac5a54dc4c10e8bc0ec39edd54c0c3a486dfba647ca0305311583066d",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 4 supports each named system and the one-storey building scope. No installation deadline is invented."
+    },
+    "city-05-1": {
+      "fingerprint": "63a714e70a64a20d1a6a14258bb347032e60c22e817d3c2c2cfc833496e7bd53",
+      "accurate": false,
+      "qualifications_preserved": false,
+      "salience": 5,
+      "clarity": 4,
+      "blocking_issues": [
+        "Any building permit broadens the stated deadline for the building permit to relocate the building."
+      ],
+      "rationale": "Page 7 expressly limits this consolidation prerequisite to the building permit to relocate the building. Page 5 separately requires arrangements before the development permit. The final auditor incorrectly accepted the broadened scope."
+    },
+    "city-05-2": {
+      "fingerprint": "d154b8ccde6a97499e2111e2cc8e12f427fb2a822b8065a028d742c49cd20433",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1, 6 and 7 identify the raise/relocation/addition as reconstruction and require full sprinklering. The post attributes the requirement to building review."
+    },
+    "city-05-3": {
+      "fingerprint": "e2e235caa4f6300860a1710b0e0cc8c88236bfc3682f0beaca96e9eb3df8476b",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 5 and 7 identify Lot 17 plus the east half of Lot 18, preserving the limited parcel scope. Consolidation is a permit prerequisite in the building-review comments; the post does not expressly move it before development-permit issuance."
+    },
+    "city-08-1": {
+      "fingerprint": "b6a10bea7b45f5e415e9d1d8c6c10742e2c4d059a40fd8d3860c5e32079e3fe4",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 2 requires outdoor space sized under licensing rules for the proposed capacity and prohibits indoor substitution. The post preserves capacity dependence."
+    },
+    "city-08-2": {
+      "fingerprint": "158b3c7c1bb5ae58132e871260668dc3bfeabba0112b2e778b7c01d2ece777fd",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 2 requires an on-site outdoor play area and explicitly excludes indoor space from meeting that requirement. No invented size or final licensed capacity."
+    },
+    "city-08-3": {
+      "fingerprint": "f0bb47ad4524055ae061d59635853a6342c2e03bdb8cbbb486ce3ddb57d51f2c",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1–2 describe the proposed daycare for up to twenty children and require outdoor play area meeting licensing rules. This identifies the proposed daycare size rather than claiming a final licence, although up to would be clearer."
+    },
+    "city-09-1": {
+      "fingerprint": "021ed69d52d23becb10301da6a29c0a3236d7055992152d40f09dee9c408842a",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 5 requires a designated escape path at stair 2 and notes the playground tripping hazard. The post states the concrete routing need at building review."
+    },
+    "city-09-2": {
+      "fingerprint": "b53de52d06803af3b1634f3471d0d374e77cb1124905db140e12e515372110b8",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 5 links the playground evacuation hazard with a designated path for stair 2. It does not invent a route that must avoid the entire playground."
+    },
+    "city-09-3": {
+      "fingerprint": "c7dd70f7f9361854c99d3119a5aed07d207cb7a19afa4694696178e8b5b56d97",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Page 5 supports the designated exit path and potential tripping hazard, with later building review explicit."
+    }
+  }
+}

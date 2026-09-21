@@ -1,0 +1,454 @@
+{
+  "metrics": {
+    "pass_rate": 0.9166666666666666,
+    "total": 12,
+    "editorial_evaluation": true,
+    "generation": {
+      "api_calls": 75,
+      "usage": {
+        "prompt_tokens": 277406,
+        "completion_tokens": 62736,
+        "total_tokens": 340142
+      },
+      "quota_interruptions": 0,
+      "reported_cost_usd": null,
+      "reported_cost_subtotal_usd": 0.05570658,
+      "calls_without_reported_cost": 1,
+      "calls_without_usage": 1,
+      "trials_needing_repair": 7,
+      "median_seconds": 51.8,
+      "p95_seconds": 162.34
+    }
+  },
+  "success": false,
+  "reviewer": "Codex in the interactive subscription session; reviewed against original source pages, no paid grader calls",
+  "review_dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4",
+  "rubric_sha256": "31bf5d3844af2849c26fd5d6dc2cf1db5238bb5a6dcf275c4791d9d27ffb04ad",
+  "results": [
+    {
+      "id": "city-01-1",
+      "case_id": "city-01",
+      "text": "Approval conditions: 1772 Renfrew St daycare conversion. Building review calls for sprinklering the entire existing building, plus smoke detection, CO alarm and emergency lighting, marking this a serious by-law concern.",
+      "source_url": "https://www.shapeyourcity.ca/52161/widgets/220724/documents/172212",
+      "post_characters": 286,
+      "evidence": [
+        {
+          "evidence": "Page 4 of 6 3.11 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before October 16, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no development permit shall be issued for the demolition unless and until a development permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch.The following information should be included at building permit application stage: i. As of September 15, 2025, all submissions are to be in accordance with the VBBL 2025. ii. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. iii. *This project requires the services of a registered architect. Architectural Schedule B and sealed drawings should be submitted. iv. *The existing 1 storey building is consider a minor renovation and change of major occupancy. The building is required to be upgraded to design levels F4, S4, N4, A4 and E4, as per VBBL 2025 11.5.2.1 Flow Chart No. 1 and No. 2. v. *Building is to be sprinklered, provide smoke detection and CO alarm and emergency lighting as per VBBL 2025 Table 3.1.2.8 vi. Clarify definition of S.A at building permit stage. a. vii. Provide exit travel distance at building permit stage.",
+          "page": 4,
+          "requirement": "Building review calls for sprinklering the entire existing building, plus smoke detection, CO alarm and emergency lighting, marking this a serious by-law concern."
+        },
+        {
+          "evidence": "Page 5 of 6 viii. Provide occupant load and washroom load calculation at building permit stage. ix. Indicate accessible path of travel from indoor area to outdoor playground. x. Windows and door schedule to be reviewed at building permit stage. xi. Building assemblies to be reviewed at building permit stage. xii. Suite is to be reference and design in compliance to VBBL 2025 3.8.3 or CSA B561: a. Universal washroom b. Door and doorway xiii. All new architectural, mechanical and electrical components are required to comply with the energy and emissions requirements of the Vancouver Building By-law #12511. Please add to your drawings the Energy Statements per the “Energy Statements on Drawings” requirements found within the City of Vancouver energy webpage http://vancouver.ca/building-energy-requirements. *Items marked with an asterisk have been identified as serious non-conforming Building By-law issues. Written confirmation that the applicant has read and has understood the implications of the above noted comments is required and shall be submitted as part of the \"prior to\" response. 4.5 If this Development Application included a written notification of neighbouring property owners or other interested parties, a copy of this letter will be sent to all respondents advising them of the decision. 4.6 The Canadian Electrical Code regulates high voltage overhead conductor clearances from structures and dielectric liquid-filled transformer clearances from combustible building surfaces, doors, windows, and ventilation openings. All structures must have a horizontal distance of at least 3 m from existing BC Hydro high voltage overhead conductors. Combustible building surfaces, windows, doors, and ventilation openings must be located at least 6 m from dielectric liquid-filled, pole-mounted BC Hydro transformers, unless an acceptable non- combustible barrier is constructed between these transformers and combustible building surfaces, doors, windows, or ventilation openings. Yours truly,",
+          "page": 5,
+          "requirement": "Building review calls for sprinklering the entire existing building, plus smoke detection, CO alarm and emergency lighting, marking this a serious by-law concern."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "31b9eae90cddf5cbf6ab45a81675569dfba73ce822bd787f68daed1e5be7ac31",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 4–5 require the named fire-safety systems and mark them as serious non-conforming issues. Building review preserves the later stage."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-01-2",
+      "case_id": "city-01",
+      "text": "Approval conditions: 1772 Renfrew St daycare. Building review calls for sprinklering the existing one-storey building, plus smoke detection, a CO alarm and emergency lighting.",
+      "source_url": "https://www.shapeyourcity.ca/52161/widgets/220724/documents/172212",
+      "post_characters": 242,
+      "evidence": [
+        {
+          "evidence": "Page 4 of 6 3.11 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before October 16, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no development permit shall be issued for the demolition unless and until a development permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch.The following information should be included at building permit application stage: i. As of September 15, 2025, all submissions are to be in accordance with the VBBL 2025. ii. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. iii. *This project requires the services of a registered architect. Architectural Schedule B and sealed drawings should be submitted. iv. *The existing 1 storey building is consider a minor renovation and change of major occupancy. The building is required to be upgraded to design levels F4, S4, N4, A4 and E4, as per VBBL 2025 11.5.2.1 Flow Chart No. 1 and No. 2. v. *Building is to be sprinklered, provide smoke detection and CO alarm and emergency lighting as per VBBL 2025 Table 3.1.2.8 vi. Clarify definition of S.A at building permit stage. a. vii. Provide exit travel distance at building permit stage.",
+          "page": 4,
+          "requirement": "Building review calls for sprinklering the existing one-storey building, plus smoke detection, a CO alarm and emergency lighting."
+        },
+        {
+          "evidence": "Page 5 of 6 viii. Provide occupant load and washroom load calculation at building permit stage. ix. Indicate accessible path of travel from indoor area to outdoor playground. x. Windows and door schedule to be reviewed at building permit stage. xi. Building assemblies to be reviewed at building permit stage. xii. Suite is to be reference and design in compliance to VBBL 2025 3.8.3 or CSA B561: a. Universal washroom b. Door and doorway xiii. All new architectural, mechanical and electrical components are required to comply with the energy and emissions requirements of the Vancouver Building By-law #12511. Please add to your drawings the Energy Statements per the “Energy Statements on Drawings” requirements found within the City of Vancouver energy webpage http://vancouver.ca/building-energy-requirements. *Items marked with an asterisk have been identified as serious non-conforming Building By-law issues. Written confirmation that the applicant has read and has understood the implications of the above noted comments is required and shall be submitted as part of the \"prior to\" response. 4.5 If this Development Application included a written notification of neighbouring property owners or other interested parties, a copy of this letter will be sent to all respondents advising them of the decision. 4.6 The Canadian Electrical Code regulates high voltage overhead conductor clearances from structures and dielectric liquid-filled transformer clearances from combustible building surfaces, doors, windows, and ventilation openings. All structures must have a horizontal distance of at least 3 m from existing BC Hydro high voltage overhead conductors. Combustible building surfaces, windows, doors, and ventilation openings must be located at least 6 m from dielectric liquid-filled, pole-mounted BC Hydro transformers, unless an acceptable non- combustible barrier is constructed between these transformers and combustible building surfaces, doors, windows, or ventilation openings. Yours truly,",
+          "page": 5,
+          "requirement": "Building review calls for sprinklering the existing one-storey building, plus smoke detection, a CO alarm and emergency lighting."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division – Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch July 31, 2026 Stephen Sze Archspace - WY Design & Construction Ltd. 2602-7088 18th Avenue Burnaby, BC V3N 0A2 RE: 1772 Renfrew Street, Vancouver, BC V5M 3H8 Development permit application number DP-2026-00087 On behalf of the Director of Planning, your application has been approved to change the use of existing Retail to a Child Day Care Facility for a maximum of 26 children in this existing building, including the Letter of Operation submitted by Brightlings Early Learning Centre. Hours of operation: Monday to Friday 7:30am to 5:30pm. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.2 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl Questions? Contact your Project Coordinator helen.yoon@vancouver.ca",
+          "page": 1,
+          "requirement": "Building review calls for sprinklering the existing one-storey building, plus smoke detection, a CO alarm and emergency lighting."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "3268c9e023ad3397601eae2e5ec5ff2c4200b9d61c4790a612acf6d3ce90b943",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 4 explicitly calls for sprinklering, smoke detection, CO alarm and emergency lighting in the existing one-storey building, at building review."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-01-3",
+      "case_id": "city-01",
+      "text": "Approval conditions: 1772 Renfrew St daycare conversion. Building review requires the existing one-storey building to be sprinklered, with smoke detection, a CO alarm and emergency lighting.",
+      "source_url": "https://www.shapeyourcity.ca/52161/widgets/220724/documents/172212",
+      "post_characters": 257,
+      "evidence": [
+        {
+          "evidence": "Page 4 of 6 3.11 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before October 16, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no development permit shall be issued for the demolition unless and until a development permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch.The following information should be included at building permit application stage: i. As of September 15, 2025, all submissions are to be in accordance with the VBBL 2025. ii. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. iii. *This project requires the services of a registered architect. Architectural Schedule B and sealed drawings should be submitted. iv. *The existing 1 storey building is consider a minor renovation and change of major occupancy. The building is required to be upgraded to design levels F4, S4, N4, A4 and E4, as per VBBL 2025 11.5.2.1 Flow Chart No. 1 and No. 2. v. *Building is to be sprinklered, provide smoke detection and CO alarm and emergency lighting as per VBBL 2025 Table 3.1.2.8 vi. Clarify definition of S.A at building permit stage. a. vii. Provide exit travel distance at building permit stage.",
+          "page": 4,
+          "requirement": "Building review requires the existing one-storey building to be sprinklered, with smoke detection, a CO alarm and emergency lighting."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "9b84258ac5a54dc4c10e8bc0ec39edd54c0c3a486dfba647ca0305311583066d",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 4 supports each named system and the one-storey building scope. No installation deadline is invented."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-05-1",
+      "case_id": "city-05",
+      "text": "Approval conditions: 3631 Point Grey Rd house conversion. The two lots must be consolidated into a single parcel, with Building Review also requiring this before any building permit.",
+      "source_url": "https://www.shapeyourcity.ca/52163/widgets/220738/documents/172131",
+      "post_characters": 249,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division – Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch July 30, 2026 Malcolm McSporran Quinkatla Development Planning 2997 W 7th Ave Vancouver, BC V6K 1Z7 RE: 3631 Point Grey Road, Vancouver, BC V6R 1B1 Development permit application number DP-2025-00686 On behalf of the Director of Planning, your application has been approved to alter and convert this existing single detached house to a Multiple Conversion Dwelling containing three dwelling units providing one parking space in an existing garage and one surface parking space, for a total of two parking spaces having vehicular access from Point Grey Road. This proposal includes relocating the building on this site. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.9 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact your Project Coordinator madelaine.merkel@vancouver.ca",
+          "page": 1,
+          "requirement": "The two lots must be consolidated into a single parcel, with Building Review also requiring this before any building permit."
+        },
+        {
+          "evidence": "Page 5 of 9 ii. clearly show and dimension the line of excavation for the proposed garage to demonstrate the safe retention of Tree #75; iii. indicate whether crown clearance pruning is required to accommodate the proposed garage and, if required, specify the extent of pruning and assess the potential impacts to tree health and canopy structure; and iv. include any new low impact construction methods and pruning recommendations identified in the updated Arborist Report on the TMP. Engineering Services conditions: 2.7 Provision of a copy of a current title search for each parcel of land involved in the development site. The title search must be dated within one week of the intake date. Note to Applicant: The title for Lot 17 is missing. Please provide this title also. 2.8 Provision of copies of all non-financial charges (Statutory Right of Way, Right of Way, Covenant, Easement, Option to Purchase, and Easement and Indemnity) and legal notations listed on each title search for the development site. 2.9 Make arrangements to the satisfaction of the General Manager of Engineering Services and the Director of Legal Services for the consolidation of Lot 17, and The East ½ of Lot 18; All of Block 2, District Lot 540, Plan 229 to create a single parcel. 3.0 Development Permit Terms: 3.1 All approved off-street vehicle parking, loading, and unloading spaces, and bicycle parking spaces shall be provided in accordance with the relevant requirements of the Parking By-law prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition. 3.2 All landscaping and treatment of the open portions of the site shall be completed in accordance with the approved drawings prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition. Note to Applicant: In cases where it is not practical, due to adverse weather conditions or other mitigating factors, to complete the landscaping prior to occupancy of a building, the City will accept an Irrevocable Letter of Credit (amount to be determined by the City) as a guarantee for completion of the work by an agreed upon date. 3.3 In accordance with Protection of Trees By-law Number 9958, the removal and replacement of trees is permitted only as indicated on the approved Development Permit drawings.",
+          "page": 5,
+          "requirement": "The two lots must be consolidated into a single parcel, with Building Review also requiring this before any building permit."
+        },
+        {
+          "evidence": "Page 7 of 9 i. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. ii. Provide BC Housing registration for reconstruction project or confirm not required. iii. This address consists of two parcels; parcels are to be consolidated prior to issuance of building permit to relocate building. Provide updated property survey showing single parcel prior to issuance. iv. Per VBBL 1.3.3.2 (2) this building requires Part 4 Structural design. v. A geotechnical report is required; ensure the report number, bearing and design values are referenced in the Part 4 design sheets. vi. Provide a Provincial site disclosure statement form (required with ground disturbance). vii. Per VBBL 1.3.3.2 (3), Part 5 design applies. Provide building envelope drawings, Schedule B (Arch), and Schedule D for building envelope review. viii. Alterations in the Reconstruction category shall comply with 11.3.2.4 (3). Provide energy checklist to confirm compliance with either the Prescriptive or Performance paths of 10.2.1.4. ix. A CRP Schedule A is required. x. *This renovation is considered a Reconstruction under VBBL 11.5.2, with upgrade triggers of F4, S4, N4, and A4 to the entire building. Provide a code review to clarify existing conditions, and what upgrades are proposed. xi. Spatial separation and construction of exposing building faces is to be upgraded to conform to 9.10.14, or as permitted by acceptable alternatives of Part 11. All new work affecting limiting distance, including addition of exterior insulation, is to conform to VBBL 2025. Review all eaves and projections required to be non-combustible per 9.10.14.5 (6). xii. This building is required to be sprinklered per 11.5.4.2, in conformance to 9.10.1.3 (8). See also bulletin 2025-003-BU if applicable. xiii. Per VBBL 9.10.20.3, Indicate the Fire department access and Path of Travel for firefighters from the street curb to the primary entry of each dwelling unit, to comply with 3.2.5.5 and 3.2.5.6. xiv. Confirm if building is being stratified.",
+          "page": 7,
+          "requirement": "The two lots must be consolidated into a single parcel, with Building Review also requiring this before any building permit."
+        }
+      ],
+      "passed": false,
+      "errors": [],
+      "grade": {
+        "fingerprint": "63a714e70a64a20d1a6a14258bb347032e60c22e817d3c2c2cfc833496e7bd53",
+        "accurate": false,
+        "qualifications_preserved": false,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [
+          "Any building permit broadens the stated deadline for the building permit to relocate the building."
+        ],
+        "rationale": "Page 7 expressly limits this consolidation prerequisite to the building permit to relocate the building. Page 5 separately requires arrangements before the development permit. The final auditor incorrectly accepted the broadened scope."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-05-2",
+      "case_id": "city-05",
+      "text": "Approval conditions: 3631 Point Grey Rd house conversion. Building review says the raise, relocation and vertical addition make this a reconstruction, so the converted 3-unit house needs full sprinklering.",
+      "source_url": "https://www.shapeyourcity.ca/52163/widgets/220738/documents/172131",
+      "post_characters": 272,
+      "evidence": [
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division – Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7060 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Division Development Review Branch July 30, 2026 Malcolm McSporran Quinkatla Development Planning 2997 W 7th Ave Vancouver, BC V6K 1Z7 RE: 3631 Point Grey Road, Vancouver, BC V6R 1B1 Development permit application number DP-2025-00686 On behalf of the Director of Planning, your application has been approved to alter and convert this existing single detached house to a Multiple Conversion Dwelling containing three dwelling units providing one parking space in an existing garage and one surface parking space, for a total of two parking spaces having vehicular access from Point Grey Road. This proposal includes relocating the building on this site. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.9 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact your Project Coordinator madelaine.merkel@vancouver.ca",
+          "page": 1,
+          "requirement": "Building review says the raise, relocation and vertical addition make this a reconstruction, so the converted 3-unit house needs full sprinklering."
+        },
+        {
+          "evidence": "Page 6 of 9 3.4 This Development Permit is valid for a period of 12 months from the date of issuance - unless otherwise validated by a Building Permit. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before October 30, 2026, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no development permit shall be issued for the demolition unless and until a development permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch: The following comments are based on the preliminary drawings prepared by Quinkatla Development Planning dated Mar 12, 2026, for the proposed development permit application. This is a preliminary review only, to identify issues to be addressed to comply with Vancouver Building By-law #14343 as amended (VBBL 2025). * Please note that building permit applications must conform to Vancouver Building By-law #14343 (2025) as may be amended from time to time. Please see the following page: http://vancouver.ca/your- government/vancouver-building-bylaw.aspx. “To alter and convert this existing single detached house to a Multiple Conversion Dwelling containing three dwelling units providing two parking spaces in a detached carport having vehicular access from Point Grey Road.” Scope of work includes raising and relocating building within the site on a new foundation, and vertical addition at 3rd storey. This is considered a Reconstruction of the existing dwelling. The following information is to be included at Building Permit Application Stage: As of September 14, 2025, all submissions are to be in accordance with the VBBL 2025.",
+          "page": 6,
+          "requirement": "Building review says the raise, relocation and vertical addition make this a reconstruction, so the converted 3-unit house needs full sprinklering."
+        },
+        {
+          "evidence": "Page 7 of 9 i. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. ii. Provide BC Housing registration for reconstruction project or confirm not required. iii. This address consists of two parcels; parcels are to be consolidated prior to issuance of building permit to relocate building. Provide updated property survey showing single parcel prior to issuance. iv. Per VBBL 1.3.3.2 (2) this building requires Part 4 Structural design. v. A geotechnical report is required; ensure the report number, bearing and design values are referenced in the Part 4 design sheets. vi. Provide a Provincial site disclosure statement form (required with ground disturbance). vii. Per VBBL 1.3.3.2 (3), Part 5 design applies. Provide building envelope drawings, Schedule B (Arch), and Schedule D for building envelope review. viii. Alterations in the Reconstruction category shall comply with 11.3.2.4 (3). Provide energy checklist to confirm compliance with either the Prescriptive or Performance paths of 10.2.1.4. ix. A CRP Schedule A is required. x. *This renovation is considered a Reconstruction under VBBL 11.5.2, with upgrade triggers of F4, S4, N4, and A4 to the entire building. Provide a code review to clarify existing conditions, and what upgrades are proposed. xi. Spatial separation and construction of exposing building faces is to be upgraded to conform to 9.10.14, or as permitted by acceptable alternatives of Part 11. All new work affecting limiting distance, including addition of exterior insulation, is to conform to VBBL 2025. Review all eaves and projections required to be non-combustible per 9.10.14.5 (6). xii. This building is required to be sprinklered per 11.5.4.2, in conformance to 9.10.1.3 (8). See also bulletin 2025-003-BU if applicable. xiii. Per VBBL 9.10.20.3, Indicate the Fire department access and Path of Travel for firefighters from the street curb to the primary entry of each dwelling unit, to comply with 3.2.5.5 and 3.2.5.6. xiv. Confirm if building is being stratified.",
+          "page": 7,
+          "requirement": "Building review says the raise, relocation and vertical addition make this a reconstruction, so the converted 3-unit house needs full sprinklering."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "d154b8ccde6a97499e2111e2cc8e12f427fb2a822b8065a028d742c49cd20433",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 1, 6 and 7 identify the raise/relocation/addition as reconstruction and require full sprinklering. The post attributes the requirement to building review."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-05-3",
+      "case_id": "city-05",
+      "text": "Approval conditions: 3631 Point Grey Rd conversion dwelling. Conditions call for combining Lot 17 with the east half of Lot 18 into one lot, a permit prerequisite.",
+      "source_url": "https://www.shapeyourcity.ca/52163/widgets/220738/documents/172131",
+      "post_characters": 230,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 9 ii. clearly show and dimension the line of excavation for the proposed garage to demonstrate the safe retention of Tree #75; iii. indicate whether crown clearance pruning is required to accommodate the proposed garage and, if required, specify the extent of pruning and assess the potential impacts to tree health and canopy structure; and iv. include any new low impact construction methods and pruning recommendations identified in the updated Arborist Report on the TMP. Engineering Services conditions: 2.7 Provision of a copy of a current title search for each parcel of land involved in the development site. The title search must be dated within one week of the intake date. Note to Applicant: The title for Lot 17 is missing. Please provide this title also. 2.8 Provision of copies of all non-financial charges (Statutory Right of Way, Right of Way, Covenant, Easement, Option to Purchase, and Easement and Indemnity) and legal notations listed on each title search for the development site. 2.9 Make arrangements to the satisfaction of the General Manager of Engineering Services and the Director of Legal Services for the consolidation of Lot 17, and The East ½ of Lot 18; All of Block 2, District Lot 540, Plan 229 to create a single parcel. 3.0 Development Permit Terms: 3.1 All approved off-street vehicle parking, loading, and unloading spaces, and bicycle parking spaces shall be provided in accordance with the relevant requirements of the Parking By-law prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition. 3.2 All landscaping and treatment of the open portions of the site shall be completed in accordance with the approved drawings prior to the issuance of any required occupancy permit, or any use or occupancy of the proposed development not requiring an occupancy permit, and thereafter permanently maintained in good condition. Note to Applicant: In cases where it is not practical, due to adverse weather conditions or other mitigating factors, to complete the landscaping prior to occupancy of a building, the City will accept an Irrevocable Letter of Credit (amount to be determined by the City) as a guarantee for completion of the work by an agreed upon date. 3.3 In accordance with Protection of Trees By-law Number 9958, the removal and replacement of trees is permitted only as indicated on the approved Development Permit drawings.",
+          "page": 5,
+          "requirement": "Conditions call for combining Lot 17 with the east half of Lot 18 into one lot, a permit prerequisite."
+        },
+        {
+          "evidence": "Page 7 of 9 i. Alteration shall not increase the non-conformity of the existing building or create non-conformity with respect to VBBL 2025. All new work shall conform to VBBL 2025. ii. Provide BC Housing registration for reconstruction project or confirm not required. iii. This address consists of two parcels; parcels are to be consolidated prior to issuance of building permit to relocate building. Provide updated property survey showing single parcel prior to issuance. iv. Per VBBL 1.3.3.2 (2) this building requires Part 4 Structural design. v. A geotechnical report is required; ensure the report number, bearing and design values are referenced in the Part 4 design sheets. vi. Provide a Provincial site disclosure statement form (required with ground disturbance). vii. Per VBBL 1.3.3.2 (3), Part 5 design applies. Provide building envelope drawings, Schedule B (Arch), and Schedule D for building envelope review. viii. Alterations in the Reconstruction category shall comply with 11.3.2.4 (3). Provide energy checklist to confirm compliance with either the Prescriptive or Performance paths of 10.2.1.4. ix. A CRP Schedule A is required. x. *This renovation is considered a Reconstruction under VBBL 11.5.2, with upgrade triggers of F4, S4, N4, and A4 to the entire building. Provide a code review to clarify existing conditions, and what upgrades are proposed. xi. Spatial separation and construction of exposing building faces is to be upgraded to conform to 9.10.14, or as permitted by acceptable alternatives of Part 11. All new work affecting limiting distance, including addition of exterior insulation, is to conform to VBBL 2025. Review all eaves and projections required to be non-combustible per 9.10.14.5 (6). xii. This building is required to be sprinklered per 11.5.4.2, in conformance to 9.10.1.3 (8). See also bulletin 2025-003-BU if applicable. xiii. Per VBBL 9.10.20.3, Indicate the Fire department access and Path of Travel for firefighters from the street curb to the primary entry of each dwelling unit, to comply with 3.2.5.5 and 3.2.5.6. xiv. Confirm if building is being stratified.",
+          "page": 7,
+          "requirement": "Conditions call for combining Lot 17 with the east half of Lot 18 into one lot, a permit prerequisite."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "e2e235caa4f6300860a1710b0e0cc8c88236bfc3682f0beaca96e9eb3df8476b",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 5,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 5 and 7 identify Lot 17 plus the east half of Lot 18, preserving the limited parcel scope. Consolidation is a permit prerequisite in the building-review comments; the post does not expressly move it before development-permit issuance."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-08-1",
+      "case_id": "city-08",
+      "text": "Approval conditions: 1410 E 49th Ave daycare. Conditions require outdoor play space on site, meeting BC Child Care Licensing Regulation amounts for the proposed capacity; indoor rooms cannot be counted.",
+      "source_url": "https://www.shapeyourcity.ca/51324/widgets/216958/documents/167022",
+      "post_characters": 269,
+      "evidence": [
+        {
+          "evidence": "Page 2 of 6 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating: Development Review Branch conditions: 1.1 compliance with Section 6 (6.2.2.6) Required Off-Street Bicycle Spaces and the Design Supplements of the Parking By-law: i. a minimum of three (3) Class B off-street bicycle spaces; Note to Applicant: Bicycle spaces to be clearly labelled and dimensioned on the drawings. Class A spaces noted on drawings are required for residential units and cannot be substituted for required Class B spaces. 1.2 compliance with Section 7 Class A Passenger Spaces of the Parking By-law: i. a minimum of two (2) Class A Passenger Spaces; ii. minimum 4.0 m (13.1 ft.) width and 5.5 m (18 ft.) length for the first-Class A space; iii. minimum 2.9 m (9.5 ft.) width and 5.5 m (18 ft.) length after the first-Class A space; Note to applicant: Passenger spaces must comply with the minimum size requirements as per the Parking By-law Section 7 and the Design Supplement. Label the allocated Passenger Spaces on the site plan and update Parking statistics to reflect the changes. 1.3 provision of revisions and additional information on drawings as follows: i. improved technical data table (project statistics) to incorporate the entire site; Note to Applicant: Provide statistical breakdowns for all approved and proposed uses on this site including required, existing and proposed data requirements. Refer to DP Change of use checklist for details: https://vancouver.ca/files/cov/change-of-use-main-app.pdf ii. reformat drawings to meet the electronic file requirements; Note to Applicant: Make sure that you don't certify (\"lock\") your documents prior to submission. Please see Electronic permit applications | City of Vancouver for guidelines. Social Policy conditions: 1.4 provision of on-site outdoor play area in compliance with licensing requirements for the capacity proposed. Note to Applicant: On-site outdoor play space is required in the amount specified in the BC Child Care Licensing Regulation. Indoor space cannot be counted toward meeting the requirement for on-site outdoor play area.",
+          "page": 2,
+          "requirement": "Conditions require outdoor play space on site, meeting BC Child Care Licensing Regulation amounts for the proposed capacity; indoor rooms cannot be counted."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch April 1, 2026 Jaswinder Singh Gabri Cre8 Architecture Ltd. #205 - 6321 King George Blvd. Surrey, BC V3X 1G1 RE: 1410 E 49th Avenue, Vancouver, BC V5P 1S3 Development permit application number DP-2025-00783 On behalf of the Director of Planning, your application has been approved to perform interior alterations to combine units 1410 and 1408 and change of use of approximately 2,307.0 sq. ft. on the ground floor from Office to a Child Day Care Facility for up to 20 children (ages 30 months to school age), in this existing 3-storey plus basement mixed-use building on the site. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.3 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact Samantha Senechal, your Project Coordinator (details at end of letter).",
+          "page": 1,
+          "requirement": "Conditions require outdoor play space on site, meeting BC Child Care Licensing Regulation amounts for the proposed capacity; indoor rooms cannot be counted."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "b6a10bea7b45f5e415e9d1d8c6c10742e2c4d059a40fd8d3860c5e32079e3fe4",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 2 requires outdoor space sized under licensing rules for the proposed capacity and prohibits indoor substitution. The post preserves capacity dependence."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-08-2",
+      "case_id": "city-08",
+      "text": "Approval conditions: 1410 E 49th Ave daycare conversion. The daycare must include an on-site outdoor play area sized to BC licensing rules; indoor space cannot count toward it.",
+      "source_url": "https://www.shapeyourcity.ca/51324/widgets/216958/documents/167022",
+      "post_characters": 243,
+      "evidence": [
+        {
+          "evidence": "Page 2 of 6 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating: Development Review Branch conditions: 1.1 compliance with Section 6 (6.2.2.6) Required Off-Street Bicycle Spaces and the Design Supplements of the Parking By-law: i. a minimum of three (3) Class B off-street bicycle spaces; Note to Applicant: Bicycle spaces to be clearly labelled and dimensioned on the drawings. Class A spaces noted on drawings are required for residential units and cannot be substituted for required Class B spaces. 1.2 compliance with Section 7 Class A Passenger Spaces of the Parking By-law: i. a minimum of two (2) Class A Passenger Spaces; ii. minimum 4.0 m (13.1 ft.) width and 5.5 m (18 ft.) length for the first-Class A space; iii. minimum 2.9 m (9.5 ft.) width and 5.5 m (18 ft.) length after the first-Class A space; Note to applicant: Passenger spaces must comply with the minimum size requirements as per the Parking By-law Section 7 and the Design Supplement. Label the allocated Passenger Spaces on the site plan and update Parking statistics to reflect the changes. 1.3 provision of revisions and additional information on drawings as follows: i. improved technical data table (project statistics) to incorporate the entire site; Note to Applicant: Provide statistical breakdowns for all approved and proposed uses on this site including required, existing and proposed data requirements. Refer to DP Change of use checklist for details: https://vancouver.ca/files/cov/change-of-use-main-app.pdf ii. reformat drawings to meet the electronic file requirements; Note to Applicant: Make sure that you don't certify (\"lock\") your documents prior to submission. Please see Electronic permit applications | City of Vancouver for guidelines. Social Policy conditions: 1.4 provision of on-site outdoor play area in compliance with licensing requirements for the capacity proposed. Note to Applicant: On-site outdoor play space is required in the amount specified in the BC Child Care Licensing Regulation. Indoor space cannot be counted toward meeting the requirement for on-site outdoor play area.",
+          "page": 2,
+          "requirement": "The daycare must include an on-site outdoor play area sized to BC licensing rules; indoor space cannot count toward it."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch April 1, 2026 Jaswinder Singh Gabri Cre8 Architecture Ltd. #205 - 6321 King George Blvd. Surrey, BC V3X 1G1 RE: 1410 E 49th Avenue, Vancouver, BC V5P 1S3 Development permit application number DP-2025-00783 On behalf of the Director of Planning, your application has been approved to perform interior alterations to combine units 1410 and 1408 and change of use of approximately 2,307.0 sq. ft. on the ground floor from Office to a Child Day Care Facility for up to 20 children (ages 30 months to school age), in this existing 3-storey plus basement mixed-use building on the site. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.3 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact Samantha Senechal, your Project Coordinator (details at end of letter).",
+          "page": 1,
+          "requirement": "The daycare must include an on-site outdoor play area sized to BC licensing rules; indoor space cannot count toward it."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "158b3c7c1bb5ae58132e871260668dc3bfeabba0112b2e778b7c01d2ece777fd",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 2 requires an on-site outdoor play area and explicitly excludes indoor space from meeting that requirement. No invented size or final licensed capacity."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-08-3",
+      "case_id": "city-08",
+      "text": "Approval conditions: 1410 E 49th Ave daycare conversion. The daycare's 20 children need a licensed outdoor play area on site — indoor rooms can't be counted toward it.",
+      "source_url": "https://www.shapeyourcity.ca/51324/widgets/216958/documents/167022",
+      "post_characters": 234,
+      "evidence": [
+        {
+          "evidence": "Page 2 of 6 1.0 Prior to the issuance of the Development Permit, revised digital drawings shall be submitted, to the satisfaction of the Director of Planning, clearly indicating: Development Review Branch conditions: 1.1 compliance with Section 6 (6.2.2.6) Required Off-Street Bicycle Spaces and the Design Supplements of the Parking By-law: i. a minimum of three (3) Class B off-street bicycle spaces; Note to Applicant: Bicycle spaces to be clearly labelled and dimensioned on the drawings. Class A spaces noted on drawings are required for residential units and cannot be substituted for required Class B spaces. 1.2 compliance with Section 7 Class A Passenger Spaces of the Parking By-law: i. a minimum of two (2) Class A Passenger Spaces; ii. minimum 4.0 m (13.1 ft.) width and 5.5 m (18 ft.) length for the first-Class A space; iii. minimum 2.9 m (9.5 ft.) width and 5.5 m (18 ft.) length after the first-Class A space; Note to applicant: Passenger spaces must comply with the minimum size requirements as per the Parking By-law Section 7 and the Design Supplement. Label the allocated Passenger Spaces on the site plan and update Parking statistics to reflect the changes. 1.3 provision of revisions and additional information on drawings as follows: i. improved technical data table (project statistics) to incorporate the entire site; Note to Applicant: Provide statistical breakdowns for all approved and proposed uses on this site including required, existing and proposed data requirements. Refer to DP Change of use checklist for details: https://vancouver.ca/files/cov/change-of-use-main-app.pdf ii. reformat drawings to meet the electronic file requirements; Note to Applicant: Make sure that you don't certify (\"lock\") your documents prior to submission. Please see Electronic permit applications | City of Vancouver for guidelines. Social Policy conditions: 1.4 provision of on-site outdoor play area in compliance with licensing requirements for the capacity proposed. Note to Applicant: On-site outdoor play space is required in the amount specified in the BC Child Care Licensing Regulation. Indoor space cannot be counted toward meeting the requirement for on-site outdoor play area.",
+          "page": 2,
+          "requirement": "The daycare's 20 children need a licensed outdoor play area on site — indoor rooms can't be counted toward it."
+        },
+        {
+          "evidence": "City of Vancouver, Development, Buildings & Licensing Development Services Division, Development Review Branch 453 West 12th Avenue Vancouver, British Columbia V5Y 1V4 Canada tel: 604.873.7611 fax: 604.873.7100 website: vancouver.ca DEVELOPMENT, BUILDINGS & LICENSING Development Services Development Review Branch April 1, 2026 Jaswinder Singh Gabri Cre8 Architecture Ltd. #205 - 6321 King George Blvd. Surrey, BC V3X 1G1 RE: 1410 E 49th Avenue, Vancouver, BC V5P 1S3 Development permit application number DP-2025-00783 On behalf of the Director of Planning, your application has been approved to perform interior alterations to combine units 1410 and 1408 and change of use of approximately 2,307.0 sq. ft. on the ground floor from Office to a Child Day Care Facility for up to 20 children (ages 30 months to school age), in this existing 3-storey plus basement mixed-use building on the site. A permit may be issued upon the completion of the revisions and conditions noted below under items 1.0 to 2.3 of this “prior-to permit issuance” letter. HOW TO RESPOND TO THIS LETTER 1. Write and sign a response letter. • Explain how you addressed each condition. • Only changes made pursuant to addressing Prior To conditions are accepted as part of your response. Ensure all changes are clearly identified. • Provide a complete response to avoid delays or extra fees. 2. Ensure relevant documents have digital signatures and seals from registered professionals. • Review requirements at vancouver.ca/permits-eplan. 3. Upload your response letter and documents. • Log into your permit account at vancouver.ca/permit-apply. APPLY FOR BUILDING PERMIT(S) Apply using the Development and Building Services Centre form at vancouver.ca/contact-dbl. Questions? Contact Samantha Senechal, your Project Coordinator (details at end of letter).",
+          "page": 1,
+          "requirement": "The daycare's 20 children need a licensed outdoor play area on site — indoor rooms can't be counted toward it."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "f0bb47ad4524055ae061d59635853a6342c2e03bdb8cbbb486ce3ddb57d51f2c",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Pages 1–2 describe the proposed daycare for up to twenty children and require outdoor play area meeting licensing rules. This identifies the proposed daycare size rather than claiming a final licence, although up to would be clearer."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-09-1",
+      "case_id": "city-09",
+      "text": "Approval conditions: 3333 Bridgeway childcare conversion. Building review flags exit stair 2: a marked escape route is needed because the playground poses a tripping risk when evacuating.",
+      "source_url": "https://www.shapeyourcity.ca/51523/widgets/217762/documents/171424",
+      "post_characters": 254,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 5 v. *Travel distance shall comply with Article 3.4.2.5. vi. *The public corridor must comply with Article 3.3.1.4 and Sentence 3.3.1.3 (12). vii. *Dead-end corridors must comply with Article 3.3.1.9. viii. A designated egress path is required for exit stair #2. The playground can present a tripping hazard in an emergency evacuation. ix. Additional fire bell or strobe lights may be required at the play area and patio. * Items marked with an asterisk have been identified as serious non- conforming Building Bylaw issues. Further reviews are required at the Building Permit application stage. The applicant may wish to retain the services of a qualified Building Code consultant in case of difficulty in comprehending the comments and their potential impact on the proposal. Failure to address these issues may jeopardize the ability to obtain a Building Permit or delay the issuance of a Building Permit for the proposed. 4.5 If this Development Application included a written notification of neighbouring property owners or other interested parties, a copy of this letter will be sent to all respondents advising them of the decision. 4.6 The Canadian Electrical Code regulates high voltage overhead conductor clearances from structures and dielectric liquid-filled transformer clearances from combustible building surfaces, doors, windows, and ventilation openings. All structures must have a horizontal distance of at least 3 m from existing BC Hydro high voltage overhead conductors. Combustible building surfaces, windows, doors, and ventilation openings must be located at least 6 m from dielectric liquid-filled, pole-mounted BC Hydro transformers, unless an acceptable non- combustible barrier is constructed between these transformers and combustible building surfaces, doors, windows, or ventilation openings. Yours truly, Samantha Senechal, samantha.senechal@vancouver.ca (604) 873-7000 SS/jk",
+          "page": 5,
+          "requirement": "Building review flags exit stair 2: a marked escape route is needed because the playground poses a tripping risk when evacuating."
+        },
+        {
+          "evidence": "Page 3 of 5 Engineering Services conditions: 1.6 passenger space(s), per Parking By-law Section 7 and the Design Supplement, including: i. minimum 4.0 m (13.1 ft) width and 5.5 m (18 ft) length for the first Class A space; and ii. minimum 2.9 m (9.5 ft) width and 5.5 m (18 ft) length after the first Class A space. 2.0 Condition(s) to be met prior to the issuance of the Development Permit: Development Review Branch conditions: 2.1 Written confirmation that Building Review Branch comments under 4.4 have been acknowledged and understood, is required to be submitted as part of the “prior-to” response. 2.2 Written confirmation that the notification sign on the site has been removed. 2.3 Provide updated letter of operation to capture any revisions and applicable relaxation rationale. 3.0 Development Permit Terms: 3.1 All approved off-street parking, loading, bicycle, and passenger loading spaces shall be provided in accordance with the relevant requirements of the Parking By- law prior to the issuance of any required Occupancy Permit, or any use or occupancy of the proposed development not requiring an Occupancy Permit, and thereafter permanently maintained in good condition. 3.2 All landscaping and treatment of the open portions of the site shall be completed in accordance with the approved drawings prior to the issuance of any required Occupancy Permit, or any use or occupancy of the proposed development not requiring an Occupancy Permit, and thereafter permanently maintained in good condition. Note to Applicant: In cases where it is not practical, due to adverse weather conditions or other mitigating factors, to complete the landscaping prior to occupancy of a building, the City will accept an Irrevocable Letter of Credit (amount to be determined by the City) as a guarantee for completion of the work by an agreed upon date. 3.3 In accordance with Protection of Trees By-law Number 9958, the removal and replacement of trees is permitted only as indicated on the approved Development Permit drawings. 3.4 This Development Permit is valid for a period of 12 months from the date of issuance - unless otherwise validated by a Building Permit.",
+          "page": 3,
+          "requirement": "Building review flags exit stair 2: a marked escape route is needed because the playground poses a tripping risk when evacuating."
+        },
+        {
+          "evidence": "Page 4 of 5 3.5 This permit has been issued for a time limited period and will expire on the date noted unless extended in writing by the Director of Planning. It is the applicant's responsibility to request an extension prior to the expiry date. 3.6 Development must meet requirements of the Community Care and Assisted Living Act, Child Care Licensing Regulations and the Adult Care Regulations prior to approval at Building Permit stage. 3.7 Childcare to be licensed by Vancouver Coastal Health’s Community Care. 3.8 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before January 10, 2027, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in Section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no Development Permit shall be issued for the demolition unless and until a Development Permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch: This is a preliminary courtesy review to identify issues that do not comply with the Vancouver Building By-law #14343 as amended (VBBL) and includes a review of Subsection 3.2.5. \"Provisions for Fire Fighting\". The following information should be included at Building Permit Application Stage: i. All new work must comply with the current VBBL, and the rest of the upgrade to the existing is required in Part 11, VBBL 2025. ii. In Part 11, this is a Minor Renovation, and a Change of Major Occupancy (Cumulative 5-year limit). *Please check to make sure the 5-year limit is not exceeded; otherwise, it will be a Full Upgrade. iii. 3.2.2. must comply with the number of storeys, occupancies, and sprinklers. (non-comb construction) iv. *Means of egress must meet Article 3.3.1.3.",
+          "page": 4,
+          "requirement": "Building review flags exit stair 2: a marked escape route is needed because the playground poses a tripping risk when evacuating."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "021ed69d52d23becb10301da6a29c0a3236d7055992152d40f09dee9c408842a",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 5,
+        "blocking_issues": [],
+        "rationale": "Page 5 requires a designated escape path at stair 2 and notes the playground tripping hazard. The post states the concrete routing need at building review."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-09-2",
+      "case_id": "city-09",
+      "text": "Approval conditions: 3333 Bridgeway daycare conversion. Building review flags the playground as a tripping risk on the evacuation route, so exit stair #2 requires a designated egress path.",
+      "source_url": "https://www.shapeyourcity.ca/51523/widgets/217762/documents/171424",
+      "post_characters": 255,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 5 v. *Travel distance shall comply with Article 3.4.2.5. vi. *The public corridor must comply with Article 3.3.1.4 and Sentence 3.3.1.3 (12). vii. *Dead-end corridors must comply with Article 3.3.1.9. viii. A designated egress path is required for exit stair #2. The playground can present a tripping hazard in an emergency evacuation. ix. Additional fire bell or strobe lights may be required at the play area and patio. * Items marked with an asterisk have been identified as serious non- conforming Building Bylaw issues. Further reviews are required at the Building Permit application stage. The applicant may wish to retain the services of a qualified Building Code consultant in case of difficulty in comprehending the comments and their potential impact on the proposal. Failure to address these issues may jeopardize the ability to obtain a Building Permit or delay the issuance of a Building Permit for the proposed. 4.5 If this Development Application included a written notification of neighbouring property owners or other interested parties, a copy of this letter will be sent to all respondents advising them of the decision. 4.6 The Canadian Electrical Code regulates high voltage overhead conductor clearances from structures and dielectric liquid-filled transformer clearances from combustible building surfaces, doors, windows, and ventilation openings. All structures must have a horizontal distance of at least 3 m from existing BC Hydro high voltage overhead conductors. Combustible building surfaces, windows, doors, and ventilation openings must be located at least 6 m from dielectric liquid-filled, pole-mounted BC Hydro transformers, unless an acceptable non- combustible barrier is constructed between these transformers and combustible building surfaces, doors, windows, or ventilation openings. Yours truly, Samantha Senechal, samantha.senechal@vancouver.ca (604) 873-7000 SS/jk",
+          "page": 5,
+          "requirement": "Building review flags the playground as a tripping risk on the evacuation route, so exit stair #2 requires a designated egress path."
+        },
+        {
+          "evidence": "Page 4 of 5 3.5 This permit has been issued for a time limited period and will expire on the date noted unless extended in writing by the Director of Planning. It is the applicant's responsibility to request an extension prior to the expiry date. 3.6 Development must meet requirements of the Community Care and Assisted Living Act, Child Care Licensing Regulations and the Adult Care Regulations prior to approval at Building Permit stage. 3.7 Childcare to be licensed by Vancouver Coastal Health’s Community Care. 3.8 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before January 10, 2027, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in Section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no Development Permit shall be issued for the demolition unless and until a Development Permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch: This is a preliminary courtesy review to identify issues that do not comply with the Vancouver Building By-law #14343 as amended (VBBL) and includes a review of Subsection 3.2.5. \"Provisions for Fire Fighting\". The following information should be included at Building Permit Application Stage: i. All new work must comply with the current VBBL, and the rest of the upgrade to the existing is required in Part 11, VBBL 2025. ii. In Part 11, this is a Minor Renovation, and a Change of Major Occupancy (Cumulative 5-year limit). *Please check to make sure the 5-year limit is not exceeded; otherwise, it will be a Full Upgrade. iii. 3.2.2. must comply with the number of storeys, occupancies, and sprinklers. (non-comb construction) iv. *Means of egress must meet Article 3.3.1.3.",
+          "page": 4,
+          "requirement": "Building review flags the playground as a tripping risk on the evacuation route, so exit stair #2 requires a designated egress path."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "b53de52d06803af3b1634f3471d0d374e77cb1124905db140e12e515372110b8",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 5 links the playground evacuation hazard with a designated path for stair 2. It does not invent a route that must avoid the entire playground."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    },
+    {
+      "id": "city-09-3",
+      "case_id": "city-09",
+      "text": "Approval conditions: 3333 Bridgeway daycare conversion. Building review requires a designated egress path from exit stair 2, since the playground can be a tripping hazard when evacuating in an emergency.",
+      "source_url": "https://www.shapeyourcity.ca/51523/widgets/217762/documents/171424",
+      "post_characters": 270,
+      "evidence": [
+        {
+          "evidence": "Page 5 of 5 v. *Travel distance shall comply with Article 3.4.2.5. vi. *The public corridor must comply with Article 3.3.1.4 and Sentence 3.3.1.3 (12). vii. *Dead-end corridors must comply with Article 3.3.1.9. viii. A designated egress path is required for exit stair #2. The playground can present a tripping hazard in an emergency evacuation. ix. Additional fire bell or strobe lights may be required at the play area and patio. * Items marked with an asterisk have been identified as serious non- conforming Building Bylaw issues. Further reviews are required at the Building Permit application stage. The applicant may wish to retain the services of a qualified Building Code consultant in case of difficulty in comprehending the comments and their potential impact on the proposal. Failure to address these issues may jeopardize the ability to obtain a Building Permit or delay the issuance of a Building Permit for the proposed. 4.5 If this Development Application included a written notification of neighbouring property owners or other interested parties, a copy of this letter will be sent to all respondents advising them of the decision. 4.6 The Canadian Electrical Code regulates high voltage overhead conductor clearances from structures and dielectric liquid-filled transformer clearances from combustible building surfaces, doors, windows, and ventilation openings. All structures must have a horizontal distance of at least 3 m from existing BC Hydro high voltage overhead conductors. Combustible building surfaces, windows, doors, and ventilation openings must be located at least 6 m from dielectric liquid-filled, pole-mounted BC Hydro transformers, unless an acceptable non- combustible barrier is constructed between these transformers and combustible building surfaces, doors, windows, or ventilation openings. Yours truly, Samantha Senechal, samantha.senechal@vancouver.ca (604) 873-7000 SS/jk",
+          "page": 5,
+          "requirement": "Building review requires a designated egress path from exit stair 2, since the playground can be a tripping hazard when evacuating in an emergency."
+        },
+        {
+          "evidence": "Page 4 of 5 3.5 This permit has been issued for a time limited period and will expire on the date noted unless extended in writing by the Director of Planning. It is the applicant's responsibility to request an extension prior to the expiry date. 3.6 Development must meet requirements of the Community Care and Assisted Living Act, Child Care Licensing Regulations and the Adult Care Regulations prior to approval at Building Permit stage. 3.7 Childcare to be licensed by Vancouver Coastal Health’s Community Care. 3.8 Final capacity will be determined at the Child Care Final Inspection. 4.0 Notes to Applicant: 4.1 It should be noted that your Development Permit will be issued when you have complied with all the above conditions. However, if these conditions have not been complied with on, or before January 10, 2027, this Development Application may stand refused. 4.2 A new Development Application will be required for any significant changes. This approval is subject to any change in the Zoning and Development By-law or other regulations affecting the development that occurs before the permit is issuable. No permit that contravenes the by-law or regulations can be issued. 4.3 If this application necessitates the demolition of existing residential rental, per Section 10.14.2 and except as set out in Section 10.14.3, where development necessitates the demolition of existing residential rental accommodation, no Development Permit shall be issued for the demolition unless and until a Development Permit for the new development has been issued. Note to Applicant: The requirements listed above may be varied subject to the provisions outlined under Section 10.14.4. 4.4 The following comments have been made by the Building Review Branch: This is a preliminary courtesy review to identify issues that do not comply with the Vancouver Building By-law #14343 as amended (VBBL) and includes a review of Subsection 3.2.5. \"Provisions for Fire Fighting\". The following information should be included at Building Permit Application Stage: i. All new work must comply with the current VBBL, and the rest of the upgrade to the existing is required in Part 11, VBBL 2025. ii. In Part 11, this is a Minor Renovation, and a Change of Major Occupancy (Cumulative 5-year limit). *Please check to make sure the 5-year limit is not exceeded; otherwise, it will be a Full Upgrade. iii. 3.2.2. must comply with the number of storeys, occupancies, and sprinklers. (non-comb construction) iv. *Means of egress must meet Article 3.3.1.3.",
+          "page": 4,
+          "requirement": "Building review requires a designated egress path from exit stair 2, since the playground can be a tripping hazard when evacuating in an emergency."
+        }
+      ],
+      "passed": true,
+      "errors": [],
+      "grade": {
+        "fingerprint": "c7dd70f7f9361854c99d3119a5aed07d207cb7a19afa4694696178e8b5b56d97",
+        "accurate": true,
+        "qualifications_preserved": true,
+        "salience": 4,
+        "clarity": 4,
+        "blocking_issues": [],
+        "rationale": "Page 5 supports the designated exit path and potential tripping hazard, with later building review explicit."
+      },
+      "expected_pass": null,
+      "generator_model": "open_router::z-ai/glm-5.3-flash",
+      "workflow_sha256": "8caf94ffc0d07164089b3ee6da8b59359ca3e65891a73ccfecea699cc3a206b4",
+      "dataset_sha256": "4565a292826d07df3b8c947027b91231feefcc3d637f66deccd4178d82dbadf4"
+    }
+  ]
+}

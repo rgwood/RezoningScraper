@@ -12,7 +12,28 @@ Download a binary from [the releases page](https://github.com/rgwood/RezoningScr
 
 Run it; on the first launch it will download all ShapeYourCity projects without posting any. On subsequent launches, it will post to Slack and/or Bluesky if credentials are set via argument or environment variable.
 
-Bluesky functionality uses OpenAI for summarizing projects; you will also need to specify an `OPENAI_API_KEY` environment variable.
+Slack and Bluesky share the same project-summary generator. All new project and
+approval-condition summaries default to GLM 5.3 Flash through OpenRouter, pinned
+to the official Z.ai provider with fallback disabled. Set `OPEN_ROUTER_API_KEY`;
+`OPENAI_API_KEY` is never used. Direct-provider models, OpenAI models through
+OpenRouter, automatic routers and presets are rejected before making a request.
+
+When deploying this change, set the OpenRouter key in the service/cron environment
+and remove its old OpenAI key. The app does not read `openrouter.key` automatically;
+that local file is gitignored. Existing saved summaries and already-queued post
+text are retained. A missing OpenRouter key stops new summarization before queued
+projects consume a retry attempt.
+
+Ordinary project summaries keep the 140-character prompt, with explicit source
+accuracy rules for counts, use labels and floor locations. They use medium
+reasoning, a 2,000-token cap and a 60-second timeout per call. A separate call to
+the same GLM model checks each draft against the original source. An overlong
+checked response gets one rewrite and another source check (at most four calls
+per attempt); empty, incomplete or still overlong responses fail without posting.
+The source check reduces errors but is not a guarantee of factual accuracy.
+Provider errors never trigger a model
+fallback. Both summarizers share the same provider pin and price caps described
+below. See the [application-summary checks](evals/applications/README.md).
 
 ```
 
@@ -36,6 +57,328 @@ Options:
           Print help
   -V, --version
           Print version
+```
+
+## Approval tracking
+
+Approval notices and their conditions can appear months after the original
+application. Approval tracking keeps those notices and copies of the linked PDFs
+in SQLite. Normal runs now collect and post new conditions automatically when
+Slack or Bluesky credentials are configured. Both generation and source review
+use GLM through the official Z.ai provider.
+
+Set `POST_CONDITIONS=false` or pass `--post-conditions=false` to disable automatic
+conditions collection, generation and delivery. Regular application posts keep
+working. Add `--track-approvals` if you want collection to continue while posting
+is disabled. `--skip-update-db` also bypasses the automatic conditions pipeline.
+
+The first successful scan of each project is a baseline: existing letters are
+archived without generating or posting summaries. Previously tracked history is
+also baselined when automatic posting is first enabled. Failed initial downloads
+remain unbaselined until a scan succeeds. A project first seen while awaiting
+approval can post its conditions when they later appear; an already-approved
+project first discovered later is conservatively baselined.
+
+After that, distinct PDF contents become eligible for a post with the source
+link. A repeated download, another URL for the same bytes on that project, or
+a return to an already-seen version never creates another post. A newer version
+supersedes an unsent draft; posts already sent to one destination keep their
+original text for delivery to the other. Notices without a linked conditions
+PDF are recorded but do not generate an automatic post.
+
+Disabling cancels queued conditions work. Re-enabling, or changing the set of
+enabled destination types (Slack/Bluesky), establishes a fresh baseline rather
+than posting updates accumulated while disabled. Changing only a webhook URL
+or Bluesky account does not reset the baseline. No destination credentials means
+no automatic conditions work. Existing cached summaries remain available.
+
+Each run generates at most three conditions summaries and attempts at most three
+deliveries per destination. Set `CONDITIONS_POST_LIMIT` or
+`--conditions-post-limit` to change that limit (1–20). Each summary has a
+five-minute overall timeout and the existing three-attempt failure budget.
+The conditions pipeline runs after regular application posts, so a failed PDF
+download or summary does not block them. Failures still appear in the run's
+monitoring status.
+
+Deliveries use a durable outbox with separate Slack and Bluesky status. Bluesky
+retries use the same stored post identity and verify an existing record before
+accepting it as delivered. Slack incoming webhooks cannot reconcile an ambiguous
+send: timeouts, server errors and crashes during delivery are held as `uncertain`
+for inspection, rather than automatically risking duplicate posts. Connection
+failures and rate limits retry on a later run, up to three attempts. This policy
+applies to conditions posts; the ordinary application queues are unchanged.
+
+To collect approvals without summarizing or posting anything:
+
+```console
+rezoning-scraper --tracking-only --database approvals.db
+```
+
+`--tracking-only` bypasses all LLM, Slack, Bluesky, and monitoring work, even if
+credentials are configured or messages are already queued. It does not update
+the ordinary `Projects` snapshots, so it won't consume new-project notifications
+from a later normal run. The separate database above keeps testing isolated.
+
+`--track-approvals --post-conditions=false` adds passive collection to a normal
+run, which still processes its ordinary posting queues. `--tracking-only` always
+stays passive, even with the default posting flag enabled. Both tracking options
+conflict with `--skip-update-db`. Successfully collected evidence survives failed
+downloads and is available on later runs.
+
+The tracker distinguishes rezoning approval, development approval, development
+approval subject to conditions, and permit issuance. It reads explicit notices
+from the API's description and archival message. An archived consultation alone
+does not count as approval, and a development application's reference to an
+earlier rezoning approval does not count as development approval.
+
+For each notice it saves the project name and URL, application number when
+available, decision type, authority, stated date, notice text, and first/last
+observation times. `IsBaseline = 1` means the notice was present on that project's
+first tracking scan, not that the approval just happened. Unknown decision dates
+are stored as an empty string; observation timestamps are Unix seconds in UTC.
+Reworded notices are retained as separate observations, not necessarily separate
+decisions. Missing notices never delete earlier evidence.
+
+For projects with a recognized decision, it checks the project description and
+document library for links labelled “Prior-to letter” or “Conditions of approval”.
+It follows Shape Your City's download pages and stores distinct PDF contents as
+SQLite BLOBs, keeping older versions when a URL's contents change. A SHA-256
+content store shares identical bytes across URLs and projects; document/version
+records retain their own history. Downloads are limited to 20 MiB each; failed downloads
+retain the link and error and are retried on a later run. The database will grow
+as documents accumulate. There is no global storage cap or automatic deletion.
+Byte changes, including PDF metadata changes, count as new versions.
+
+Existing archives migrate transactionally on open, preserving version IDs and
+summary references. The legacy `ApprovalDocumentVersions.Content` column becomes
+empty; read bytes by joining `ApprovalPdfContent` as shown below. Freed SQLite
+pages are reused but the file does not automatically shrink. Keep a database
+backup when deploying schema changes; older conditions tools expect the old
+inline PDF column.
+
+Inspect archive size and outbox counts without network calls:
+
+```console
+rezoning-scraper --approval-storage-stats --database approvals.db
+```
+
+This opens/migrates the database, then reports unique PDF bytes, bytes without
+deduplication, analysis text/trace bytes, allocated/reusable SQLite pages, and
+conditions delivery states. Normal collection runs also print these figures and
+report `rezoning_scraper.approval_pdf_bytes` to monitoring.
+
+Unchanged projects with known decisions are checked for documents again after
+24 hours, including projects whose documents were initially missing. Changed
+notice/description text triggers an earlier check. These checks happen when you
+run the scraper; the option does not install a schedule.
+
+This is a conservative first pass. Unfamiliar approval wording may be missed,
+and generic council-report links are not treated as conditions documents. It
+archives PDFs; normal runs analyze new eligible versions, and the separate
+summary command below can analyze history without posting. It cannot
+reconstruct conditional-approval dates or documents removed before tracking began.
+
+Inspect the history and linked documents with SQLite:
+
+```sql
+SELECT ProjectName, ApplicationNumber, Kind, DecisionDate,
+       datetime(FirstSeen, 'unixepoch') AS FirstObservedUTC,
+       IsBaseline, Notice
+FROM ApprovalEvents
+ORDER BY FirstSeen DESC, Id DESC;
+
+SELECT d.ProjectId, d.Title, d.SourceUrl, d.LastError,
+       v.Id AS VersionId, length(b.Content) AS PdfBytes
+FROM ApprovalDocuments d
+LEFT JOIN ApprovalDocumentVersions v ON v.DocumentId = d.Id
+LEFT JOIN ApprovalPdfContent b ON b.Hash = v.ContentHash
+ORDER BY d.Id, v.Id;
+```
+
+In the SQLite CLI, export a version using its `VersionId`:
+
+```sql
+SELECT writefile('conditions.pdf', b.Content)
+FROM ApprovalDocumentVersions v
+JOIN ApprovalPdfContent b ON b.Hash = v.ContentHash WHERE v.Id = 1;
+
+SELECT p.Id, p.ProjectId, p.VersionId, p.State, p.LastError,
+       d.Channel, d.Status, d.Attempts, d.LastError AS DeliveryError
+FROM ApprovalPosts p LEFT JOIN ApprovalPostDeliveries d ON d.PostId = p.Id
+WHERE p.State = 'failed' OR d.Status IN ('failed', 'uncertain');
+```
+
+For an uncertain Slack delivery, check the destination before changing its
+status. If the post exists, mark that delivery `sent`. If it definitely did not
+arrive, an operator can reset that delivery to `pending` with `Attempts=0` and
+`LastAttempt=NULL`. Never reset a successful destination when retrying the other.
+Failed or uncertain work remains visible in monitoring until resolved or
+automatic posting is disabled.
+
+For a limited test, `--tracking-only --projects-file response.json --database test.db`
+reads a saved projects API response instead of querying the API. Document pages
+and PDFs are still fetched over HTTP. Automated tests use saved page excerpts,
+in-memory databases, localhost fixture servers, and isolated CLI databases:
+
+```console
+cargo test --locked
+cargo clippy --locked --all-targets -- -D warnings
+```
+
+## Conditions summaries
+
+Conditions letters can be long, and approval does not mean the applicant can
+start building. The summary command drafts a short post from the PDFs
+already collected by approval tracking:
+
+```console
+rezoning-scraper --summarize-conditions --database approvals.db --summary-limit 3
+```
+
+This uses `OPEN_ROUTER_API_KEY` with `open_router::z-ai/glm-5.3-flash`.
+It prints one short paragraph and the source URL, and saves structured JSON in
+SQLite. It does not crawl, post, consume posting queues, or send monitoring
+events. Run approval tracking separately to collect new documents.
+
+The model first selects and explains one lead condition, writes three short versions of
+that angle, then reviews the drafts against the original letter. The reviewer
+checks facts, qualifications, usefulness and readability. A separate final audit
+compares the chosen post with its cited pages and the letter's first page, without
+seeing the earlier verdict. It must quote the source for each substantive claim;
+the app checks those quotations and rejects omitted clauses or unsupported inferences.
+Whether a quotation actually supports a claim still depends on model judgment.
+If the final audit rejects a draft, the editor reviews the remaining alternatives
+and the selected replacement receives a fresh audit. Only after those fail does
+feedback start another round. The writer gets one extra attempt with measured length
+feedback when every draft fails local checks. There are at most four rounds
+(normally four calls; at most 72 calls including all alternatives and format repairs).
+Every stage uses the same configured model; the app never silently substitutes
+a larger one. Requests use `genai` 0.6.5, medium
+reasoning for selection and writing, and high reasoning for
+the full-letter review and final verification, with output limits of 6,000 tokens (10,000 for the two review stages),
+and a 120-second timeout per call.
+GLM uses Chat Completions with JSON mode and local validation, pinned to the official
+Z.ai provider (`z-ai/fp8`) with provider fallback disabled. Price caps are
+at most $0.15 per million input tokens and $0.50 per million output tokens, with
+no per-request fee. Every stage records the returned model, provider, generation
+ID and raw usage including the reported charge. Model comparisons must specify
+an explicit non-OpenAI OpenRouter model and use the same OpenRouter key. The
+regular Slack/Bluesky generator also uses the shared GLM default.
+Incomplete responses are rejected.
+The official endpoint uses JSON mode rather than constrained JSON-schema decoding.
+Extra metadata is tolerated, but missing verdicts, qualifications or citations fail.
+Malformed output gets one format retry within that stage. Leads containing only
+code levels fall back to the next eligible ranked fact. Weekday daycare hours and
+routine capacity confirmation rank below other useful conditions,
+with the decision recorded. A code-level paragraph that also names a concrete
+physical requirement can stay, but the post must report that requirement.
+Claims that depend on resolving conflicting instructions cannot be selected as
+the lead. A factual pairing of clear design demands can be reported, with their
+separate locations preserved and no invented claim of contradiction. Both
+source-reading stages identify suggested methods separately from required
+outcomes; when either identifies advice, the app requires explicit suggestion
+wording. Those classifications still depend on the model reading the source
+correctly, so they do not replace editorial evaluation.
+
+The post identifies the project and prioritizes discretionary design/landscaping
+demands, open-ended acceptance criteria, consequential permit terms, and
+requirements made notable by an existing building or project scale. Engineering
+and building-review conditions remain eligible, but a precise quantity alone
+does not make a condition a strong highlight. If there is no strong highlight,
+the app still posts a concise, neutral summary of a routine condition. It does
+not skip the letter or invent controversy. Suggested design methods remain
+suggestions, and an explicit limited permit term retains its extension option.
+The selector classifies candidates as limited permit terms, discretionary design,
+existing physical features, other highlights, or routine summaries. The app
+enforces that priority before drafting and records any changed selection in the
+trace. Classification still depends on the model; source review and evals check
+whether it assigned the right category. Routine-only letters remain eligible.
+After two failed rounds on a source passage, later rounds prefer another passage.
+This leaves one opportunity to correct the wording of a strong condition first.
+The alternative still has to pass the same accuracy checks before it can be posted.
+It omits the checklist, page references, and routine administrative steps.
+The app adds a compact project introduction and gives the writer the remaining
+character budget. The hard limit applies to
+the entire draft: the full source URL, separator, and prose must fit within
+300 characters. Length is validated after generation rather than constrained by
+the JSON schema, which produced cut-off sentences in live testing. Longer
+responses are rejected, never cut off. Control characters and drafts without a
+closing period are also rejected. Counting Unicode
+scalar values is conservative for Bluesky's grapheme limit.
+
+Supporting requirements, PDF page references, and limitations stay in SQLite.
+The prompt distinguishes conditions before permit
+issuance from permit terms, occupancy requirements, and advisory comments. It
+preserves alternatives and qualifications, highlights explicit fees and
+deadlines, and avoids guessing costs or describing requirements as onerous.
+
+Each supporting requirement has original page text in the saved JSON. The model
+selects passage IDs; the app retains the complete cited pages so a chunk boundary
+cannot cut off the actual subclause or a neighbouring qualification. The final
+reviewer can correct the selector's citation IDs. This prevents invented quotations, but does not
+prove the paraphrase is correct. These are
+AI-generated, selective summaries, not complete compliance checklists.
+`TraceJson` retains every selection, draft and review, with errors, token usage
+and timings, including failed rounds. Only accepted posts populate `SummaryJson`;
+`RawResponse` holds the assembled candidate summary. Prompt version 4 uses this
+workflow; earlier summaries remain
+stored under their original version.
+
+PDF text extraction is built into the binary; no external PDF tools are needed.
+The app keeps page boundaries and saves the text used for the summary. It rejects
+malformed PDFs, pages with very little readable text, documents over 100 pages,
+and extracted text over 120,000 bytes rather than silently truncating the letter.
+One narrow exception allows a final page containing only staff initials and a
+page footer after the letter's sign-off. PDF graphics checks reject images,
+forms or substantial drawing content on that page; page numbers stay intact.
+There is no OCR yet, so scanned documents may need manual review.
+
+By default a run processes up to 10 PDFs, newest archived versions first. Set
+`--summary-limit` from 1 to 100 to change that. Completed summaries are cached by
+PDF version, model, prompt version, and extractor version. New PDF versions get
+their own summaries; older summaries remain available. No model call is made
+when displaying a cached result:
+
+```console
+rezoning-scraper --summarize-conditions --database approvals.db --document-version 1
+```
+
+Use `--conditions-model MODEL` to try another model. Its summaries and retry
+budget are stored separately. The [conditions eval suite](evals/conditions/README.md)
+runs the exact production workflow against frozen letters, tests repeated
+generations, and grades editorial quality independently. Run it before switching
+models; a valid JSON response is not enough.
+
+Failures are saved and retried on later runs, up to three attempts. One failed
+document does not stop the rest of the batch, but the command exits non-zero if
+any document in that batch failed. Use `--retry-failed-summaries` to explicitly
+retry documents that have exhausted their attempts. Missing API credentials fail
+before consuming any attempts. Cached summaries can be viewed without a key.
+
+Inspect results and failures with SQLite:
+
+```sql
+SELECT DocumentVersionId, Model, PromptVersion,
+       json_extract(SummaryJson, '$.overview') AS Overview,
+       Attempts, LastError
+FROM ConditionsSummaries
+ORDER BY DocumentVersionId DESC;
+
+SELECT s.DocumentVersionId,
+       json_extract(r.value, '$.requirement') AS Requirement,
+       json_extract(r.value, '$.page') AS Page,
+       json_extract(r.value, '$.evidence') AS Evidence
+FROM ConditionsSummaries s, json_each(s.SummaryJson, '$.requirements') r;
+```
+
+Tests include a real six-page childcare conditions letter, quote/page validation,
+retry limits, PDF and prompt version changes, a local mock OpenRouter server, and CLI
+checks that existing posting queues remain untouched. The default test suite
+never uses a real API key. An opt-in smoke test checks the existing application
+summarizer against the live API without posting:
+
+```console
+cargo test --lib live_application_summary -- --ignored --nocapture
 ```
 
 ## Monitoring

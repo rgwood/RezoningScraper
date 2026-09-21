@@ -1,0 +1,92 @@
+{
+  "reviewer": "Codex in the interactive subscription session; reviewed against original source pages, no paid grader calls",
+  "grades": {
+    "city-03-1": {
+      "fingerprint": "09cc80623448cc028f35e7b57d359d8708ca26f278a3dca18c2476128e5d9053",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 3,
+      "blocking_issues": [
+        "Public life use is unexplained legal wording."
+      ],
+      "rationale": "Pages 1 and 5 support public-access rights over the private plaza, but copying public life use obscures that straightforward meaning."
+    },
+    "city-03-2": {
+      "fingerprint": "a813cca33b90361d7c0675766ad3430ac6bf72933ee6e2694a52748c7a0e2b4c",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1 and 5 require arrangements for public access rights over the privately owned plaza. The post identifies what the legal right permits and invents no registration deadline."
+    },
+    "city-03-3": {
+      "fingerprint": "af3f132f46574860e4e468a9fb51663e924fac2d8f33f3eb419da2eb98a737a4",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 2,
+      "clarity": 3,
+      "blocking_issues": [
+        "A numbered external bulletin reference does not explain the substantive demand."
+      ],
+      "rationale": "Pages 5–6 support the agreement requirement, but this wording tells readers nothing about its practical effect despite the public plaza and loading redesign elsewhere in the letter."
+    },
+    "city-05-1": {
+      "fingerprint": "49f1ecb535d3c2d57974c8394f6155ab2aff3437d17587be35ea1fd95871bd31",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 6–7 classify the project as reconstruction and require sprinklering throughout. Building review preserves the later stage."
+    },
+    "city-05-2": {
+      "fingerprint": "d4de73509e80dcee73f197e55b79a1528afce901851c031e4321e77f3a456d79",
+      "accurate": true,
+      "qualifications_preserved": false,
+      "salience": 4,
+      "clarity": 3,
+      "blocking_issues": [
+        "At the building permit stage, fire sprinklers are required blurs design review with completed installation."
+      ],
+      "rationale": "Pages 6–7 describe building-review requirements; the post should say building review calls for sprinklering, rather than imply installed sprinklers are needed at the permit stage."
+    },
+    "city-05-3": {
+      "fingerprint": "6f3a4e362eae28f07855b23d0feb26f1d748d285ee94a6803f92e0cff8bfb49e",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 5 requires consolidation arrangements and page 7 explicitly requires the parcels consolidated before the building permit to relocate the house. This is a concrete land-title constraint with supported timing."
+    },
+    "city-12-1": {
+      "fingerprint": "f71d11532b01395715e1f82141aa95040907f2c735fc51b3b0a7c7c827b9a526",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 4,
+      "clarity": 4,
+      "blocking_issues": [],
+      "rationale": "Pages 1 and 4 identify six off-site trees and conflicts between their root zones and demolition/site work. Revised plans showing retention is the supported stage."
+    },
+    "city-12-2": {
+      "fingerprint": "d72182cdeaab3d6175a87177027ed86a5d0af179c70f4b9e02632d63935d80a6",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 3 identifies the rear building's 2.2 ft excess over the 25.26 ft/7.7 m maximum. The post describes a quantified drawing-stage redesign."
+    },
+    "city-12-3": {
+      "fingerprint": "24bf5b01897da6957c81c359995d482439a617004c7a76813e0d228651fcb7fb",
+      "accurate": true,
+      "qualifications_preserved": true,
+      "salience": 5,
+      "clarity": 5,
+      "blocking_issues": [],
+      "rationale": "Page 3 gives both the 2.2 ft excess and 25.26 ft maximum, with revised drawings required. The post is concise and specific."
+    }
+  }
+}

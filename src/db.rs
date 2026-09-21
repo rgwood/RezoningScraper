@@ -74,6 +74,10 @@ impl Database {
             [],
         )?;
 
+        crate::approvals::initialize_schema(&self.conn)?;
+        crate::conditions::initialize_schema(&self.conn)?;
+        crate::approval_posts::initialize(&self.conn)?;
+
         Ok(())
     }
 
