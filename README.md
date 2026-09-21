@@ -59,6 +59,29 @@ Options:
           Print version
 ```
 
+## Production deployment
+
+Production runs on SSH host `spudnik` as the `reilly` user. The user-level
+`rezoning-scraper.timer` starts `rezoning-scraper.service` hourly at :15 from
+09:00 through 17:00 in the server's local time. The binary is
+`~/bin/rezoning-scraper`, the database is `~/rezoning_scraper.db`, and the service
+reads credentials and flags from `~/.config/rezoning-scraper.env` (mode 600).
+
+For the conditions rollout, production uses `POST_CONDITIONS=true` and
+`CONDITIONS_POST_LIMIT=1`: at most one conditions post per destination per run.
+The app's default remains three. Set `POST_CONDITIONS=false` in that environment
+file to disable conditions work on subsequent runs; ordinary application posts
+continue. An already-running service has already loaded its environment.
+
+Before replacing the binary, pause the timer and wait for the service to be idle.
+Back up the binary, environment file and database (using SQLite's backup API),
+then test the new binary's `--approval-storage-stats` command against a copy of
+the backup. That command migrates its database but does not crawl or post. Keep
+rollback copies private: the database and environment contain credentials.
+Install the binary atomically, run the service once, inspect its exit status and
+conditions outbox, then resume the timer. `just publish` only builds and copies
+the binary; it does not perform these rollout checks.
+
 ## Approval tracking
 
 Approval notices and their conditions can appear months after the original
