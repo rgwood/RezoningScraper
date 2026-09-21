@@ -392,19 +392,27 @@ mod tests {
     #[test]
     fn first_scan_and_first_seen_approved_projects_never_queue_history() {
         let db = setup();
-        for n in 1..=100 {
+        for n in 1..=1000 {
             archive(&db, &format!("p{n}"), n, "existing letter");
         }
-        for n in 1..=100 {
+        for n in 1..=1000 {
             observe_project(&db, &format!("p{n}"), 10).unwrap();
         }
-        assert_eq!(count(&db, "baseline"), 100);
+        assert_eq!(count(&db, "baseline"), 1000);
         assert_eq!(count(&db, "pending"), 0);
         assert!(claim(&db, "slack", 20).unwrap().is_none());
+        assert!(claim(&db, "bluesky", 20).unwrap().is_none());
+        // A later cron run with the same configuration must not replay history.
+        configure(&db, true, true, true).unwrap();
+        for n in 1..=1000 {
+            observe_project(&db, &format!("p{n}"), 25).unwrap();
+        }
+        assert_eq!(count(&db, "baseline"), 1000);
+        assert_eq!(count(&db, "pending"), 0);
         archive(
             &db,
             "later-discovered-project",
-            101,
+            1001,
             "also already approved",
         );
         observe_project(&db, "later-discovered-project", 30).unwrap();
@@ -564,7 +572,7 @@ mod tests {
     #[tokio::test]
     async fn cached_summaries_are_bounded_and_no_baseline_triggers_generation() {
         let db = setup();
-        for n in 1..=5 {
+        for n in 1..=1000 {
             let project = format!("p{n}");
             observe_project(&db, &project, 10).unwrap();
             let version = archive(&db, &project, n, "new letter");
@@ -574,7 +582,16 @@ mod tests {
         }
         assert!(prepare(&db, 3, 30).await.unwrap().is_empty());
         assert_eq!(count(&db, "ready"), 3);
-        assert_eq!(count(&db, "pending"), 2);
+        assert_eq!(count(&db, "pending"), 997);
+        // Even an unexpectedly large eligible backlog cannot all reach delivery.
+        for channel in ["slack", "bluesky"] {
+            for _ in 0..3 {
+                let delivery = claim(&db, channel, 31).unwrap().unwrap();
+                finish(&db, delivery.id, channel, &Outcome::Sent).unwrap();
+            }
+            assert!(claim(&db, channel, 31).unwrap().is_none());
+        }
+        assert_eq!(count(&db, "sent"), 3);
         configure(&db, false, true, true).unwrap();
         assert!(prepare(&db, 3, 40).await.unwrap().is_empty());
         assert_eq!(count(&db, "ready"), 0);
