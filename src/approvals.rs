@@ -14,6 +14,9 @@ use crate::{db::Database, models::Project};
 const RECHECK_SECONDS: i64 = 24 * 60 * 60;
 const MAX_PAGE_BYTES: usize = 4 * 1024 * 1024;
 const MAX_PDF_BYTES: usize = 20 * 1024 * 1024;
+const MAX_DOWNLOAD_ATTEMPTS: u32 = 3;
+const DOWNLOAD_RETRY_DELAY: Duration = Duration::from_secs(1);
+const MAX_RETRY_AFTER: Duration = Duration::from_secs(30);
 
 pub fn initialize_schema(db: &Connection) -> Result<()> {
     db.execute_batch(
@@ -242,7 +245,81 @@ pub fn document_links(page: &str, base: &Url) -> Vec<DocumentLink> {
 }
 
 async fn get_bytes(client: &Client, url: &Url, limit: usize) -> Result<(Url, Vec<u8>)> {
-    let mut response = client.get(url.clone()).send().await?.error_for_status()?;
+    get_bytes_with_retry(client, url, limit, DOWNLOAD_RETRY_DELAY).await
+}
+
+async fn get_bytes_with_retry(
+    client: &Client,
+    url: &Url,
+    limit: usize,
+    initial_delay: Duration,
+) -> Result<(Url, Vec<u8>)> {
+    for attempt in 1..=MAX_DOWNLOAD_ATTEMPTS {
+        let mut retry_after = None;
+        let result = get_bytes_once(client, url, limit, &mut retry_after).await;
+        match result {
+            Ok(download) => return Ok(download),
+            Err(error) => {
+                let retryable = error.downcast_ref::<reqwest::Error>().is_some_and(|e| {
+                    e.is_timeout()
+                        || e.is_connect()
+                        || e.is_request()
+                        || e.is_body()
+                        // reqwest also reports truncated response streams as decode errors.
+                        || e.is_decode()
+                        || e.status().is_some_and(|status| {
+                            status == reqwest::StatusCode::REQUEST_TIMEOUT
+                                || status == reqwest::StatusCode::TOO_MANY_REQUESTS
+                                || status.is_server_error()
+                        })
+                });
+                // A longer server-requested wait is left to the next scheduled run.
+                // Never shorten Retry-After and hammer a rate-limited endpoint.
+                if !retryable
+                    || attempt == MAX_DOWNLOAD_ATTEMPTS
+                    || retry_after.is_some_and(|delay| delay > MAX_RETRY_AFTER)
+                {
+                    return Err(error).with_context(|| {
+                        format!("Approval download failed after {attempt} attempt(s): {url}")
+                    });
+                }
+                let delay = initial_delay
+                    .saturating_mul(2_u32.pow(attempt - 1))
+                    .max(retry_after.unwrap_or_default());
+                eprintln!(
+                    "Approval download attempt {attempt}/{MAX_DOWNLOAD_ATTEMPTS} failed for {url}: {error:#}; retrying in {}s",
+                    delay.as_secs_f32()
+                );
+                tokio::time::sleep(delay).await;
+            }
+        }
+    }
+    unreachable!("the final attempt always returns")
+}
+
+fn retry_after_delay(value: &str, now: chrono::DateTime<Utc>) -> Option<Duration> {
+    if let Ok(seconds) = value.trim().parse::<u64>() {
+        return Some(Duration::from_secs(seconds));
+    }
+    let date = chrono::DateTime::parse_from_rfc2822(value).ok()?;
+    Some((date.with_timezone(&Utc) - now).to_std().unwrap_or_default())
+}
+
+async fn get_bytes_once(
+    client: &Client,
+    url: &Url,
+    limit: usize,
+    retry_after: &mut Option<Duration>,
+) -> Result<(Url, Vec<u8>)> {
+    // Start each attempt at the original URL, including redirects. Download
+    // pages issue signed URLs which may expire between attempts.
+    let response = client.get(url.clone()).send().await?;
+    *retry_after = response
+        .headers()
+        .get(reqwest::header::RETRY_AFTER)
+        .and_then(|value| value.to_str().ok())
+        .and_then(|value| retry_after_delay(value, Utc::now()));
+    let mut response = response.error_for_status()?;
     if response
         .content_length()
         .is_some_and(|size| size > limit as u64)
@@ -756,10 +833,17 @@ mod tests {
 
     // Each server has a finite script and asserts every request. Tests use only localhost.
     async fn server(responses: Vec<(&'static str, u16, &'static str)>) -> (String, JoinHandle<()>) {
+        raw_server(responses.into_iter().map(|(path, status, body)| {
+            (path, format!("HTTP/1.1 {status} Test\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len()))
+        }).collect())
+        .await
+    }
+
+    async fn raw_server(responses: Vec<(&'static str, String)>) -> (String, JoinHandle<()>) {
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let base = format!("http://{}", listener.local_addr().unwrap());
         let task = tokio::spawn(async move {
-            for (path, status, body) in responses {
+            for (path, response) in responses {
                 let (mut socket, _) =
                     tokio::time::timeout(Duration::from_secs(5), listener.accept())
                         .await
@@ -772,7 +856,6 @@ mod tests {
                     request.starts_with(&format!("GET {path} HTTP/1.1")),
                     "unexpected request: {request}"
                 );
-                let response = format!("HTTP/1.1 {status} Test\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len());
                 socket.write_all(response.as_bytes()).await.unwrap();
             }
         });
@@ -785,6 +868,207 @@ mod tests {
             .timeout(Duration::from_secs(3))
             .build()
             .unwrap()
+    }
+
+    #[tokio::test]
+    async fn transient_download_errors_recover_in_the_same_run() {
+        for status in [408, 429, 500, 502, 503, 504] {
+            let (base, task) = server(vec![
+                ("/letter", status, "later"),
+                ("/letter", 200, "%PDF-recovered"),
+            ])
+            .await;
+            let (_, bytes) = get_bytes_with_retry(
+                &client(),
+                &Url::parse(&format!("{base}/letter")).unwrap(),
+                MAX_PDF_BYTES,
+                Duration::ZERO,
+            )
+            .await
+            .unwrap();
+            assert_eq!(bytes, b"%PDF-recovered");
+            task.await.unwrap();
+        }
+    }
+
+    #[tokio::test]
+    async fn persistent_download_errors_exhaust_three_attempts() {
+        let (base, task) = server(vec![("/letter", 503, "later"); 3]).await;
+        let error = get_bytes_with_retry(
+            &client(),
+            &Url::parse(&format!("{base}/letter")).unwrap(),
+            MAX_PDF_BYTES,
+            Duration::ZERO,
+        )
+        .await
+        .unwrap_err();
+        assert!(error.to_string().contains("after 3 attempt(s)"));
+        assert!(format!("{error:#}").contains("503"));
+        task.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn permanent_download_errors_are_not_retried() {
+        for status in [400, 401, 403, 404] {
+            let (base, task) = server(vec![("/letter", status, "missing")]).await;
+            let error = get_bytes_with_retry(
+                &client(),
+                &Url::parse(&format!("{base}/letter")).unwrap(),
+                MAX_PDF_BYTES,
+                Duration::ZERO,
+            )
+            .await
+            .unwrap_err();
+            assert!(error.to_string().contains("after 1 attempt(s)"));
+            task.await.unwrap();
+        }
+    }
+
+    #[tokio::test]
+    async fn interrupted_body_is_retried_without_retaining_partial_bytes() {
+        let (base, task) = raw_server(vec![
+            ("/letter", "HTTP/1.1 200 OK\r\nContent-Length: 100\r\nConnection: close\r\n\r\n%PDF-partial".into()),
+            ("/letter", "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\n%PDF-complete".into()),
+        ]).await;
+        let (_, bytes) = get_bytes_with_retry(
+            &client(),
+            &Url::parse(&format!("{base}/letter")).unwrap(),
+            MAX_PDF_BYTES,
+            Duration::ZERO,
+        )
+        .await
+        .unwrap();
+        assert_eq!(bytes, b"%PDF-complete");
+        task.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn connection_failures_are_retried() {
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let url = Url::parse(&format!("http://{}/letter", listener.local_addr().unwrap())).unwrap();
+        drop(listener);
+        let error = get_bytes_with_retry(&client(), &url, MAX_PDF_BYTES, Duration::ZERO)
+            .await
+            .unwrap_err();
+        assert!(error.to_string().contains("after 3 attempt(s)"));
+        assert!(error.downcast_ref::<reqwest::Error>().unwrap().is_connect());
+    }
+
+    #[tokio::test]
+    async fn timed_out_download_recovers_on_retry() {
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let url = Url::parse(&format!("http://{}/letter", listener.local_addr().unwrap())).unwrap();
+        let task = tokio::spawn(async move {
+            let (mut stalled, _) = listener.accept().await.unwrap();
+            let mut request = [0; 8192];
+            assert!(stalled.read(&mut request).await.unwrap() > 0);
+            // Keep the first connection open without responding until the client retries.
+            let (mut recovered, _) = tokio::time::timeout(Duration::from_secs(5), listener.accept())
+                .await
+                .unwrap()
+                .unwrap();
+            assert!(recovered.read(&mut request).await.unwrap() > 0);
+            recovered.write_all(b"HTTP/1.1 200 OK\r\nContent-Length: 7\r\nConnection: close\r\n\r\n%PDF-ok")
+                .await
+                .unwrap();
+        });
+        let client = Client::builder()
+            .no_proxy()
+            .timeout(Duration::from_millis(200))
+            .build()
+            .unwrap();
+        let (_, bytes) = get_bytes_with_retry(&client, &url, MAX_PDF_BYTES, Duration::ZERO)
+            .await
+            .unwrap();
+        assert_eq!(bytes, b"%PDF-ok");
+        task.await.unwrap();
+    }
+
+    #[test]
+    fn retry_after_accepts_seconds_and_http_dates() {
+        let now = chrono::DateTime::parse_from_rfc2822("Mon, 28 Sep 2026 19:00:00 GMT")
+            .unwrap()
+            .with_timezone(&Utc);
+        assert_eq!(retry_after_delay("12", now), Some(Duration::from_secs(12)));
+        assert_eq!(
+            retry_after_delay("Mon, 28 Sep 2026 19:00:15 GMT", now),
+            Some(Duration::from_secs(15))
+        );
+        assert_eq!(
+            retry_after_delay("Mon, 28 Sep 2026 18:00:00 GMT", now),
+            Some(Duration::ZERO)
+        );
+        assert_eq!(retry_after_delay("invalid", now), None);
+    }
+
+    #[tokio::test]
+    async fn long_retry_after_is_deferred_to_a_later_run() {
+        let (base, task) = raw_server(vec![("/letter",
+            "HTTP/1.1 429 Too Many Requests\r\nRetry-After: 120\r\nContent-Length: 0\r\nConnection: close\r\n\r\n".into(),
+        )]).await;
+        let error = get_bytes_with_retry(
+            &client(),
+            &Url::parse(&format!("{base}/letter")).unwrap(),
+            MAX_PDF_BYTES,
+            Duration::ZERO,
+        )
+        .await
+        .unwrap_err();
+        assert!(error.to_string().contains("after 1 attempt(s)"));
+        task.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn short_retry_after_is_respected() {
+        let (base, task) = raw_server(vec![
+            ("/letter", "HTTP/1.1 429 Too Many Requests\r\nRetry-After: 1\r\nContent-Length: 0\r\nConnection: close\r\n\r\n".into()),
+            ("/letter", "HTTP/1.1 200 OK\r\nContent-Length: 7\r\nConnection: close\r\n\r\n%PDF-ok".into()),
+        ]).await;
+        let start = std::time::Instant::now();
+        let (_, bytes) = get_bytes_with_retry(
+            &client(),
+            &Url::parse(&format!("{base}/letter")).unwrap(),
+            MAX_PDF_BYTES,
+            Duration::ZERO,
+        )
+        .await
+        .unwrap();
+        assert!(start.elapsed() >= Duration::from_secs(1));
+        assert_eq!(bytes, b"%PDF-ok");
+        task.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn tracking_recovers_page_wrapper_and_pdf_without_leaving_an_error() {
+        let page =
+            "<div class='widget_document_library'><a href='/letter'>Prior-to letter</a></div>";
+        let (base, task) = server(vec![
+            ("/project", 503, "later"),
+            ("/project", 200, page),
+            ("/letter", 502, "later"),
+            (
+                "/letter",
+                200,
+                include_str!("../test_files/approval-download.html"),
+            ),
+            ("/letter/download", 500, "later"),
+            ("/letter/download", 200, "%PDF-recovered"),
+        ])
+        .await;
+        let mut db = Database::new_in_memory().unwrap();
+        let mut p = project(CONDITIONAL);
+        p.links.self_link = format!("{base}/project");
+        track_with_client(&mut db, &[p], &client(), 100)
+            .await
+            .unwrap();
+        let (last_success, error): (i64, Option<String>) = db.query_row(
+            "SELECT s.LastSuccess, d.LastError FROM ApprovalScans s JOIN ApprovalDocuments d ON s.ProjectId=d.ProjectId",
+            [], |r| Ok((r.get(0)?, r.get(1)?)),
+        ).unwrap();
+        assert_eq!(last_success, 100);
+        assert_eq!(error, None);
+        assert_eq!(count(&db, "ApprovalDocumentVersions"), 1);
+        task.await.unwrap();
     }
 
     #[tokio::test]
@@ -848,6 +1132,8 @@ mod tests {
             "<div class='widget_document_library'><a href='/letter'>Prior-to letter</a></div>";
         let (base, task) = server(vec![
             ("/project", 200, page),
+            ("/letter", 503, "later"),
+            ("/letter", 503, "later"),
             ("/letter", 503, "later"),
             ("/project", 200, page),
             ("/letter", 200, "%PDF-original"),
@@ -958,6 +1244,8 @@ mod tests {
         let (base, task) = server(vec![
             ("/project", 200, page),
             ("/letter", 503, "try later"),
+            ("/letter", 503, "try later"),
+            ("/letter", 503, "try later"),
             ("/project", 200, page),
             ("/letter", 200, "%PDF-recovered"),
         ])
@@ -1039,7 +1327,12 @@ mod tests {
 
     #[tokio::test]
     async fn project_failure_does_not_prevent_other_projects_being_collected() {
-        let (base, task) = server(vec![("/bad", 500, "oops"), ("/good", 200, "")]).await;
+        let (base, task) = server(vec![
+            ("/bad", 500, "oops"),
+            ("/bad", 500, "oops"),
+            ("/bad", 500, "oops"),
+            ("/good", 200, ""),
+        ]).await;
         let mut db = Database::new_in_memory().unwrap();
         let mut bad = project(CONDITIONAL);
         bad.links.self_link = format!("{base}/bad");

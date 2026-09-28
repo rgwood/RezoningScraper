@@ -172,6 +172,15 @@ retain the link and error and are retried on a later run. The database will grow
 as documents accumulate. There is no global storage cap or automatic deletion.
 Byte changes, including PDF metadata changes, count as new versions.
 
+Approval pages and PDFs retry connection/DNS errors, timeouts, interrupted
+downloads, HTTP 408/429 and server errors up to three attempts per request, with
+1- and 2-second backoff. Each attempt keeps the 45-second request timeout and
+response size limit. Retries restart the download and follow redirects again.
+`Retry-After` can extend the wait up to 30 seconds; longer waits defer the request
+to a later scheduled run. Missing pages, invalid PDFs and oversized responses
+fail without retries. Exhausted retries still fail the run and reach monitoring,
+while other projects continue and previously collected documents stay intact.
+
 Existing archives migrate transactionally on open, preserving version IDs and
 summary references. The legacy `ApprovalDocumentVersions.Content` column becomes
 empty; read bytes by joining `ApprovalPdfContent` as shown below. Freed SQLite
