@@ -17,6 +17,7 @@ const REVIEW: &str = include_str!("review_prompt.txt");
 const VERIFY: &str = include_str!("verify_prompt.txt");
 const TERMINOLOGY: &str = include_str!("terminology.txt");
 const MAX_ROUNDS: usize = 4;
+const ANALYSIS_TIMEOUT: Duration = Duration::from_secs(600);
 pub const DEFAULT_MODEL: &str = crate::llm::MODEL;
 pub use crate::llm::require_api_key;
 
@@ -336,6 +337,7 @@ async fn complete_once(
         system.to_owned()
     };
     let started = Instant::now();
+    eprintln!("Conditions model stage {stage}, round {round} started");
     let mut options = ChatOptions::default()
         .with_capture_raw_body(true)
         .with_max_tokens(
@@ -1130,8 +1132,45 @@ pub async fn analyze_pages(
     url: &str,
     pages: &[String],
 ) -> Analysis {
+    analyze_pages_with_timeout(client, model, name, url, pages, ANALYSIS_TIMEOUT).await
+}
+
+async fn analyze_pages_with_timeout(
+    client: &genai::Client,
+    model: &str,
+    name: &str,
+    url: &str,
+    pages: &[String],
+    budget: Duration,
+) -> Analysis {
     let mut trace = Vec::new();
-    let result = workflow(client, model, name, url, pages, &mut trace).await;
+    let started = Instant::now();
+    // Keep the trace outside the cancelled future, then return it for persistence.
+    let result = match tokio::time::timeout(
+        budget,
+        workflow(client, model, name, url, pages, &mut trace),
+    )
+    .await
+    {
+        Ok(result) => result,
+        Err(_) => {
+            let message = format!(
+                "Conditions summary exceeded {} seconds; {} model calls completed",
+                budget.as_secs_f64(),
+                trace.len()
+            );
+            trace.push(Step {
+                stage: "workflow_timeout".into(),
+                round: trace.last().map_or(1, |step| step.round),
+                elapsed_ms: started.elapsed().as_millis(),
+                usage: Value::Null,
+                response: String::new(),
+                error: Some(message.clone()),
+                decision: None,
+            });
+            Err(anyhow::anyhow!(message))
+        }
+    };
     match result {
         Ok(summary) => Analysis {
             workflow_sha256: workflow_fingerprint(),
@@ -1156,6 +1195,13 @@ mod tests {
     async fn mock_client(
         responses: Vec<Value>,
     ) -> (genai::Client, tokio::task::JoinHandle<Vec<Value>>) {
+        mock_client_with_delay(responses, None).await
+    }
+
+    async fn mock_client_with_delay(
+        responses: Vec<Value>,
+        delay_at: Option<usize>,
+    ) -> (genai::Client, tokio::task::JoinHandle<Vec<Value>>) {
         use genai::resolver::{AuthData, AuthResolver, Endpoint, ServiceTargetResolver};
         use tokio::{
             io::{AsyncReadExt, AsyncWriteExt},
@@ -1165,7 +1211,7 @@ mod tests {
         let endpoint = format!("http://{}/v1/", listener.local_addr().unwrap());
         let server = tokio::spawn(async move {
             let mut requests = vec![];
-            for response in responses {
+            for (index, response) in responses.into_iter().enumerate() {
                 let (mut socket, _) = listener.accept().await.unwrap();
                 let mut bytes = Vec::new();
                 let (start, len) = loop {
@@ -1222,6 +1268,9 @@ mod tests {
                     );
                 }
                 requests.push(request);
+                if delay_at == Some(index) {
+                    tokio::time::sleep(Duration::from_secs(5)).await;
+                }
                 let body = json!({"id":"test-openrouter", "model":"z-ai/glm-5.3-flash", "provider":"TestProvider", "usage":{"prompt_tokens":10,"completion_tokens":20,"total_tokens":30,"cost":0.0012},
                     "choices":[{"finish_reason":"stop","message":{"role":"assistant","content":response.to_string()}}]}).to_string();
                 socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",body.len()).as_bytes()).await.unwrap();
@@ -1254,6 +1303,33 @@ mod tests {
             responses.push(json!({"claims":[{"text":"Provide five Class B bicycle spaces.","quotes":[{"page":1,"text":"five Class B bicycle spaces"}],"entailed":true,"explanation":"The source names five bicycle spaces."}],"meaning_changes":[],"assessment":"The source requires five bicycle spaces in revised plans, with no material omission.","accurate":true,"qualified":true,"concrete":true,"issues":[]}));
         }
         responses
+    }
+
+    #[tokio::test]
+    async fn overall_timeout_retains_completed_stages_and_rejects_unfinished_summary() {
+        let (client, server) = mock_client_with_delay(sample_responses(true), Some(1)).await;
+        let result = analyze_pages_with_timeout(
+            &client,
+            DEFAULT_MODEL,
+            "1 Test St daycare",
+            "https://example.com/letter",
+            &["Provide five Class B bicycle spaces in revised drawings.".into()],
+            Duration::from_millis(500),
+        )
+        .await;
+        server.abort();
+        assert!(result.summary.is_none());
+        assert!(result
+            .error
+            .as_deref()
+            .unwrap()
+            .contains("exceeded 0.5 seconds"));
+        assert_eq!(result.trace.len(), 2);
+        assert_eq!(result.trace[0].stage, "select_conditions");
+        assert!(!result.trace[0].response.is_empty());
+        assert_eq!(result.trace[0].usage["generation_id"], "test-openrouter");
+        assert_eq!(result.trace[1].stage, "workflow_timeout");
+        assert_eq!(result.trace[1].error, result.error);
     }
 
     #[tokio::test]

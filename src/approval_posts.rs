@@ -125,7 +125,7 @@ pub fn has_baseline(db: &Connection, project: &str) -> Result<bool> {
 
 pub async fn prepare(db: &Database, limit: u32, now: i64) -> Result<Vec<String>> {
     let started = std::time::Instant::now();
-    // A crashed worker can resume; a live worker has a five-minute overall timeout.
+    // A crashed worker can resume; live analysis has a ten-minute deadline.
     db.execute(
         "UPDATE ApprovalPosts SET State='pending' WHERE State='generating' AND LastAttempt < ?1",
         [now - 900],
@@ -140,21 +140,17 @@ pub async fn prepare(db: &Database, limit: u32, now: i64) -> Result<Vec<String>>
     for (id, version) in ids {
         let claimed_at = now.saturating_add(started.elapsed().as_secs() as i64);
         if db.execute("UPDATE ApprovalPosts SET State='generating',LastAttempt=?2 WHERE Id=?1 AND State='pending'", params![id, claimed_at])? == 0 { continue; }
-        let result = tokio::time::timeout(
-            Duration::from_secs(300),
-            conditions::summarize_conditions_with_model(db, 1, Some(version), false, llm::MODEL),
-        )
-        .await;
-        let result = match result {
-            Ok(result) => result.and_then(|mut run| {
-                ensure!(run.failures.is_empty(), "{}", run.failures.join("; "));
-                run.summaries
-                    .pop()
-                    .context("Summary retry budget exhausted")?
-                    .post_text()
-            }),
-            Err(_) => Err(anyhow::anyhow!("Conditions summary exceeded five minutes")),
-        };
+        // Analysis owns its deadline so cancellation still returns a trace to save.
+        let result =
+            conditions::summarize_conditions_with_model(db, 1, Some(version), false, llm::MODEL)
+                .await;
+        let result = result.and_then(|mut run| {
+            ensure!(run.failures.is_empty(), "{}", run.failures.join("; "));
+            run.summaries
+                .pop()
+                .context("Summary retry budget exhausted")?
+                .post_text()
+        });
         match result {
             Ok(text) => {
                 set_text(db, id, &text)?;

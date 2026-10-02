@@ -1,4 +1,4 @@
-use std::{num::NonZero, vec};
+use std::{num::NonZero, time::Duration, vec};
 
 use anyhow::{bail, Context, Result};
 use bsky_sdk::{
@@ -21,6 +21,57 @@ use crate::models::Project;
 
 // Hard limit on image size to post to Bluesky
 const MAX_IMAGE_SIZE_BYTES: usize = 1_000_000;
+const IMAGE_REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
+const IMAGE_DOWNLOAD_ATTEMPTS: u32 = 3;
+
+async fn download_image(url: &str) -> Result<Vec<u8>> {
+    let client = reqwest::Client::builder()
+        .timeout(IMAGE_REQUEST_TIMEOUT)
+        .build()?;
+    download_image_with_retry(&client, url, Duration::from_secs(1)).await
+}
+
+async fn download_image_with_retry(
+    client: &reqwest::Client,
+    url: &str,
+    initial_delay: Duration,
+) -> Result<Vec<u8>> {
+    for attempt in 1..=IMAGE_DOWNLOAD_ATTEMPTS {
+        let result = async {
+            let response = client.get(url).send().await?.error_for_status()?;
+            response.bytes().await.map(|bytes| bytes.to_vec())
+        }
+        .await;
+        match result {
+            Ok(bytes) => return Ok(bytes),
+            Err(error)
+                if attempt < IMAGE_DOWNLOAD_ATTEMPTS
+                    && (error.is_connect()
+                        || error.is_timeout()
+                        || error.is_body()
+                        || error.is_decode()
+                        || error.status().is_some_and(|status| {
+                            status == reqwest::StatusCode::REQUEST_TIMEOUT
+                                || status == reqwest::StatusCode::TOO_MANY_REQUESTS
+                                || status.is_server_error()
+                        })) =>
+            {
+                let delay = initial_delay.saturating_mul(1 << (attempt - 1));
+                eprintln!(
+                    "Image download attempt {attempt}/{IMAGE_DOWNLOAD_ATTEMPTS} failed for {url}: {error}; retrying in {}s",
+                    delay.as_secs_f32()
+                );
+                tokio::time::sleep(delay).await;
+            }
+            Err(error) => {
+                return Err(error).with_context(|| {
+                    format!("Image download failed after {attempt} attempt(s): {url}")
+                });
+            }
+        }
+    }
+    unreachable!("image download attempts are nonzero")
+}
 
 /// A stable record key and read-back let interrupted requests retry without duplicates.
 pub async fn post_conditions(
@@ -129,7 +180,7 @@ pub async fn post_to_bluesky(
     if let Some(img_url) = &project.attributes.image_url {
         // sometimes they post generic images that we don't want to repost
         if !img_url.trim().is_empty() && !img_url.to_lowercase().contains("generic") {
-            let img_bytes = reqwest::get(img_url).await?.bytes().await?;
+            let img_bytes = download_image(img_url).await?;
             eprintln!("Downloaded image: {}", img_url);
 
             let img_bytes = compress_image_until_under_size(&img_bytes)?;
@@ -239,6 +290,96 @@ fn compress_image_until_under_size(img: &[u8]) -> Result<Vec<u8>> {
 mod tests {
     use super::*;
     use std::io::Write;
+
+    #[tokio::test]
+    async fn image_download_retries_transient_errors_but_not_missing_images() {
+        use tokio::{
+            io::{AsyncReadExt, AsyncWriteExt},
+            net::TcpListener,
+        };
+        // The incomplete 200 response exercises retries of an interrupted body.
+        for (responses, succeeds) in [
+            (vec![(500, 5), (503, 5), (200, 5)], true),
+            (vec![(429, 5), (200, 5)], true),
+            (vec![(408, 5), (200, 5)], true),
+            (vec![(200, 100), (200, 5)], true),
+            (vec![(404, 5)], false),
+            (vec![(500, 5), (500, 5), (500, 5)], false),
+        ] {
+            let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+            let url = format!("http://{}/image", listener.local_addr().unwrap());
+            let attempts = responses.len();
+            let server = tokio::spawn(async move {
+                for (status, length) in responses {
+                    let (mut socket, _) = listener.accept().await.unwrap();
+                    let mut request = [0; 2048];
+                    assert!(socket.read(&mut request).await.unwrap() > 0);
+                    socket.write_all(format!(
+                        "HTTP/1.1 {status} Test\r\nContent-Length: {length}\r\nConnection: close\r\n\r\nimage"
+                    ).as_bytes()).await.unwrap();
+                }
+                attempts
+            });
+            let client = reqwest::Client::builder()
+                .timeout(Duration::from_secs(1))
+                .build()
+                .unwrap();
+            let result = download_image_with_retry(&client, &url, Duration::ZERO).await;
+            if succeeds {
+                assert_eq!(result.unwrap(), b"image");
+            } else {
+                assert!(result
+                    .unwrap_err()
+                    .to_string()
+                    .contains(&format!("after {attempts} attempt(s)")));
+            }
+            assert_eq!(server.await.unwrap(), attempts);
+        }
+    }
+
+    #[tokio::test]
+    async fn image_connection_failures_exhaust_the_bounded_retry_budget() {
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let url = format!("http://{}/image", listener.local_addr().unwrap());
+        drop(listener);
+        let error = download_image_with_retry(&reqwest::Client::new(), &url, Duration::ZERO)
+            .await
+            .unwrap_err();
+        assert!(error.to_string().contains("after 3 attempt(s)"));
+    }
+
+    #[tokio::test]
+    async fn image_request_timeout_recovers_on_the_next_attempt() {
+        use tokio::{
+            io::{AsyncReadExt, AsyncWriteExt},
+            net::TcpListener,
+        };
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let url = format!("http://{}/image", listener.local_addr().unwrap());
+        let server = tokio::spawn(async move {
+            let (mut stalled, _) = listener.accept().await.unwrap();
+            let mut request = [0; 2048];
+            assert!(stalled.read(&mut request).await.unwrap() > 0);
+            // Keep the first socket open until the client's deadline triggers a retry.
+            let (mut recovered, _) = listener.accept().await.unwrap();
+            assert!(recovered.read(&mut request).await.unwrap() > 0);
+            recovered
+                .write_all(
+                    b"HTTP/1.1 200 OK\r\nContent-Length: 5\r\nConnection: close\r\n\r\nimage",
+                )
+                .await
+                .unwrap();
+        });
+        let client = reqwest::Client::builder()
+            .timeout(Duration::from_millis(50))
+            .build()
+            .unwrap();
+        let bytes = download_image_with_retry(&client, &url, Duration::ZERO)
+            .await
+            .unwrap();
+        assert_eq!(bytes, b"image");
+        server.await.unwrap();
+    }
 
     #[tokio::test]
     async fn conditions_retry_reads_back_same_record_without_creating_a_duplicate() {

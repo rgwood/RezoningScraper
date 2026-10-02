@@ -118,7 +118,9 @@ no automatic conditions work. Existing cached summaries remain available.
 Each run generates at most three conditions summaries and attempts at most three
 deliveries per destination. Set `CONDITIONS_POST_LIMIT` or
 `--conditions-post-limit` to change that limit (1–20). Each summary has a
-five-minute overall timeout and the existing three-attempt failure budget.
+ten-minute analysis timeout and the existing three-attempt failure budget.
+Timeouts retain completed model stages and record the deadline failure in SQLite;
+stage starts are also logged so an interrupted request can be identified.
 The conditions pipeline runs after regular application posts, so a failed PDF
 download or summary does not block them. Failures still appear in the run's
 monitoring status.
@@ -417,6 +419,11 @@ cargo test --lib live_application_summary -- --ignored --nocapture
 
 The scraper reports run status and queue depth to a local Datadog Agent. It
 also exits non-zero and writes a structured log when anything fails.
+
+Bluesky project image downloads have a 30-second timeout per attempt. Connection
+errors, timeouts, interrupted downloads, HTTP 408/429 and server errors retry up
+to three attempts with 1- and 2-second backoff. Missing images fail immediately.
+Only the image download retries within a run; post creation is not repeated.
 
 ```console
 rezoning-scraper --monitoring-test critical
