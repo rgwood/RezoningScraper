@@ -91,7 +91,7 @@ regression case; add fresh held-out letters or edge cases for future changes.
   salience and clarity from 1–5; both must be at least 4. Accuracy and preservation
   of qualifications are separate mandatory gates.
 
-`cases.json` contains 12 public City letters and twelve synthetic edge cases, with
+`cases.json` contains 12 public City letters and thirteen synthetic edge cases, with
 assistant-curated reference posts, acceptable alternative angles, critical
 qualifications, and positive/negative calibration examples. References are
 guides, not exact-match targets. The September 20 revision incorporates the user's

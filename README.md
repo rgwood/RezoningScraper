@@ -354,8 +354,9 @@ prove the paraphrase is correct. These are
 AI-generated, selective summaries, not complete compliance checklists.
 `TraceJson` retains every selection, draft and review, with errors, token usage
 and timings, including failed rounds. Only accepted posts populate `SummaryJson`;
-`RawResponse` holds the assembled candidate summary. Prompt version 4 uses this
-workflow; earlier summaries remain
+`RawResponse` holds the assembled candidate summary. Prompt version 5 makes
+unresolved duration conflicts override the limited-permit selection priority;
+another clear condition can be summarized instead. Earlier summaries remain
 stored under their original version.
 
 PDF text extraction is built into the binary; no external PDF tools are needed.

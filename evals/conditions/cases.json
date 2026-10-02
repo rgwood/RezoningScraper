@@ -1,5 +1,25 @@
 [
   {
+    "id": "editorial-conflicting-term",
+    "split": "editorial",
+    "project_name": "360 Cedar St child care alteration",
+    "source_url": "https://example.com/conditions/cedar",
+    "pages": [
+      "360 Cedar Street: change an existing retail building to a child care facility for up to 74 children. The application is approved for a limited period of one year unless extended in writing by the Director of Planning. A development permit may be issued after the conditions are met. Landscape Review 1.1: revised drawings must enhance the outdoor play area's landscape treatment. Additional planting and edible gardening are suggested ways to achieve this. Plants must be appropriate for children; avoid toxic or thorn-bearing species.",
+      "Development Permit Work Description: change the existing retail building at 360 Cedar Street to a child care facility for up to 74 children, for a limited period of two years unless extended in writing by the Director of Planning. These are the complete conditions of this synthetic letter. No explanation reconciles the two durations."
+    ],
+    "gold": {
+      "reference": "Approval conditions: 360 Cedar St child care. Plans must improve the play area's landscaping; added planting or edible gardening are suggested.",
+      "acceptable_highlights": ["Summarize the clear landscaping requirement or child-safe plant selection without resolving the conflicting one- and two-year terms."],
+      "critical_rules": ["Do not select either disputed duration or infer that one section overrides the other.", "Omitting the disputed permit term must not cause an otherwise accurate, useful post to fail.", "Preserve the required landscape improvement and advisory planting/gardening methods as distinct legal strengths.", "Drawings required before a permit do not mean completed landscaping before permit issuance."]
+    },
+    "provenance": "Synthetic regression based on the conflicting durations in the October 1 Victoria Drive letter; not an unseen holdout.",
+    "calibration": [
+      {"text": "Approval conditions: 360 Cedar St child care. Plans must improve the play area's landscaping; added planting or edible gardening are suggested.", "expected_pass": true, "reason": "Reports a clear independent condition while avoiding the disputed term."},
+      {"text": "Approval conditions: 360 Cedar St child care. The permit lasts one year unless extended in writing.", "expected_pass": false, "reason": "Chooses one conflicting duration without a source-based reconciliation."}
+    ]
+  },
+  {
     "id": "city-01",
     "pdf": "pdfs/01.pdf",
     "sha256": "2e8374a6941ee0650e6d201ebd6acf5e698baef29461fc9288f3e8306de4a845",
