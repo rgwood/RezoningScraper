@@ -1,14 +1,8 @@
 use anyhow::Result;
-use chrono::{DateTime, Utc};
 use rusqlite::{params, Connection};
 use std::ops::{Deref, DerefMut};
 
 use crate::models::Project;
-
-pub struct Token {
-    pub expiration: DateTime<Utc>,
-    pub jwt: String,
-}
 
 pub struct Database {
     conn: Connection,
@@ -47,6 +41,8 @@ impl Database {
     }
 
     pub fn initialize_schema(&self) -> Result<()> {
+        // EngagementHQ-era projects (up to 2026-11-10). Kept read-only for history;
+        // nothing writes to this table any more.
         self.conn.execute(
             "CREATE TABLE IF NOT EXISTS Projects(
                 Id TEXT PRIMARY KEY NOT NULL,
@@ -56,6 +52,28 @@ impl Database {
             [],
         )?;
 
+        // Projects from the Hive-based Shape Your City site (2026-11-10 onward).
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS HiveProjects(
+                Id TEXT PRIMARY KEY NOT NULL,
+                Serialized TEXT NOT NULL,
+                FirstSeen INTEGER NOT NULL DEFAULT (unixepoch()),
+                LastSeen INTEGER NOT NULL DEFAULT (unixepoch())
+            )",
+            [],
+        )?;
+
+        // Old and new IDs for the same project page (matched by URL slug).
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS LegacyProjectLinks(
+                HiveProjectId TEXT PRIMARY KEY NOT NULL,
+                LegacyProjectId TEXT NOT NULL,
+                MatchedOn TEXT NOT NULL
+            )",
+            [],
+        )?;
+
+        // TokenCache and Cache held EngagementHQ API state; unused since the migration.
         self.conn.execute(
             "CREATE TABLE IF NOT EXISTS TokenCache(
                 Expiration INTEGER NOT NULL,
@@ -83,7 +101,7 @@ impl Database {
 
     pub fn contains_project(&self, id: &str) -> Result<bool> {
         let count: i64 = self.conn.query_row(
-            "SELECT COUNT(*) FROM Projects WHERE Id = ?",
+            "SELECT COUNT(*) FROM HiveProjects WHERE Id = ?",
             params![id],
             |row| row.get(0),
         )?;
@@ -92,7 +110,7 @@ impl Database {
 
     #[allow(dead_code)]
     pub fn get_projects(&self) -> Result<Vec<Project>> {
-        let mut stmt = self.conn.prepare("SELECT Serialized FROM Projects")?;
+        let mut stmt = self.conn.prepare("SELECT Serialized FROM HiveProjects")?;
         let rows = stmt.query_map([], |row| row.get(0))?;
 
         let mut projects = Vec::new();
@@ -104,9 +122,33 @@ impl Database {
         Ok(projects)
     }
 
+    pub fn get_projects_by_id(&self) -> Result<std::collections::HashMap<String, Project>> {
+        Ok(self
+            .get_projects()?
+            .into_iter()
+            .map(|project| (project.id.clone(), project))
+            .collect())
+    }
+
+    /// Record which EngagementHQ project each new-site project replaced, when the
+    /// URL slug matches. Returns how many new links were recorded.
+    pub fn link_legacy_projects(&self) -> Result<usize> {
+        Ok(self.conn.execute(
+            "INSERT OR IGNORE INTO LegacyProjectLinks(HiveProjectId, LegacyProjectId, MatchedOn)
+             SELECT h.Id, min(p.Id), 'permalink'
+             FROM HiveProjects h
+             JOIN Projects p
+               ON json_extract(p.Serialized, '$.attributes.permalink')
+                = json_extract(h.Serialized, '$.attributes.permalink')
+             WHERE json_extract(h.Serialized, '$.attributes.permalink') <> ''
+             GROUP BY h.Id",
+            [],
+        )?)
+    }
+
     pub fn get_project(&self, id: &str) -> Result<Project> {
         let json: String = self.conn.query_row(
-            "SELECT Serialized FROM Projects WHERE Id = ?",
+            "SELECT Serialized FROM HiveProjects WHERE Id = ?",
             params![id],
             |row| row.get(0),
         )?;
@@ -120,8 +162,9 @@ impl Database {
         for project in projects {
             let json = serde_json::to_string(project)?;
             transaction.execute(
-                "INSERT INTO Projects(Id, Serialized) VALUES(?1, ?2)
-                 ON CONFLICT(Id) DO UPDATE SET Serialized = excluded.Serialized",
+                "INSERT INTO HiveProjects(Id, Serialized) VALUES(?1, ?2)
+                 ON CONFLICT(Id) DO UPDATE SET Serialized = excluded.Serialized,
+                    LastSeen = unixepoch()",
                 params![project.id, json],
             )?;
         }
@@ -130,81 +173,17 @@ impl Database {
         Ok(())
     }
 
-    pub fn get_token(&self) -> Result<Option<Token>> {
-        let result = self.conn.query_row(
-            "SELECT Expiration, Token FROM TokenCache LIMIT 1",
-            [],
-            |row| {
-                let timestamp: i64 = row.get(0)?;
-                let jwt: String = row.get(1)?;
-                Ok((timestamp, jwt))
-            },
-        );
-
-        match result {
-            Ok((timestamp, jwt)) => Ok(Some(Token {
-                expiration: DateTime::from_timestamp(timestamp / 1000, 0).unwrap_or_default(),
-                jwt,
-            })),
-            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
-            Err(e) => Err(e.into()),
-        }
-    }
-
-    pub fn set_token(&mut self, token: &Token) -> Result<()> {
-        let transaction = self.conn.transaction()?;
-
-        transaction.execute("DELETE FROM TokenCache", [])?;
-
-        transaction.execute(
-            "INSERT INTO TokenCache(Expiration, Token) VALUES(?1, ?2)",
-            params![token.expiration.timestamp_millis(), token.jwt,],
-        )?;
-
-        transaction.commit()?;
-        Ok(())
-    }
-
-    pub fn get_cached_response(&self, url: &str) -> Result<Option<String>> {
-        let now = Utc::now().timestamp();
-
-        let result = self.conn.query_row(
-            "SELECT Value FROM Cache WHERE Key = ? AND Expiration > ?",
-            params![url, now],
-            |row| row.get::<_, String>(0),
-        );
-
-        match result {
-            Ok(value) => Ok(Some(value)),
-            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
-            Err(e) => Err(e.into()),
-        }
-    }
-
     pub fn is_empty(&self) -> Result<bool> {
         let count: i64 = self
             .conn
-            .query_row("SELECT COUNT(*) FROM Projects", [], |row| row.get(0))?;
+            .query_row("SELECT COUNT(*) FROM HiveProjects", [], |row| row.get(0))?;
         Ok(count == 0)
-    }
-
-    pub fn cache_response(&self, url: &str, value: &str) -> Result<()> {
-        let expiration = Utc::now().timestamp() + 3600; // 1 hour from now
-
-        self.conn.execute(
-            "INSERT INTO Cache(Key, Expiration, Value) VALUES(?1, ?2, ?3)
-             ON CONFLICT(Key) DO UPDATE SET Expiration = excluded.Expiration, Value = excluded.Value",
-            params![url, expiration, value],
-        )?;
-
-        Ok(())
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use chrono::Utc;
 
     #[test]
     fn test_initialize_db() -> Result<()> {
@@ -261,22 +240,35 @@ mod tests {
     }
 
     #[test]
-    fn test_token_works() -> Result<()> {
+    fn legacy_projects_are_untouched_and_linked() -> Result<()> {
         let mut db = Database::new_in_memory()?;
-
-        assert!(db.get_token()?.is_none());
-
-        let token = Token {
-            expiration: Utc::now(),
-            jwt: "foo".to_string(),
+        db.execute(
+            "INSERT INTO Projects(Id, Serialized) VALUES('50711', ?1)",
+            [r#"{"attributes":{"permalink":"6525-6575-oak"}}"#],
+        )?;
+        let mut project = Project {
+            id: "hive-2008".to_string(),
+            project_type: "hive-project".to_string(),
+            attributes: Default::default(),
+            relationships: Default::default(),
+            links: Default::default(),
         };
-
-        db.set_token(&token)?;
-        let retrieved = db.get_token()?.unwrap();
-
-        assert_eq!(token.jwt, retrieved.jwt);
-        assert!((token.expiration.timestamp() - retrieved.expiration.timestamp()).abs() <= 1);
-
+        project.attributes.permalink = "6525-6575-oak".into();
+        assert!(
+            db.is_empty()?,
+            "legacy rows do not count as new-site projects"
+        );
+        db.upsert_projects(&[project])?;
+        assert_eq!(db.link_legacy_projects()?, 1);
+        assert_eq!(db.link_legacy_projects()?, 0);
+        let legacy: String = db.query_row(
+            "SELECT LegacyProjectId FROM LegacyProjectLinks WHERE HiveProjectId='hive-2008'",
+            [],
+            |r| r.get(0),
+        )?;
+        assert_eq!(legacy, "50711");
+        let count: i64 = db.query_row("SELECT COUNT(*) FROM Projects", [], |r| r.get(0))?;
+        assert_eq!(count, 1);
         Ok(())
     }
 }

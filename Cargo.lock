@@ -3108,7 +3108,6 @@ name = "rezoning-scraper"
 version = "3.2.1"
 dependencies = [
  "anyhow",
- "base64",
  "bsky-sdk",
  "chrono",
  "clap",

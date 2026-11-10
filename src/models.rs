@@ -61,6 +61,10 @@ pub struct Attributes {
     pub meta_description: Option<String>,
     pub parent_id: Option<i32>,
     pub access: bool,
+    /// Shape Your City (Hive) listing card this snapshot was built from.
+    /// Absent on EngagementHQ-era projects.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source_fingerprint: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]

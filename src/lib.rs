@@ -5,6 +5,7 @@ pub mod approvals;
 pub mod bluesky;
 pub mod conditions;
 pub mod db;
+pub mod hive;
 pub mod llm;
 pub mod models;
 pub mod queue;

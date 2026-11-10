@@ -108,10 +108,36 @@ fn date_in(text: &str) -> Option<String> {
         .map(|date| date.to_string())
 }
 
-pub fn decisions(project: &Project) -> Vec<Decision> {
+/// (is development application, is rezoning application)
+fn application_kind(project: &Project) -> (bool, bool) {
     let name = project.attributes.name.to_lowercase();
-    let development = name.contains("development application");
-    let rezoning = name.contains("rezoning application");
+    if name.contains("development application") {
+        return (true, false);
+    }
+    if name.contains("rezoning application") {
+        return (false, true);
+    }
+    // The new Shape Your City site has inconsistent names ("dev appln", "text
+    // amendment"), but every application has a Development or Rezoning category.
+    if project.id.starts_with(crate::hive::ID_PREFIX) {
+        let tags = &project.attributes.project_tag_list;
+        if tags.iter().any(|tag| tag == "Development") {
+            return (true, false);
+        }
+        if tags.iter().any(|tag| tag == "Rezoning") {
+            return (false, true);
+        }
+    }
+    (false, false)
+}
+
+pub fn is_application(project: &Project) -> bool {
+    let (development, rezoning) = application_kind(project);
+    development || rezoning
+}
+
+pub fn decisions(project: &Project) -> Vec<Decision> {
+    let (development, rezoning) = application_kind(project);
     if !development && !rezoning {
         return Vec::new();
     }
@@ -219,8 +245,13 @@ pub fn document_links(page: &str, base: &Url) -> Vec<DocumentLink> {
     let html = Html::parse_document(page);
     // Q&A answers sometimes link a neighbouring project's conditions. Restrict
     // discovery to the City's document library and project description.
-    let selector =
-        Selector::parse(".widget_document_library a[href], .description a[href]").unwrap();
+    // The Hive site (Nov 2026 onward) uses its own document library block and
+    // `main .hive-block-content` for the description.
+    let selector = Selector::parse(
+        ".widget_document_library a[href], .description a[href], \
+         .hive-block-document-library a[href], main .hive-block-content a[href]",
+    )
+    .unwrap();
     let mut links = Vec::new();
     for anchor in html.select(&selector) {
         let title = normalized_text(&anchor.inner_html());
@@ -302,7 +333,11 @@ fn retry_after_delay(value: &str, now: chrono::DateTime<Utc>) -> Option<Duration
         return Some(Duration::from_secs(seconds));
     }
     let date = chrono::DateTime::parse_from_rfc2822(value).ok()?;
-    Some((date.with_timezone(&Utc) - now).to_std().unwrap_or_default())
+    Some(
+        (date.with_timezone(&Utc) - now)
+            .to_std()
+            .unwrap_or_default(),
+    )
 }
 
 async fn get_bytes_once(
@@ -454,15 +489,22 @@ fn record_pdf(db: &mut Database, id: i64, url: &Url, bytes: &[u8], now: i64) -> 
     Ok(())
 }
 
+fn http_client() -> Result<Client> {
+    Ok(Client::builder()
+        .user_agent(crate::hive::USER_AGENT)
+        .timeout(Duration::from_secs(45))
+        .build()?)
+}
+
 /// Called before the posting pipeline. Fetch failures preserve evidence already collected
 /// and return an error after other projects have been attempted.
 pub async fn track_approvals(db: &mut Database, projects: &[Project]) -> Result<()> {
-    let client = Client::builder().timeout(Duration::from_secs(45)).build()?;
+    let client = http_client()?;
     track_with_client(db, projects, &client, Utc::now().timestamp()).await
 }
 
 pub async fn track_for_posting(db: &mut Database, projects: &[Project]) -> Result<()> {
-    let client = Client::builder().timeout(Duration::from_secs(45)).build()?;
+    let client = http_client()?;
     track_with_observations(db, projects, &client, Utc::now().timestamp(), true).await
 }
 
@@ -484,8 +526,7 @@ async fn track_with_observations(
 ) -> Result<()> {
     let mut failures = Vec::new();
     for project in projects {
-        let name = project.attributes.name.to_lowercase();
-        if !name.contains("development application") && !name.contains("rezoning application") {
+        if !is_application(project) {
             continue;
         }
         let found = record_decisions(db, project, now)?;
@@ -927,9 +968,18 @@ mod tests {
     #[tokio::test]
     async fn interrupted_body_is_retried_without_retaining_partial_bytes() {
         let (base, task) = raw_server(vec![
-            ("/letter", "HTTP/1.1 200 OK\r\nContent-Length: 100\r\nConnection: close\r\n\r\n%PDF-partial".into()),
-            ("/letter", "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\n%PDF-complete".into()),
-        ]).await;
+            (
+                "/letter",
+                "HTTP/1.1 200 OK\r\nContent-Length: 100\r\nConnection: close\r\n\r\n%PDF-partial"
+                    .into(),
+            ),
+            (
+                "/letter",
+                "HTTP/1.1 200 OK\r\nContent-Length: 13\r\nConnection: close\r\n\r\n%PDF-complete"
+                    .into(),
+            ),
+        ])
+        .await;
         let (_, bytes) = get_bytes_with_retry(
             &client(),
             &Url::parse(&format!("{base}/letter")).unwrap(),
@@ -963,12 +1013,16 @@ mod tests {
             let mut request = [0; 8192];
             assert!(stalled.read(&mut request).await.unwrap() > 0);
             // Keep the first connection open without responding until the client retries.
-            let (mut recovered, _) = tokio::time::timeout(Duration::from_secs(5), listener.accept())
-                .await
-                .unwrap()
-                .unwrap();
+            let (mut recovered, _) =
+                tokio::time::timeout(Duration::from_secs(5), listener.accept())
+                    .await
+                    .unwrap()
+                    .unwrap();
             assert!(recovered.read(&mut request).await.unwrap() > 0);
-            recovered.write_all(b"HTTP/1.1 200 OK\r\nContent-Length: 7\r\nConnection: close\r\n\r\n%PDF-ok")
+            recovered
+                .write_all(
+                    b"HTTP/1.1 200 OK\r\nContent-Length: 7\r\nConnection: close\r\n\r\n%PDF-ok",
+                )
                 .await
                 .unwrap();
         });
@@ -1332,7 +1386,8 @@ mod tests {
             ("/bad", 500, "oops"),
             ("/bad", 500, "oops"),
             ("/good", 200, ""),
-        ]).await;
+        ])
+        .await;
         let mut db = Database::new_in_memory().unwrap();
         let mut bad = project(CONDITIONAL);
         bad.links.self_link = format!("{base}/bad");

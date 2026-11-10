@@ -47,8 +47,6 @@ Options:
           Bluesky username. Required for posting to Bluesky [env: BLUESKY_USER=]
       --bluesky-password <BLUESKY_PASSWORD>
           Bluesky password. Required for posting to Bluesky [env: BLUESKY_PASSWORD=]
-      --api-cache
-          Use cached API responses (up to 1 hour old) when available
       --skip-update-db
           Skip updating the local database (useful for testing)
       --monitoring-test <MONITORING_TEST>
@@ -58,6 +56,27 @@ Options:
   -V, --version
           Print version
 ```
+
+## Where the data comes from
+
+Shape Your City moved from EngagementHQ to an OpenPoint "Hive" (Concrete CMS)
+site on 2026-11-10, and the old `/api/v2/projects` JSON API went away. There's no
+public project API on the new site, so the scraper:
+
+1. Finds the project listing blocks on `/projects`, `/rezoning` and `/development`
+   (`/projects` doesn't include rezoning or development applications).
+2. Pages through each block's `load_more` JSON endpoint. It's slow (~4s per page
+   of 10), so it fetches 4 pages at a time.
+3. Fetches a project's page for its full description and decision notices only
+   when the project is new or its listing card changed.
+
+New-site projects have IDs like `hive-1695` and live in the `HiveProjects` table.
+The EngagementHQ-era projects stay untouched in the `Projects` table, and
+`LegacyProjectLinks` maps new IDs to old ones when the URL slug matches. Approval
+history and conditions PDFs collected under the old IDs are kept as-is; new-site
+projects start their own approval baselines, so the switchover doesn't re-post
+old decisions or conditions. The first run on the new site takes about 5 minutes
+(about 590 project pages); later runs take about a minute.
 
 ## Production deployment
 
@@ -152,7 +171,7 @@ downloads and is available on later runs.
 
 The tracker distinguishes rezoning approval, development approval, development
 approval subject to conditions, and permit issuance. It reads explicit notices
-from the API's description and archival message. An archived consultation alone
+from the project page's description and highlighted notices. An archived consultation alone
 does not count as approval, and a development application's reference to an
 earlier rezoning approval does not count as development approval.
 
@@ -250,7 +269,7 @@ Failed or uncertain work remains visible in monitoring until resolved or
 automatic posting is disabled.
 
 For a limited test, `--tracking-only --projects-file response.json --database test.db`
-reads a saved projects API response instead of querying the API. Document pages
+reads a saved EngagementHQ-format projects response instead of crawling the site. Document pages
 and PDFs are still fetched over HTTP. Automated tests use saved page excerpts,
 in-memory databases, localhost fixture servers, and isolated CLI databases:
 

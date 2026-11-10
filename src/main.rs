@@ -1,17 +1,13 @@
 use anyhow::{anyhow, Context, Result};
-use base64::engine::general_purpose::URL_SAFE_NO_PAD;
-use base64::Engine;
-use chrono::{DateTime, TimeZone, Utc};
+use chrono::Utc;
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
-use db::{Database, Token};
+use db::Database;
 use indicatif::ProgressBar;
 use models::{Project, Projects, SummarizedProject};
 use monitoring::{Monitoring, ServiceCheckStatus};
 use queue::Queue;
-use scraper::{Html, Selector};
 use serde_json::json;
-use serde_json::Value;
 use std::time::Duration;
 use summarizer::project_to_tweet;
 use tokio::time::sleep;
@@ -22,6 +18,7 @@ mod approvals;
 mod bluesky;
 mod conditions;
 mod db;
+mod hive;
 mod llm;
 mod models;
 mod monitoring;
@@ -29,9 +26,6 @@ mod queue;
 mod summarizer;
 
 const MAX_MESSAGE_PROCESSING_ATTEMPTS: i32 = 3;
-const PROJECT_REQUEST_TIMEOUT: Duration = Duration::from_secs(60);
-const MAX_PROJECT_REQUEST_ATTEMPTS: u32 = 3;
-const PROJECT_REQUEST_RETRY_DELAY: Duration = Duration::from_secs(1);
 
 #[derive(Clone, Copy, Debug, ValueEnum)]
 enum MonitoringTestStatus {
@@ -62,12 +56,6 @@ struct Args {
     )]
     bluesky_password: Option<String>,
 
-    #[arg(
-        long,
-        help = "Use cached API responses (up to 1 hour old) when available"
-    )]
-    api_cache: bool,
-
     #[arg(long, help = "Skip updating the local database (useful for testing)")]
     skip_update_db: bool,
 
@@ -90,7 +78,7 @@ struct Args {
     #[arg(long, help = "Only collect approvals; bypass all summarizing and posting queues", conflicts_with_all = ["skip_update_db", "monitoring_test"])]
     tracking_only: bool,
 
-    #[arg(long, help = "Summarize archived conditions PDFs locally; do not crawl or post", conflicts_with_all = ["tracking_only", "track_approvals", "projects_file", "skip_update_db", "monitoring_test", "api_cache"])]
+    #[arg(long, help = "Summarize archived conditions PDFs locally; do not crawl or post", conflicts_with_all = ["tracking_only", "track_approvals", "projects_file", "skip_update_db", "monitoring_test"])]
     summarize_conditions: bool,
 
     #[arg(long, default_value_t = 10, requires = "summarize_conditions", value_parser = clap::value_parser!(u32).range(1..=100), help = "Maximum PDFs to summarize in one run")]
@@ -125,7 +113,7 @@ struct Args {
     #[arg(
         long,
         requires = "tracking_only",
-        help = "Read a saved projects API response instead of fetching the API (document downloads still use HTTP)"
+        help = "Read a saved EngagementHQ-format projects response instead of crawling the site (document downloads still use HTTP)"
     )]
     projects_file: Option<std::path::PathBuf>,
 
@@ -246,25 +234,27 @@ async fn async_main(args: Args, monitoring: Option<&Monitoring>) -> Result<()> {
         )?;
     }
 
-    let client = reqwest::Client::builder()
-        .timeout(PROJECT_REQUEST_TIMEOUT)
-        .build()?;
-
     // Fetch projects
     let start = std::time::Instant::now();
+    let mut source_failures = Vec::new();
     let latest_projects = if let Some(path) = &args.projects_file {
         println!("Reading saved projects from {}...", path.display());
         let response: Projects = serde_json::from_slice(&std::fs::read(path)?)?;
         response.data
     } else {
-        println!("{}", "Querying API...".bold().cyan());
-        let token_spinner = ProgressBar::new_spinner();
-        token_spinner.set_message("Getting API token...");
-        token_spinner.enable_steady_tick(Duration::from_millis(100));
-        let token = get_token_from_db_or_website(&mut db, &token_spinner).await?;
-        fetch_all_projects(&client, &token.jwt, &db, args.api_cache).await?
+        println!("{}", "Querying Shape Your City...".bold().cyan());
+        let spinner = ProgressBar::new_spinner();
+        spinner.enable_steady_tick(Duration::from_millis(100));
+        spinner.set_message("Fetching project listings...");
+        let stored = db.get_projects_by_id()?;
+        let fetched = hive::fetch_projects(&hive::client()?, hive::BASE_URL, &stored).await?;
+        spinner.finish_with_message(format!(
+            "Fetched listings and {} project page(s)",
+            fetched.detail_fetches
+        ));
+        source_failures = fetched.failures;
+        fetched.projects
     };
-
     println!(
         "Retrieved {} projects in {}ms",
         format!("{}", latest_projects.len()).green(),
@@ -355,6 +345,10 @@ async fn async_main(args: Args, monitoring: Option<&Monitoring>) -> Result<()> {
         // Update database in a single transaction
         let start = std::time::Instant::now();
         db.upsert_projects(&latest_projects)?;
+        let linked = db.link_legacy_projects()?;
+        if linked > 0 {
+            println!("Linked {linked} project(s) to their EngagementHQ-era records");
+        }
         println!(
             "Updated database with {} projects in {}ms",
             format!("{}", latest_projects.len()).green(),
@@ -381,6 +375,14 @@ async fn async_main(args: Args, monitoring: Option<&Monitoring>) -> Result<()> {
     }
 
     let mut processing_failures = 0;
+    for failure in &source_failures {
+        monitoring.error(
+            "Failed to fetch project page",
+            &anyhow!("{failure}"),
+            &[("source", json!("shapeyourcity"))],
+        );
+        processing_failures += 1;
+    }
 
     // Process LLM queue
     {
@@ -718,175 +720,6 @@ fn print_projects(
     // }
 }
 
-async fn get_token_from_db_or_website(db: &mut Database, pb: &ProgressBar) -> Result<Token> {
-    // Check if we have a valid token in the DB
-    if let Some(token) = db.get_token()? {
-        let now = Utc::now();
-        if token.expiration > now + chrono::Duration::minutes(1) {
-            pb.finish_with_message(format!(
-                "Loaded API token from database. Cached token will expire on {}",
-                token.expiration.to_string().green()
-            ));
-
-            return Ok(token);
-        }
-    }
-
-    pb.set_message("Getting latest anonymous user token from shapeyourcity.ca");
-    let client = reqwest::Client::builder()
-        .timeout(Duration::from_secs(20))
-        .build()?;
-
-    let html = client
-        .get("https://www.shapeyourcity.ca/embeds/projectfinder")
-        .send()
-        .await?
-        .text()
-        .await?;
-
-    let jwt = extract_token_from_html(&html)?;
-    let expiration = get_expiration_from_encoded_jwt(&jwt)?;
-
-    pb.finish_with_message(format!(
-        "Retrieved API token from website. Token will expire on {}",
-        expiration.to_string().green()
-    ));
-
-    let token = Token { expiration, jwt };
-
-    db.set_token(&token)?;
-
-    Ok(token)
-}
-
-async fn fetch_all_projects(
-    client: &reqwest::Client,
-    jwt: &str,
-    db: &Database,
-    use_cache: bool,
-) -> Result<Vec<Project>> {
-    const RESULTS_PER_PAGE: u32 = 200;
-    let mut all_projects = Vec::new();
-    let mut next_url = Some(format!(
-        "https://www.shapeyourcity.ca/api/v2/projects?per_page={}",
-        RESULTS_PER_PAGE
-    ));
-    let mut page_count = 0;
-
-    while let Some(url) = next_url {
-        let pb = ProgressBar::new_spinner();
-        pb.enable_steady_tick(Duration::from_millis(100));
-        pb.set_message(format!("Fetching page {}...", page_count + 1));
-
-        let (response, used_cache): (Projects, bool) = if use_cache {
-            if let Some(cached) = db.get_cached_response(&url)? {
-                (serde_json::from_str(&cached)?, true)
-            } else {
-                let response = fetch_project_page(client, &url, jwt).await?;
-
-                db.cache_response(&url, &response)?;
-                (serde_json::from_str(&response)?, false)
-            }
-        } else {
-            let response = fetch_project_page(client, &url, jwt).await?;
-
-            db.cache_response(&url, &response)?;
-            (serde_json::from_str(&response)?, false)
-        };
-
-        page_count += 1;
-
-        if used_cache {
-            pb.finish_with_message(format!(
-                "Retrieved page {} from cache ({} items)",
-                page_count,
-                response.data.len()
-            ));
-        } else {
-            pb.finish_with_message(format!(
-                "Retrieved page {} ({} items)",
-                page_count,
-                response.data.len()
-            ));
-        }
-
-        all_projects.extend(response.data);
-        next_url = response.links.next;
-    }
-
-    Ok(all_projects)
-}
-
-async fn fetch_project_page(client: &reqwest::Client, url: &str, jwt: &str) -> Result<String> {
-    fetch_project_page_with_retry(
-        client,
-        url,
-        jwt,
-        MAX_PROJECT_REQUEST_ATTEMPTS,
-        PROJECT_REQUEST_RETRY_DELAY,
-    )
-    .await
-}
-
-async fn fetch_project_page_with_retry(
-    client: &reqwest::Client,
-    url: &str,
-    jwt: &str,
-    max_attempts: u32,
-    initial_retry_delay: Duration,
-) -> Result<String> {
-    if max_attempts == 0 {
-        return Err(anyhow!(
-            "max project request attempts must be greater than zero"
-        ));
-    }
-
-    let mut attempt = 1;
-    loop {
-        let result = async {
-            client
-                .get(url)
-                .header("Authorization", format!("Bearer {jwt}"))
-                .send()
-                .await?
-                .error_for_status()?
-                .text()
-                .await
-        }
-        .await;
-
-        match result {
-            Ok(response) => return Ok(response),
-            Err(error) if attempt < max_attempts && is_retryable_project_request_error(&error) => {
-                let retry_delay = project_request_retry_delay(initial_retry_delay, attempt);
-                eprintln!(
-                    "Project API request attempt {attempt}/{max_attempts} failed: {error}; retrying in {}s",
-                    retry_delay.as_secs_f32()
-                );
-                sleep(retry_delay).await;
-                attempt += 1;
-            }
-            Err(error) => {
-                return Err(error).with_context(|| {
-                    format!("project API request failed after {attempt} attempt(s): {url}")
-                });
-            }
-        }
-    }
-}
-
-fn is_retryable_project_request_error(error: &reqwest::Error) -> bool {
-    error.is_timeout()
-        || error.is_connect()
-        || error.status().is_some_and(|status| {
-            status == reqwest::StatusCode::TOO_MANY_REQUESTS || status.is_server_error()
-        })
-}
-
-fn project_request_retry_delay(initial_delay: Duration, failed_attempt: u32) -> Duration {
-    initial_delay.saturating_mul(2_u32.saturating_pow(failed_attempt - 1))
-}
-
 async fn post_to_slack(webhook_url: &str, message: String) -> Result<()> {
     println!("{}", "Posting to Slack...".bold().cyan());
     let client = reqwest::Client::new();
@@ -974,56 +807,11 @@ struct ProjectChange {
     new_value: String,
 }
 
-fn extract_token_from_html(html: &str) -> Result<String> {
-    let document = Html::parse_document(html);
-    let selector = Selector::parse("script#__NEXT_DATA__").unwrap();
-
-    let script = document
-        .select(&selector)
-        .next()
-        .ok_or_else(|| anyhow!("Could not find NEXT_DATA tag"))?;
-
-    let json: Value = serde_json::from_str(&script.inner_html())
-        .map_err(|e| anyhow!("Could not parse NEXT_DATA JSON: {}", e))?;
-
-    // Navigate the JSON structure to get the token
-    json["props"]["pageProps"]["initialState"]["anonymousUser"]["token"]
-        .as_str()
-        .ok_or_else(|| anyhow!("Could not find token in JSON"))
-        .map(String::from)
-}
-
-fn get_expiration_from_encoded_jwt(jwt: &str) -> Result<DateTime<Utc>> {
-    let parts: Vec<&str> = jwt.split('.').collect();
-    if parts.len() != 3 {
-        return Err(anyhow!("Invalid JWT format"));
-    }
-
-    // Decode the payload (middle part)
-    let payload = URL_SAFE_NO_PAD
-        .decode(parts[1])
-        .map_err(|e| anyhow!("Failed to decode JWT payload: {}", e))?;
-
-    let json: Value =
-        serde_json::from_slice(&payload).map_err(|e| anyhow!("Failed to parse JWT JSON: {}", e))?;
-
-    // Extract exp claim
-    let exp = json["exp"]
-        .as_i64()
-        .ok_or_else(|| anyhow!("No expiration in JWT"))?;
-
-    Utc.timestamp_opt(exp, 0)
-        .single()
-        .ok_or_else(|| anyhow!("Invalid timestamp"))
-}
-
 // tests
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio::io::{AsyncReadExt, AsyncWriteExt};
-    use tokio::net::TcpListener;
-    use tokio::task::JoinHandle;
+    use serde_json::Value;
 
     fn slack_project() -> SummarizedProject {
         let projects: Projects =
@@ -1130,125 +918,4 @@ mod tests {
          "jti": "49b984aa47751d338fc3baf7897e9685"
     }
     */
-    const JWT: &str = "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzgxMjE1MjEsImp0aSI6IjQ5Yjk4NGFhNDc3NTFkMzM4ZmMzYmFmNzg5N2U5Njg1IiwiZXhwIjoxNjM4Mjk0MzIxLCJpc3MiOiJCYW5nIFRoZSBUYWJsZSBQdnQgTHRkIiwiZGF0YSI6eyJ1c2VyX2lkIjo0Njc0MTk5NDksInVzZXJfdHlwZSI6IkFub255bW91c1VzZXIifX0.p7FGWkT_7sWtC4gAsQ_HgaX-Z8aw88QQiGdHITmQleQ";
-    const EXPIRATION_IN_UNIX_SECONDS: i64 = 1638294321;
-
-    #[test]
-    fn test_extract_jwt() {
-        let html = include_str!("../test_files/projectFinder.html");
-        let jwt = extract_token_from_html(html).expect("Should extract JWT");
-        assert_eq!(jwt, JWT);
-    }
-
-    #[test]
-    fn test_extract_expiration_from_jwt() {
-        let expiration = get_expiration_from_encoded_jwt(JWT).expect("Should parse expiration");
-        assert_eq!(expiration.timestamp(), EXPIRATION_IN_UNIX_SECONDS);
-    }
-
-    #[test]
-    fn project_request_retries_use_exponential_backoff() {
-        assert_eq!(
-            project_request_retry_delay(Duration::from_secs(1), 1),
-            Duration::from_secs(1)
-        );
-        assert_eq!(
-            project_request_retry_delay(Duration::from_secs(1), 2),
-            Duration::from_secs(2)
-        );
-    }
-
-    #[tokio::test]
-    async fn retries_transient_project_api_errors() {
-        let (url, server) = spawn_http_server(vec![500, 200]).await;
-        let client = reqwest::Client::builder()
-            .timeout(Duration::from_secs(1))
-            .build()
-            .expect("client should build");
-
-        let response = fetch_project_page_with_retry(&client, &url, "token", 3, Duration::ZERO)
-            .await
-            .expect("the second request should succeed");
-
-        assert_eq!(response, "success");
-        assert_eq!(server.await.expect("server should finish"), 2);
-    }
-
-    #[tokio::test]
-    async fn does_not_retry_non_transient_project_api_errors() {
-        let (url, server) = spawn_http_server(vec![404]).await;
-        let client = reqwest::Client::builder()
-            .timeout(Duration::from_secs(1))
-            .build()
-            .expect("client should build");
-
-        let error = fetch_project_page_with_retry(&client, &url, "token", 3, Duration::ZERO)
-            .await
-            .expect_err("a 404 should fail");
-
-        assert!(error.to_string().contains("after 1 attempt"));
-        assert_eq!(server.await.expect("server should finish"), 1);
-    }
-
-    #[tokio::test]
-    async fn rejects_zero_project_request_attempts() {
-        let client = reqwest::Client::new();
-
-        let error = fetch_project_page_with_retry(
-            &client,
-            "http://127.0.0.1/projects",
-            "token",
-            0,
-            Duration::ZERO,
-        )
-        .await
-        .expect_err("zero attempts should fail");
-
-        assert_eq!(
-            error.to_string(),
-            "max project request attempts must be greater than zero"
-        );
-    }
-
-    async fn spawn_http_server(statuses: Vec<u16>) -> (String, JoinHandle<usize>) {
-        let listener = TcpListener::bind("127.0.0.1:0")
-            .await
-            .expect("test server should bind");
-        let address = listener
-            .local_addr()
-            .expect("server should have an address");
-
-        let server = tokio::spawn(async move {
-            let mut request_count = 0;
-            for status in statuses {
-                let (mut stream, _) = listener.accept().await.expect("server should accept");
-                let mut request = Vec::new();
-                let mut buffer = [0; 1024];
-                while !request.windows(4).any(|bytes| bytes == b"\r\n\r\n") {
-                    let bytes_read = stream.read(&mut buffer).await.expect("request should read");
-                    assert!(bytes_read > 0, "client closed before sending a request");
-                    request.extend_from_slice(&buffer[..bytes_read]);
-                }
-
-                let (reason, body) = match status {
-                    200 => ("OK", "success"),
-                    404 => ("Not Found", "not found"),
-                    500 => ("Internal Server Error", "temporary failure"),
-                    _ => panic!("unsupported test status: {status}"),
-                };
-                let response = format!(
-                    "HTTP/1.1 {status} {reason}\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
-                    body.len()
-                );
-                stream
-                    .write_all(response.as_bytes())
-                    .await
-                    .expect("response should write");
-                request_count += 1;
-            }
-            request_count
-        });
-
-        (format!("http://{address}/projects"), server)
-    }
 }
