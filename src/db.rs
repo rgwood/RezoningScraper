@@ -130,6 +130,19 @@ impl Database {
             .collect())
     }
 
+    /// The EngagementHQ-era project with this URL slug, if there was one.
+    pub fn legacy_project_id(&self, permalink: &str) -> Result<Option<String>> {
+        if permalink.is_empty() {
+            return Ok(None);
+        }
+        Ok(self.conn.query_row(
+            "SELECT min(Id) FROM Projects
+                 WHERE json_extract(Serialized, '$.attributes.permalink') = ?1",
+            [permalink],
+            |row| row.get(0),
+        )?)
+    }
+
     /// Record which EngagementHQ project each new-site project replaced, when the
     /// URL slug matches. Returns how many new links were recorded.
     pub fn link_legacy_projects(&self) -> Result<usize> {
@@ -259,6 +272,12 @@ mod tests {
             "legacy rows do not count as new-site projects"
         );
         db.upsert_projects(&[project])?;
+        assert_eq!(
+            db.legacy_project_id("6525-6575-oak")?.as_deref(),
+            Some("50711")
+        );
+        assert_eq!(db.legacy_project_id("brand-new-project")?, None);
+        assert_eq!(db.legacy_project_id("")?, None);
         assert_eq!(db.link_legacy_projects()?, 1);
         assert_eq!(db.link_legacy_projects()?, 0);
         let legacy: String = db.query_row(

@@ -370,6 +370,15 @@ async fn async_main(args: Args, monitoring: Option<&Monitoring>) -> Result<()> {
 
     if !is_initialization {
         for project in &new_projects {
+            // The city is still moving older projects onto the new site. Those
+            // were already posted from EngagementHQ, so don't post them again.
+            if let Some(legacy_id) = db.legacy_project_id(&project.attributes.permalink)? {
+                println!(
+                    "Skipping {} (already seen on EngagementHQ as project {legacy_id})",
+                    project.attributes.name
+                );
+                continue;
+            }
             llm_queue.push(&db, project.clone())?;
         }
     }
