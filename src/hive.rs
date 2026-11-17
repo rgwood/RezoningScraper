@@ -27,8 +27,10 @@ pub const USER_AGENT: &str = concat!(
     " (+https://github.com/rgwood/RezoningScraper)"
 );
 const MAX_LISTING_PAGES: u32 = 200;
-const MAX_ATTEMPTS: u32 = 3;
-const RETRY_DELAY: Duration = Duration::from_secs(1);
+/// Backoff of 2s, 4s, 8s, 16s: about 30s in total, long enough to ride out
+/// brief DNS resolver failures (EAI_AGAIN) on the prod host.
+const MAX_ATTEMPTS: u32 = 5;
+const RETRY_DELAY: Duration = Duration::from_secs(2);
 const DETAIL_CONCURRENCY: usize = 4;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
