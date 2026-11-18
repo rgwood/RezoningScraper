@@ -80,6 +80,8 @@ pub struct Detail {
     pub description: Option<String>,
     /// Highlighted notices, e.g. "The Director of Planning approved the application on ...".
     pub notices: Vec<String>,
+    /// The page's `og:image`. Some cards have no image even though the page does.
+    pub image: Option<String>,
 }
 
 pub fn client() -> Result<Client> {
@@ -140,9 +142,16 @@ pub fn parse_detail(page: &str) -> Detail {
         })
         .filter(|text| !text.is_empty())
         .collect();
+    let og_image = Selector::parse(r#"meta[property="og:image"]"#).unwrap();
+    let image = html
+        .select(&og_image)
+        .filter_map(|meta| meta.value().attr("content"))
+        .map(|url| url.trim().to_string())
+        .find(|url| url.starts_with("http"));
     Detail {
         description: (!parts.is_empty()).then(|| parts.join("\n")),
         notices,
+        image,
     }
 }
 
@@ -185,7 +194,10 @@ pub fn to_project(entry: &ListingEntry, detail: &Detail) -> Project {
             description: detail.description.clone(),
             project_tag_list: tags,
             archival_reason_message,
-            image_url: entry.project_image_src.clone(),
+            image_url: entry
+                .project_image_src
+                .clone()
+                .or_else(|| detail.image.clone()),
             meta_description: entry.project_description.clone(),
             access: true,
             source_fingerprint: Some(fingerprint(entry)),
@@ -455,6 +467,21 @@ mod tests {
         assert!(!more);
         assert_eq!(entries[0].project_image_src, None);
         assert_eq!(entries[0].project_description, None);
+    }
+
+    #[test]
+    fn falls_back_to_page_image_when_card_has_none() {
+        let json = r#"{"result":[{"projectID":5,"projectName":"No image","projectPath":"https://www.shapeyourcity.ca/x","projectImageSrc":false}],"moreToLoad":false}"#;
+        let (entries, _) = parse_listing(json).unwrap();
+        let page = r#"<html><head><meta property="og:image" content="https://example.com/render.png"/></head><body><main></main></body></html>"#;
+        let detail = parse_detail(page);
+        assert_eq!(detail.image.as_deref(), Some("https://example.com/render.png"));
+        let project = to_project(&entries[0], &detail);
+        assert_eq!(
+            project.attributes.image_url.as_deref(),
+            Some("https://example.com/render.png")
+        );
+        assert_eq!(parse_detail("<html><main></main></html>").image, None);
     }
 
     #[test]
