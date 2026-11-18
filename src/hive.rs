@@ -268,8 +268,12 @@ pub async fn fetch_listings(client: &Client, base_url: &str) -> Result<Vec<Listi
     // so fetch a few pages of each listing at once. Pages past the end wrap
     // around rather than coming back empty, so stop at the first page that
     // says there are no more and ignore the rest of that window.
+    //
+    // Pages are 0-indexed. The site renders page 0 into the HTML and its
+    // `data-page="1"` is the next page to load, so starting at 1 would skip
+    // the newest cards in every listing.
     for route in routes {
-        let mut first_page = 1;
+        let mut first_page = 0;
         'pages: loop {
             let mut tasks = tokio::task::JoinSet::new();
             for page_number in first_page..first_page + DETAIL_CONCURRENCY as u32 {
